@@ -1,4 +1,4 @@
-package bookworm.Bookworm;
+package com.Bookworm;
 
 public class SystemInfo {
 
