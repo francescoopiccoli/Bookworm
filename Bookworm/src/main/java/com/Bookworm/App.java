@@ -1,4 +1,4 @@
-package bookworm.Bookworm;
+package com.Bookworm;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
