@@ -15,8 +15,17 @@
             <artifactId>javafx-controls</artifactId>
             <version>13</version>
         </dependency>
-        
-		        
+        <dependency>
+		      <groupId>com.google.api-client</groupId>
+		      <artifactId>google-api-client</artifactId>
+		      <version>1.30.11</version>
+    	</dependency>
+    	<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-books -->
+	<dependency>
+	    <groupId>com.google.apis</groupId>
+	    <artifactId>google-api-services-books</artifactId>
+	    <version>v1-rev114-1.25.0</version>
+	</dependency>
     </dependencies>
     <build>
         <plugins>
