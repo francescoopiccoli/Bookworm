@@ -42,7 +42,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>bookworm.Bookworm.App</mainClass>
+                    <mainClass>com.Bookworm.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
