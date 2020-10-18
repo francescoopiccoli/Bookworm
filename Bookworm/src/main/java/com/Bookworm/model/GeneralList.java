@@ -1,10 +1,10 @@
-package com.Bookworm.model
+package com.Bookworm.model;
 import java.util.List;
 // implements the general implementation of all list types
 public class GeneralList implements ListsModifier {
 	
-	private String name;
-	private List<Book> books;
+	protected String name;
+	protected List<Book> books;
 	
 	@Override
 	public void addBook() {

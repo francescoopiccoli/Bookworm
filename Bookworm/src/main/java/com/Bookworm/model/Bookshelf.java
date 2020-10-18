@@ -1,4 +1,4 @@
-package com.Bookworm.model
+package com.Bookworm.model;
 import java.util.List;
 
 public class Bookshelf extends GeneralList {
