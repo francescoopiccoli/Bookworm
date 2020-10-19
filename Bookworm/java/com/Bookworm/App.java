@@ -35,10 +35,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
-    public static void main(String[] args) {
-        launch();
-    }
     
     private VBox _generateTopBar() {
 		VBox vBox = new VBox();
@@ -84,5 +80,9 @@ public class App extends Application {
         return hBox;
     }
 	
+
+    public static void main(String[] args) {
+        launch();
+    }
 
 }

@@ -1,4 +1,4 @@
-module bookworm.Bookworm {
+module com.Bookworm {
     requires javafx.controls;
 	requires google.api.client;
 	requires com.google.api.client;
