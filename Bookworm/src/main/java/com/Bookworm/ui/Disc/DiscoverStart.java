@@ -26,7 +26,7 @@ public class DiscoverStart extends Application {
         layout.setCenter(disc.getCenterDisc());
         scene = new Scene(layout, 1800,750);
         //Sets css to the discover scene
-        scene.getStylesheets().add("Disc/style.css");
+        scene.getStylesheets().add("/com/Bookworm/ui/Disc/style.css");
         window.setScene(scene);
         //Other characteristics for window of the application.
         window.setResizable(false);

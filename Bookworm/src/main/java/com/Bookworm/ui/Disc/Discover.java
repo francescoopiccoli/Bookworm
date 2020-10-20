@@ -1,19 +1,31 @@
 package com.Bookworm.ui.Disc;
 
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.FileNotFoundException;
 
-public class Discover {
-    public Node getCenterDisc() throws FileNotFoundException {
+public class Discover extends BorderPane {
+
+    BorderPane layout;
+    ScrollPane scrollPane;
+
+    public Discover() {
+        //Create an instance of Discover to fill the borderpane with its functions
+        setTop(createTopDisc());
+        setCenter(getCenterDisc());
+        //Sets css to the discover scene
+        //
+    }
+
+    public Node getCenterDisc() {
         //Temporary image to replace covers
         Image image = new Image("https://placekitten.com/300/300/");
         //Create vertical box will align all elements one under the other

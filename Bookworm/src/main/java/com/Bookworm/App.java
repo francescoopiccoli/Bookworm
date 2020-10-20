@@ -1,14 +1,12 @@
 package com.Bookworm;
 
+import com.Bookworm.ui.Disc.Discover;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -20,18 +18,20 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-	private Label currentView = new Label("home");
+	private Region currentView = new Discover();
+	private BorderPane mainPane;
 	
     @Override
     public void start(Stage stage) {
         var javaVersion = SystemInfo.javaVersion();
         var javafxVersion = SystemInfo.javafxVersion();
 
-        BorderPane mainPane = new BorderPane();
+        mainPane = new BorderPane();
         mainPane.setTop(_generateTopBar());
-        mainPane.setCenter(_generateContent());
+        mainPane.setCenter(_generateContent(0));
         mainPane.setBottom(_generateSidebar());
         var scene = new Scene(mainPane, 800, 600);
+        scene.getStylesheets().add("/com/Bookworm/ui/Disc/style.css");
         stage.setScene(scene);
         stage.show();
     }
@@ -47,7 +47,7 @@ public class App extends Application {
         return vBox;
     }
     
-    private Label _generateContent() {
+    private Region _generateContent(int id) {
 		return currentView;
     }
 	
@@ -73,7 +73,10 @@ public class App extends Application {
         		
             hBox.setMargin(options[i], new Insets(0, 0, 0, 8));
             hBox.getChildren().add(options[i]);
-            options[i].setOnAction((event) -> currentView.setText("viewing "+((ToggleButton) event.getSource()).getText()));
+            options[i].setOnAction((event) -> {
+                currentView = new Label("viewing "+((ToggleButton) event.getSource()).getText());
+                mainPane.setCenter(currentView);
+            });
             options[i].setToggleGroup(toggleGroup);
         }
 
