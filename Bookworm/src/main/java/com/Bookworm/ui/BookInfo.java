@@ -2,7 +2,7 @@ package com.Bookworm.ui;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-//import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -49,7 +49,7 @@ public class BookInfo extends Application {
         //TO-DO implement listener for selection change
 
         //book cover
-        Image image = new Image("sample/300.png");
+        Image image = new Image("http://placekitten.com/200/300");
         ImageView iv = new ImageView(image);
 
         //tags
