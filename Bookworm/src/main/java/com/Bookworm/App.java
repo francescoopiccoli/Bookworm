@@ -12,6 +12,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 
 /**
  * JavaFX App
@@ -19,16 +23,24 @@ import javafx.stage.Stage;
 public class App extends Application {
 
 	private Region currentView = new Discover();
+	private Map<String,Region> views = new HashMap<>();
 	private BorderPane mainPane;
 	
     @Override
     public void start(Stage stage) {
+
+        views.put("Home", new Label("implement me"));
+        views.put("Discover", new Discover());
+        views.put("Rankings", new Button("lol"));
+        views.put("Lists", new Discover());
+        views.put("Settings", new Discover());
+
         var javaVersion = SystemInfo.javaVersion();
         var javafxVersion = SystemInfo.javafxVersion();
 
         mainPane = new BorderPane();
         mainPane.setTop(_generateTopBar());
-        mainPane.setCenter(_generateContent(0));
+        mainPane.setCenter(_generateContent(""));
         mainPane.setBottom(_generateSidebar());
         var scene = new Scene(mainPane, 800, 600);
         scene.getStylesheets().add("/com/Bookworm/ui/Disc/style.css");
@@ -47,8 +59,18 @@ public class App extends Application {
         return vBox;
     }
     
-    private Region _generateContent(int id) {
-		return currentView;
+    private Region _generateContent(String name) {
+        Iterator<Map.Entry<String, Region>> iterator = views.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Region> entry = iterator.next();
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+
+            if(entry.getKey().equals(name)) {
+                return entry.getValue();
+            }
+        }
+        // default
+        return new Label("Hi! Select a view to start");
     }
 	
 	private HBox _generateSidebar() {
@@ -58,26 +80,25 @@ public class App extends Application {
         hBox.setSpacing(8);
 
         ToggleGroup toggleGroup = new ToggleGroup();
-        
-        ToggleButton options[] = new ToggleButton[] {
-            new ToggleButton("Home"),
-            new ToggleButton("Discover"),
-            new ToggleButton("Rankings"),
-            new ToggleButton("Lists"),
-            new ToggleButton("Profile")};
 
-        String defaultView = "Home";
-        for (int i=0; i<options.length; i++) {
-        	if(defaultView.equals(options[i].getText()))
-        		options[i].setSelected(true);
+
+        Iterator<Map.Entry<String, Region>> iterator = views.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, Region> entry = iterator.next();
+
+            ToggleButton button = new ToggleButton(entry.getKey());
+        	if(currentView.equals(entry.getValue()))
+        		button.setSelected(true);
         		
-            hBox.setMargin(options[i], new Insets(0, 0, 0, 8));
-            hBox.getChildren().add(options[i]);
-            options[i].setOnAction((event) -> {
-                currentView = new Label("viewing "+((ToggleButton) event.getSource()).getText());
-                mainPane.setCenter(currentView);
+            hBox.setMargin(button, new Insets(0, 0, 0, 8));
+            hBox.getChildren().add(button);
+            button.setOnAction((event) -> {
+                mainPane.setCenter(_generateContent(
+                        ((ToggleButton) event.getSource()).getText()
+                ));
             });
-            options[i].setToggleGroup(toggleGroup);
+            button.setToggleGroup(toggleGroup);
         }
 
         return hBox;
