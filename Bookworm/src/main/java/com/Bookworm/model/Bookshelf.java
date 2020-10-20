@@ -2,8 +2,10 @@ package com.Bookworm.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bookshelf extends GeneralList {
+public class Bookshelf {
 	private String description;
+	private String name;
+	private List<Book> books;
 	
 	public Bookshelf(String name, String description, List<Book> books) {
 		super();
@@ -39,11 +41,21 @@ public class Bookshelf extends GeneralList {
 	
 	public List<Book> getBooks() {
 		ArrayList<Tag> tags = new ArrayList<Tag>();
-		tags.add(new Tag("tag", null));
+		tags.add(new Tag("tag"));
 		ArrayList<Book> istanceList = new ArrayList<Book>();
-		istanceList.add(new Book("istance", "La spada nella roccia", new BookCategory("Horror", null), tags, new Author("Artù", null), 5));
-		istanceList.add(new Book("istance", "La spada nella roccia", new BookCategory("Horror", null), tags, new Author("Artù", null), 5));
-		istanceList.add(new Book("istance", "La spada nella roccia", new BookCategory("Horror", null), tags, new Author("Artù", null), 5));
+		istanceList.add(new Book("istance", "La spada nella roccia", "Horror", tags, "Artù", 5));
+		istanceList.add(new Book("istance", "La spada nella roccia", "Horror", tags, "Artù", 5));
+		istanceList.add(new Book("istance", "La spada nella roccia", "Horror", tags, "Artù", 5));
 		return null;
+	}
+
+
+	public void addBook() {
+		// TODO Auto-generated method stub
+
+	}
+	public void removeBook() {
+		// TODO Auto-generated method stub
+
 	}
 }
