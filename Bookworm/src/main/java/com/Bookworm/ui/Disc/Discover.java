@@ -1,4 +1,4 @@
-package Disc;
+package com.Bookworm.ui.Disc;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 public class Discover {
     public Node getCenterDisc() throws FileNotFoundException {
         //Temporary image to replace covers
-        Image image = new Image("Disc/300.png");
+        Image image = new Image("https://placekitten.com/300/300/");
         //Create vertical box will align all elements one under the other
         VBox vb = new VBox();
 

@@ -1,6 +1,7 @@
-package Disc;
+package com.Bookworm.ui.Disc;
 
 
+import com.Bookworm.ui.Disc.Discover;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;

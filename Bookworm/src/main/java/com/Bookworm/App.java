@@ -41,7 +41,7 @@ public class App extends Application {
         vBox.setPadding(new Insets(20));
 		vBox.setAlignment(Pos.CENTER);
         Text title = new Text("Bookworm");
-        title.setFont(Font.font("Helvetica", FontWeight.BOLD, 28));
+        title.setFont(Font.font("Noto Sans Condensed", FontWeight.BOLD, 28));
         vBox.getChildren().add(title);
 
         return vBox;

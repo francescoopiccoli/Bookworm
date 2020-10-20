@@ -8,4 +8,5 @@ module com.Bookworm {
 	requires javafx.fxml;
     exports com.Bookworm;
 	exports com.Bookworm.ui;
+	exports com.Bookworm.ui.Disc;
 }
