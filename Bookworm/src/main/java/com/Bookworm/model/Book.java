@@ -5,13 +5,13 @@ import java.util.List;
 public class Book {
 		
 		private String description, name;
-		private BookCategory category;
+		private String category;
 		private ArrayList<Tag> tags;
-		private Author author;
+		private String author;
 		private int rate;
 		
 		
-		public Book(String name, String description, BookCategory category, ArrayList<Tag> tags, Author author, int rate) {
+		public Book(String name, String description, String category, ArrayList<Tag> tags, String author, int rate) {
 			super();
 			this.description = description;
 			this.name = name;
@@ -34,10 +34,10 @@ public class Book {
 		public void setName(String name) {
 			this.name = name;
 		}
-		public BookCategory getCategory() {
+		public String getCategory() {
 			return category;
 		}
-		public void setCategory(BookCategory category) {
+		public void setCategory(String category) {
 			this.category = category;
 		}
 		public ArrayList<Tag> getTags() {
@@ -46,10 +46,10 @@ public class Book {
 		public void setTags(ArrayList<Tag> tags) {
 			this.tags = tags;
 		}
-		public Author getAuthor() {
+		public String getAuthor() {
 			return author;
 		}
-		public void setAuthor(Author author) {
+		public void setAuthor(String author) {
 			this.author = author;
 		}
 		public int getRate() {
