@@ -1,4 +1,4 @@
-package sample;
+package ui; 
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -31,7 +31,7 @@ public class BookInfo extends Application {
         window.setTitle("Book Info");
 
         //book title
-        TextArea displayTitle = new TextArea("book title"); //Book.getName()
+        TextArea displayTitle = new TextArea("book title");
         displayTitle.setPrefSize(100, 30);
         displayTitle.setEditable(false);
         displayTitle.setMouseTransparent(true);
@@ -39,17 +39,17 @@ public class BookInfo extends Application {
 
 
         //Authors in combo box
-        String authors = "author"; //Author.getName();
+       // String authors = Author.getName();
         ComboBox combo_box =
                 new ComboBox(FXCollections
-                        .observableArrayList(authors));
+                        .observableArrayList( "Fitzgerald","Camus","Hugo","Orwell","Christie"));
 
         combo_box.setOnAction(e -> combo_box.getValue());
         combo_box.setEditable(false);
         //TO-DO implement listener for selection change
 
         //book cover
-        Image image = new Image("image");
+        Image image = new Image("sample/300.png");
         ImageView iv = new ImageView(image);
 
         //tags
@@ -83,9 +83,9 @@ public class BookInfo extends Application {
 
         //positions
         Pane root = new Pane();
-        displayTitle.setLayoutX(130);
+        displayTitle.setLayoutX(95);
         displayTitle.setLayoutY(10);
-        combo_box.setLayoutX(250);
+        combo_box.setLayoutX(202);
         combo_box.setLayoutY(10);
         iv.setX(10);
         iv.setY(10);
