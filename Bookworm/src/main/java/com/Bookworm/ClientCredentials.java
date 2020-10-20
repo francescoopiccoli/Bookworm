@@ -30,7 +30,7 @@ package com.Bookworm;
 public class ClientCredentials {
 
   /** Value of the "API key" shown under "Simple API Access". */
-  static final String API_KEY = System.getenv("bookwormAPI_KEY");
+  static final String API_KEY = "AIzaSyCrhM2GtOjpf-exVbgJnQdKEDRG494tEG0";
 
   static void errorIfNotSpecified() {
     if (API_KEY.startsWith("Enter ")) {

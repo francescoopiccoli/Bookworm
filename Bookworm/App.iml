@@ -10,11 +10,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:13" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:linux:13" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:13" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:13" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:linux:13" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:13" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:13" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:linux:13" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:13" level="project" />
     <orderEntry type="library" name="Maven: com.google.api-client:google-api-client:1.30.11" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.31.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.37.0" level="project" />
@@ -27,7 +27,6 @@
     <orderEntry type="library" name="Maven: io.opencensus:opencensus-contrib-http-util:0.24.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client-jackson2:1.37.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:29.0-android" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:failureaccess:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
@@ -35,5 +34,6 @@
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.3.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.apis:google-api-services-books:v1-rev114-1.25.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.5.2" level="project" />
   </component>
 </module>
