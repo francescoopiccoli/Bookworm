@@ -39,7 +39,7 @@ public class BookInfo extends Application {
 
 
         //Authors in combo box
-        String authors = Author.getName();
+        String authors = "author"; //Author.getName();
         ComboBox combo_box =
                 new ComboBox(FXCollections
                         .observableArrayList(authors));
@@ -49,7 +49,7 @@ public class BookInfo extends Application {
         //TO-DO implement listener for selection change
 
         //book cover
-        Image image = new Image("sample/300.png");
+        Image image = new Image("image");
         ImageView iv = new ImageView(image);
 
         //tags
