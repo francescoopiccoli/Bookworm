@@ -1,8 +1,8 @@
-package ui; 
+package com.Bookworm.ui;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.fxml.FXMLLoader;
+//import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +25,7 @@ public class BookInfo extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         //    Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         window = primaryStage;
         window.setTitle("Book Info");
