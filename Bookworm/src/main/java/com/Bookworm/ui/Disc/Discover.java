@@ -27,7 +27,7 @@ public class Discover extends BorderPane {
 
     public Node getCenterDisc() {
         //Temporary image to replace covers
-        Image image = new Image("https://placekitten.com/300/300/");
+        Image image = new Image(getClass().getResourceAsStream("/Images/placeholder.png"));
         //Create vertical box will align all elements one under the other
         VBox vb = new VBox();
 

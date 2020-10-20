@@ -43,7 +43,7 @@ public class App extends Application {
         mainPane.setCenter(_generateContent(""));
         mainPane.setBottom(_generateSidebar());
         var scene = new Scene(mainPane, 800, 600);
-        scene.getStylesheets().add("/com/Bookworm/ui/Disc/style.css");
+        scene.getStylesheets().add("/src/main/resources/style.css");
         stage.setScene(scene);
         stage.show();
     }

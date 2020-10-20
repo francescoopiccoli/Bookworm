@@ -1,7 +1,6 @@
 package com.Bookworm.ui.Disc;
 
 
-import com.Bookworm.ui.Disc.Discover;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -26,7 +25,7 @@ public class DiscoverStart extends Application {
         layout.setCenter(disc.getCenterDisc());
         scene = new Scene(layout, 1800,750);
         //Sets css to the discover scene
-        scene.getStylesheets().add("/com/Bookworm/ui/Disc/style.css");
+        scene.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
         window.setScene(scene);
         //Other characteristics for window of the application.
         window.setResizable(false);
