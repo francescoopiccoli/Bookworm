@@ -42,7 +42,7 @@ public class APImanager {
    * blank, the application will log a warning. Suggested format is "MyCompany-ProductName/1.0".
    */
   private static final String APPLICATION_NAME = "bookworm";
-  
+
   private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
 
@@ -89,6 +89,13 @@ public class APImanager {
       // Description (if any).
       if (volumeInfo.getDescription() != null && volumeInfo.getDescription().length() > 0) {
         System.out.println("Description: " + volumeInfo.getDescription());
+      }
+
+      if(volumeInfo.getImageLinks() != null){
+        Volume.VolumeInfo.ImageLinks links = new Volume.VolumeInfo.ImageLinks();
+        //to get larger images just change the zoom parameter in the url, &zoom=3 or 0 or 2
+        System.out.println("Image links: " + volumeInfo.getImageLinks());
+
       }
       // Ratings (if any).
       if (volumeInfo.getRatingsCount() != null && volumeInfo.getRatingsCount() > 0) {
@@ -144,7 +151,7 @@ public class APImanager {
       // Query format: "[<author|isbn|intitle>:]<query>"
       String prefix = null;
       String query = "";
-      String[] parameters = {"Sherlock Holmes"};
+      String[] parameters = {"Elon Musk"};
       for (String arg : parameters) {
         if ("--author".equals(arg)) {
           prefix = "inauthor:";
