@@ -1,16 +1,17 @@
 package com.Bookworm.model;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Book {
 		
 		private String description, name;
 		private BookCategory category;
-		private List<Tag> tags;
+		private ArrayList<Tag> tags;
 		private Author author;
 		private int rate;
 		
 		
-		public Book(String description, String name, BookCategory category, List<Tag> tags, Author author, int rate) {
+		public Book(String name, String description, BookCategory category, ArrayList<Tag> tags, Author author, int rate) {
 			super();
 			this.description = description;
 			this.name = name;
@@ -39,10 +40,10 @@ public class Book {
 		public void setCategory(BookCategory category) {
 			this.category = category;
 		}
-		public List<Tag> getTags() {
+		public ArrayList<Tag> getTags() {
 			return tags;
 		}
-		public void setTags(List<Tag> tags) {
+		public void setTags(ArrayList<Tag> tags) {
 			this.tags = tags;
 		}
 		public Author getAuthor() {

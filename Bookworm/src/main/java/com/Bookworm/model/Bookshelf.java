@@ -38,7 +38,7 @@ public class Bookshelf extends GeneralList {
 	
 	
 	public List<Book> getBooks() {
-		ArrayList<Tag> tags= new ArrayList<Tag>();
+		ArrayList<Tag> tags = new ArrayList<Tag>();
 		tags.add(new Tag("tag", null));
 		ArrayList<Book> istanceList = new ArrayList<Book>();
 		istanceList.add(new Book("istance", "La spada nella roccia", new BookCategory("Horror", null), tags, new Author("Artù", null), 5));
@@ -46,5 +46,4 @@ public class Bookshelf extends GeneralList {
 		istanceList.add(new Book("istance", "La spada nella roccia", new BookCategory("Horror", null), tags, new Author("Artù", null), 5));
 		return null;
 	}
-	
 }
