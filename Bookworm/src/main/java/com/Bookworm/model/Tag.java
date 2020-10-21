@@ -1,14 +1,12 @@
 package com.Bookworm.model;
 import java.util.List;
 
-public class Tag extends GeneralList {
+public class Tag {
 	private String name;
-	private List<Book> books;
-	
-	public Tag(String name, List<Book> books) {
+
+	public Tag(String name) {
 		super();
 		this.name = name;
-		this.books = books;
 	}
 
 	public String getName() {
@@ -18,14 +16,4 @@ public class Tag extends GeneralList {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<Book> getBooks() {
-		return books;
-	}
-
-	public void setBooks(List<Book> books) {
-		this.books = books;
-	}
-	
-	
 }
