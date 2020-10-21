@@ -4,15 +4,12 @@ import java.util.List;
 public class Book {
 		
 		private String description, name, imageURL;
-		private BookCategory category;
+		private String category;
 		private List<Tag> tags;
-		private Author author;
+		private String author;
 		private int rate;
 
-
-
-
-	public Book(String description, String name, BookCategory category, List<Tag> tags, Author author, int rate, String imageURL) {
+	public Book(String description, String name, String category, List<Tag> tags, String author, int rate, String imageURL) {
 			super();
 			this.description = description;
 			this.name = name;
@@ -40,7 +37,7 @@ public class Book {
 		public void setName(String name) {
 			this.name = name;
 		}
-		public BookCategory getCategory() {
+		public String getCategory() {
 			return category;
 		}
 		public void setCategory(BookCategory category) {
@@ -52,7 +49,7 @@ public class Book {
 		public void setTags(List<Tag> tags) {
 			this.tags = tags;
 		}
-		public Author getAuthor() {
+		public String getAuthor() {
 			return author;
 		}
 		public void setAuthor(Author author) {
