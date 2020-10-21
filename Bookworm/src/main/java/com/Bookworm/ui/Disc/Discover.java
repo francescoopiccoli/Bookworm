@@ -22,8 +22,7 @@ public class Discover extends BorderPane {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTopDisc());
         setCenter(getCenterDisc());
-        //Sets css to the discover scene
-        //
+
     }
 
     public Node getCenterDisc() {
@@ -89,7 +88,7 @@ public class Discover extends BorderPane {
         return  vb;
     }
     private void filter() {
-        DiscoverStart.layout.setCenter(centersearch());
+        setCenter(centersearch());
     }
 
     private Node centersearch() {
