@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 
@@ -56,6 +57,7 @@ public class Discover extends BorderPane {
                 ImageView imageView = new ImageView(image);
                 rect = new Button("Title placeholder 11111111111111111111111111111jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",imageView);
                 rect.getStyleClass().add("rect");
+                rect.setOnAction(event -> {bookinfo("title","Author","Description");});
                 hb.getChildren().add(rect);
 
             }
@@ -67,6 +69,20 @@ public class Discover extends BorderPane {
         return  scrollPane;
 
 
+
+    }
+
+    private void bookinfo(String title, String author, String description) {
+        Stage bookPage = new Stage();
+        VBox vb = new VBox();
+        Text titlebook = new Text(title);
+        Text authrobook = new Text(author);
+        Text descbook = new Text(description);
+        vb.getChildren().addAll(titlebook,authrobook,descbook);
+        bookPage.setTitle("Book info: "+title);
+        Scene scenebook = new Scene(vb,500,100);
+        bookPage.setScene(scenebook);
+        bookPage.show();
 
     }
 
