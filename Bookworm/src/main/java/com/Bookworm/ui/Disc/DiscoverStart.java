@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class DiscoverStart extends Application {
     Stage window;
     Scene scene;
-    BorderPane layout;
+    public static BorderPane layout;
     ScrollPane scrollPane;
     @Override
     public void start(Stage primaryStage) throws Exception{

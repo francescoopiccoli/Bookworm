@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 
@@ -54,7 +55,7 @@ public class Discover extends BorderPane {
             for (int j = 0; j<5;j++){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
                 ImageView imageView = new ImageView(image);
-                rect = new Button("Title placeholder",imageView);
+                rect = new Button("Title placeholder 11111111111111111111111111111jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",imageView);
                 rect.getStyleClass().add("rect");
                 hb.getChildren().add(rect);
 
@@ -88,7 +89,14 @@ public class Discover extends BorderPane {
         return  vb;
     }
     private void filter() {
+        DiscoverStart.layout.setCenter(centersearch());
+    }
 
+    private Node centersearch() {
+        VBox vb = new VBox();
+        Text resulttext = new Text("THIS WILL BE YOUR RESULTS");
+        vb.getChildren().add(resulttext);
+        return vb;
     }
 
 }

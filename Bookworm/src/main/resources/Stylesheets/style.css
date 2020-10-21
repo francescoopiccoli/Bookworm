@@ -19,6 +19,9 @@
 
 .rect{
     -fx-content-display: top;
+    -fx-overflow: hidden;
+    -fx-text-overflow: ellipsis;
+    -fx-max-width: 200px;
 }
 .vbrect{
     -fx-focus-color: transparent;
@@ -26,5 +29,6 @@
     -fx-padding: 25 0 0 35;
 }
 .scrollpane{
+
 
 }
