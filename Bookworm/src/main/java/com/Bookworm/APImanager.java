@@ -12,6 +12,12 @@ package com.Bookworm;
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+
+//  metodo search ritorna lista di libri, anche querygooglebook.
+//
+import com.Bookworm.model.Author;
+import com.Bookworm.model.Book;
+import com.Bookworm.model.BookCategory;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -21,6 +27,7 @@ import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volume;
 import com.google.api.services.books.model.Volumes;
 
+import java.util.LinkedList;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
@@ -45,6 +52,77 @@ public class APImanager {
 
   private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
+  public static LinkedList<Book> foundBooks;
+
+  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
+
+    foundBooks = new LinkedList<Book>();
+    ClientCredentials.errorIfNotSpecified();
+
+    // Set up Books client.
+    final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
+            .setApplicationName(APPLICATION_NAME)
+            .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
+            .build();
+    // Set query string and filter only Google eBooks.
+    System.out.println("Query: [" + query + "]");
+    List volumesList = books.volumes().list(query);
+    volumesList.setFilter("ebooks");
+
+    // Execute the query.
+    Volumes volumes = volumesList.execute();
+    if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
+      System.out.println("No matches found.");
+      return null;
+    }
+    for (Volume volume : volumes.getItems()) {
+      Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
+      Volume.SaleInfo saleInfo = volume.getSaleInfo();
+
+      Book currentBook = new Book();
+
+      if (volumeInfo.getDescription() != null && volumeInfo.getDescription().length() > 0) {
+        currentBook.setDescription(volumeInfo.getDescription());
+      }
+
+      currentBook.setName(volumeInfo.getTitle());
+
+      if (volumeInfo.getMainCategory() != null && volumeInfo.getMainCategory().length() > 0) {
+        currentBook.setCategory(new BookCategory(volumeInfo.getMainCategory(), null));
+      }
+
+      currentBook.setTags(null);
+
+      java.util.List<String> authors = volumeInfo.getAuthors();
+      String author = new String("");
+      if (authors != null && !authors.isEmpty()) {
+        for (int i = 0; i < authors.size(); ++i) {
+          author += authors.get(i);
+
+          if (i < authors.size() - 1) {
+            author += ", ";
+          }
+        }
+      }
+      currentBook.setAuthor(new Author(author, null));
+
+      if (volumeInfo.getAverageRating() != null && volumeInfo.getAverageRating() >= 0) {
+        currentBook.setRate((volumeInfo.getAverageRating().intValue()));
+      }
+
+      if(volumeInfo.getImageLinks() != null){
+        //to get larger images just change the zoom parameter in the url, &zoom=3 or 0 or 2
+        currentBook.setImageURL((String)volumeInfo.getImageLinks().get("thumbnail"));
+      }
+
+      foundBooks.add(currentBook);
+    }
+    return foundBooks;
+  }
+
+
+
+
 
   private static void queryGoogleBooks(JsonFactory jsonFactory, String query) throws Exception {
 	  
@@ -92,11 +170,10 @@ public class APImanager {
       }
 
       if(volumeInfo.getImageLinks() != null){
-        Volume.VolumeInfo.ImageLinks links = new Volume.VolumeInfo.ImageLinks();
         //to get larger images just change the zoom parameter in the url, &zoom=3 or 0 or 2
-        System.out.println("Image links: " + volumeInfo.getImageLinks());
-
+        System.out.println("Image link: " + volumeInfo.getImageLinks().get("thumbnail"));
       }
+
       // Ratings (if any).
       if (volumeInfo.getRatingsCount() != null && volumeInfo.getRatingsCount() > 0) {
         int fullRating = (int) Math.round(volumeInfo.getAverageRating().doubleValue());
@@ -170,7 +247,10 @@ public class APImanager {
         query = prefix + query;
       }
       try {
-        queryGoogleBooks(jsonFactory, query);
+        LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, query);
+        for(Book b : foundBooks){
+            System.out.println(b.getImageURL());
+        }
         // Success!
         return;
       } catch (IOException e) {

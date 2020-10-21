@@ -3,14 +3,16 @@ import java.util.List;
 
 public class Book {
 		
-		private String description, name;
+		private String description, name, imageURL;
 		private BookCategory category;
 		private List<Tag> tags;
 		private Author author;
 		private int rate;
-		
-		
-		public Book(String description, String name, BookCategory category, List<Tag> tags, Author author, int rate) {
+
+
+
+
+	public Book(String description, String name, BookCategory category, List<Tag> tags, Author author, int rate, String imageURL) {
 			super();
 			this.description = description;
 			this.name = name;
@@ -18,8 +20,13 @@ public class Book {
 			this.tags = tags;
 			this.author = author;
 			this.rate = rate;
+			this.imageURL = imageURL;
 		}
-		
+
+		public Book(){
+
+		}
+
 		
 		public String getDescription() {
 			return description;
@@ -56,6 +63,13 @@ public class Book {
 		}
 		public void setRate(int rate) {
 			this.rate = rate;
-		}	
+		}
 
+		public String getImageURL() {
+			return imageURL;
+		}
+
+		public void setImageURL(String imageURL) {
+			this.imageURL = imageURL;
+		}
 }
