@@ -1,5 +1,7 @@
 package com.Bookworm.ui.Disc;
 
+import com.Bookworm.APImanager;
+import com.Bookworm.model.Book;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,12 +14,18 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.DataInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+
+// !!! to fix  input with return null (no results found)
 
 public class Discover extends BorderPane {
 
     BorderPane layout;
     ScrollPane scrollPane;
+
+    public static LinkedList<Book> booklist = new LinkedList<Book>();
 
     public Discover() {
         //Create an instance of Discover to fill the borderpane with its functions
@@ -49,20 +57,21 @@ public class Discover extends BorderPane {
         label.getStyleClass().add("discoverLabel");
         vb.getChildren().add(label);
         //will create (currently 3) rows with at most 5 books on each row
+       // System.out.println(booklist);
+        if(!booklist.isEmpty()){
         for (int i = 0; i<3;i++){
             hb = new HBox();
-
-            for (int j = 0; j<5;j++){
+            for (Book b : booklist){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                ImageView imageView = new ImageView(image);
-                rect = new Button("Title placeholder 11111111111111111111111111111jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",imageView);
+                ImageView imageView = new ImageView(b.getImageURL());
+                rect = new Button(b.getName(),imageView);
                 rect.getStyleClass().add("rect");
-                rect.setOnAction(event -> {bookinfo("title","Author","Description");});
                 hb.getChildren().add(rect);
 
-            }
+            }}
             vb.getChildren().add(hb);
         }
+
         scrollPane = new ScrollPane(vb);
         scrollPane.getStyleClass().add("scrollpane");
 
@@ -90,11 +99,14 @@ public class Discover extends BorderPane {
         VBox vb = new VBox();
         HBox hb = new HBox();
         //VBox v = new VBox();
-
-
         TextField search = new TextField();
         TextField filters = new TextField();
 
+        search.setOnAction(event -> {
+                    booklist = APImanager.searchBooks(search.getText());
+                    if(!booklist.isEmpty()){
+                    DiscoverStart.refresh();}
+        });
 
         Button apply = new Button("Filter");
         apply.setOnAction(event -> {filter();});

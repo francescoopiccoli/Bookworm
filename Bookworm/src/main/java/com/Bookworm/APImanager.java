@@ -15,9 +15,7 @@ package com.Bookworm;
 
 //  metodo search ritorna lista di libri, anche querygooglebook.
 //
-import com.Bookworm.model.Author;
 import com.Bookworm.model.Book;
-import com.Bookworm.model.BookCategory;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -88,7 +86,7 @@ public class APImanager {
       currentBook.setName(volumeInfo.getTitle());
 
       if (volumeInfo.getMainCategory() != null && volumeInfo.getMainCategory().length() > 0) {
-        currentBook.setCategory(new BookCategory(volumeInfo.getMainCategory(), null));
+        currentBook.setCategory(volumeInfo.getMainCategory());
       }
 
       currentBook.setTags(null);
@@ -104,7 +102,7 @@ public class APImanager {
           }
         }
       }
-      currentBook.setAuthor(new Author(author, null));
+      currentBook.setAuthor(author);
 
       if (volumeInfo.getAverageRating() != null && volumeInfo.getAverageRating() >= 0) {
         currentBook.setRate((volumeInfo.getAverageRating().intValue()));
@@ -216,7 +214,7 @@ public class APImanager {
         + URLEncoder.encode(query, "UTF-8"));
   }
 
-  public static void main(String[] args) {
+   public static LinkedList<Book> searchBooks(String query) {
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
     try {
       // Verify command line parameters.
@@ -227,8 +225,7 @@ public class APImanager {
       // Parse command line parameters into a query.
       // Query format: "[<author|isbn|intitle>:]<query>"
       String prefix = null;
-      String query = "";
-      String[] parameters = {"Elon Musk"};
+      String[] parameters = {query};
       for (String arg : parameters) {
         if ("--author".equals(arg)) {
           prefix = "inauthor:";
@@ -248,11 +245,11 @@ public class APImanager {
       }
       try {
         LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, query);
-        for(Book b : foundBooks){
-            System.out.println(b.getImageURL());
-        }
+        //for(Book b : foundBooks){
+            //System.out.println(b.getImageURL());
+        //}
         // Success!
-        return;
+        return foundBooks;
       } catch (IOException e) {
         System.err.println(e.getMessage());
       }
@@ -260,5 +257,6 @@ public class APImanager {
       t.printStackTrace();
     }
     System.exit(0);
-  }
+     return null;
+   }
 }

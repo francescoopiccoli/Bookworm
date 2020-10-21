@@ -12,6 +12,8 @@ public class DiscoverStart extends Application {
     Scene scene;
     public static BorderPane layout;
     ScrollPane scrollPane;
+    static Discover disc = new Discover();
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -20,7 +22,6 @@ public class DiscoverStart extends Application {
         primaryStage.setTitle("Bookworm - Discover");
         layout = new BorderPane();
         //Create an instance of Discover to fill the borderpane with its functions
-        Discover disc = new Discover();
         layout.setTop(disc.createTopDisc());
         layout.setCenter(disc.getCenterDisc());
         scene = new Scene(layout, 1800,750);
@@ -32,12 +33,12 @@ public class DiscoverStart extends Application {
         window.show();
         primaryStage.show();
 
-
-
     }
 
 
-
+    public static void refresh() {
+        layout.setCenter(disc.getCenterDisc());
+    }
 
     public static void main(String[] args) {
         launch(args);
