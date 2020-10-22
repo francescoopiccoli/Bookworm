@@ -66,7 +66,7 @@ public class APImanager {
     System.out.println("Query: [" + query + "]");
     List volumesList = books.volumes().list(query);
    // volumesList.setFilter("ebooks");
-
+    volumesList.setMaxResults((long) 40);
     // Execute the query.
     Volumes volumes = volumesList.execute();
     if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {

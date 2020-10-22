@@ -63,7 +63,7 @@ public class Discover extends BorderPane {
             hb = new HBox();
             for (Book b : booklist){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                if(counter == 3){
+                if(counter == 4){
                     counter = 0;
                     vb.getChildren().add(hb);
                     hb = new HBox();
