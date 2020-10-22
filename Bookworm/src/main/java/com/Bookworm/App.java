@@ -33,16 +33,15 @@ public class App extends Application {
     public void start(Stage stage) {
 
         ArrayList<Book> demoList = new ArrayList<Book>();
-        /*demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, "Francis Scott Fitzgerald", 5));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, new Author("Francis Scott Fitzgerald", null), 5));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, new Author("Francis Scott Fitzgerald", null), 5));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));*/
-
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
 
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());

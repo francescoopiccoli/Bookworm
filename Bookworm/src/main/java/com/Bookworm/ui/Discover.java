@@ -1,4 +1,4 @@
-package com.Bookworm.ui.Disc;
+package com.Bookworm.ui;
 
 import com.Bookworm.APImanager;
 import com.Bookworm.model.Book;
