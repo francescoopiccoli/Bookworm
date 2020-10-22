@@ -48,8 +48,10 @@
                 </configuration>
             </plugin>
             <plugin>
-	            <artifactId>maven-jar-plugin</artifactId>
-	            <configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
 	                <archive>
 	                    <manifest>
 	                        <mainClass>com.bookworm.App</mainClass>
