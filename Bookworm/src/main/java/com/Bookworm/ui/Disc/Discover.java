@@ -67,7 +67,13 @@ public class Discover extends BorderPane {
                     counter = 0;
                     vb.getChildren().add(hb);
                     hb = new HBox();
-                    ImageView imageView = new ImageView(b.getImageURL());
+                    ImageView imageView;
+                    if(b.getImageURL()!=null){
+                        imageView = new ImageView(b.getImageURL());}
+                    else {
+
+                        imageView = new ImageView(image);
+                    }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
                     rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
