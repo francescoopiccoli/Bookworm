@@ -58,20 +58,34 @@ public class Discover extends BorderPane {
         vb.getChildren().add(label);
         //will create (currently 3) rows with at most 5 books on each row
        // System.out.println(booklist);
+        int counter = 0;
         if(!booklist.isEmpty()){
-        for (int i = 0; i<3;i++){
             hb = new HBox();
             for (Book b : booklist){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                ImageView imageView = new ImageView(b.getImageURL());
-                rect = new Button(b.getName(),imageView);
-                rect.getStyleClass().add("rect");
-                rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
-                hb.getChildren().add(rect);
+                if(counter == 3){
+                    counter = 0;
+                    vb.getChildren().add(hb);
+                    hb = new HBox();
+                    ImageView imageView = new ImageView(b.getImageURL());
+                    rect = new Button(b.getName(),imageView);
+                    rect.getStyleClass().add("rect");
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    hb.getChildren().add(rect);
+                    counter++;
+                }
+                else{
+                    ImageView imageView = new ImageView(b.getImageURL());
+                    rect = new Button(b.getName(),imageView);
+                    rect.getStyleClass().add("rect");
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    hb.getChildren().add(rect);
+                    counter++;
+                }
 
             }}
             vb.getChildren().add(hb);
-        }
+
 
         scrollPane = new ScrollPane(vb);
         scrollPane.getStyleClass().add("scrollpane");
