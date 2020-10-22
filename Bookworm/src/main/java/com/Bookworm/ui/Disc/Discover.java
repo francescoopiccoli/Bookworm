@@ -86,9 +86,18 @@ public class Discover extends BorderPane {
                     counter++;
                 }
                 else{
-                    ImageView imageView = new ImageView(b.getImageURL());
+                    ImageView imageView;
+                    if(b.getImageURL()!=null){
+                    imageView = new ImageView(b.getImageURL());
                     imageView.setFitWidth(150);
                     imageView.setFitHeight(200);
+                    }
+                    else {
+
+                        imageView = new ImageView(image);
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(200);
+                    }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
                     rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
