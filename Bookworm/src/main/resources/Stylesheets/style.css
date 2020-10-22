@@ -1,6 +1,6 @@
 
 .discoverLabel{
-    -fx-padding: 0 0 0 700;
+    -fx-padding: 0 0 0 250;
     -fx-font-family: "Blue Highway";
     -fx-font-size: 28;
     -fx-alignment: center;
@@ -11,7 +11,7 @@
 
 .scrollpane {
         -fx-focus-color: transparent;
-        -fx-padding: 0 0 0 85;
+        -fx-padding: 0 0 0 25;
         -fx-background-insets: -1.4, 0, 1, 2;
 
 }
@@ -21,12 +21,18 @@
     -fx-content-display: top;
     -fx-overflow: hidden;
     -fx-text-overflow: ellipsis;
-    -fx-max-width: 200px;
+    -fx-min-width: 175px;
+    -fx-max-width: 175px;
+    -fx-pref-height: 250px;
+
+
+
+
 }
 .vbrect{
     -fx-focus-color: transparent;
 
-    -fx-padding: 25 0 0 35;
+    -fx-padding: 25 0 0 5;
 }
 .scrollpane{
 

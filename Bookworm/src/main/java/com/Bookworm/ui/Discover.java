@@ -1,5 +1,7 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.Disc;
 
+import com.Bookworm.APImanager;
+import com.Bookworm.model.Book;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,20 +11,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.DataInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+
+// !!! to fix  input with return null (no results found)
 
 public class Discover extends BorderPane {
 
     BorderPane layout;
     ScrollPane scrollPane;
 
+    public static LinkedList<Book> booklist = new LinkedList<Book>();
+
     public Discover() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTopDisc());
         setCenter(getCenterDisc());
-        //Sets css to the discover scene
-        //
+
     }
 
     public Node getCenterDisc() {
@@ -48,19 +57,58 @@ public class Discover extends BorderPane {
         label.getStyleClass().add("discoverLabel");
         vb.getChildren().add(label);
         //will create (currently 3) rows with at most 5 books on each row
-        for (int i = 0; i<3;i++){
+       // System.out.println(booklist);
+        int counter = 0;
+        if(!booklist.isEmpty()){
             hb = new HBox();
-
-            for (int j = 0; j<5;j++){
+            for (Book b : booklist){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                ImageView imageView = new ImageView(image);
-                rect = new Button("Title placeholder",imageView);
-                rect.getStyleClass().add("rect");
-                hb.getChildren().add(rect);
+                if(counter == 4){
+                    counter = 0;
+                    vb.getChildren().add(hb);
+                    hb = new HBox();
+                    ImageView imageView;
+                    if(b.getImageURL()!=null){
+                        imageView = new ImageView(b.getImageURL());
+                        imageView.setFitWidth(150);
 
-            }
+                        imageView.setFitHeight(200);}
+                    else {
+
+                        imageView = new ImageView(image);
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(200);
+                    }
+                    rect = new Button(b.getName(),imageView);
+                    rect.getStyleClass().add("rect");
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    hb.getChildren().add(rect);
+                    counter++;
+                }
+                else{
+                    ImageView imageView;
+                    if(b.getImageURL()!=null){
+                    imageView = new ImageView(b.getImageURL());
+                    imageView.setFitWidth(150);
+                    imageView.setFitHeight(200);
+                    }
+                    else {
+
+                        imageView = new ImageView(image);
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(200);
+                    }
+                    rect = new Button(b.getName(),imageView);
+                    rect.getStyleClass().add("rect");
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    hb.getChildren().add(rect);
+                    counter++;
+                }
+
+            }}
             vb.getChildren().add(hb);
-        }
+
+
         scrollPane = new ScrollPane(vb);
         scrollPane.getStyleClass().add("scrollpane");
 
@@ -70,15 +118,32 @@ public class Discover extends BorderPane {
 
     }
 
+    private void bookinfo(String title, String author, String description) {
+        Stage bookPage = new Stage();
+        VBox vb = new VBox();
+        Text titlebook = new Text(title);
+        Text authrobook = new Text(author);
+        Text descbook = new Text(description);
+        vb.getChildren().addAll(titlebook,authrobook,descbook);
+        bookPage.setTitle("Book info: "+title);
+        Scene scenebook = new Scene(vb,500,100);
+        bookPage.setScene(scenebook);
+        bookPage.show();
+
+    }
+
     public Node createTopDisc() {
         VBox vb = new VBox();
         HBox hb = new HBox();
         //VBox v = new VBox();
-
-
         TextField search = new TextField();
         TextField filters = new TextField();
 
+        search.setOnAction(event -> {
+                    booklist = APImanager.searchBooks(search.getText());
+                    if(!booklist.isEmpty()){
+                    refresh();}
+        });
 
         Button apply = new Button("Filter");
         apply.setOnAction(event -> {filter();});
@@ -88,7 +153,16 @@ public class Discover extends BorderPane {
         return  vb;
     }
     private void filter() {
-
+        setCenter(centersearch());
     }
 
+    private Node centersearch() {
+        VBox vb = new VBox();
+        Text resulttext = new Text("THIS WILL BE YOUR FILTERED RESULTS. IN DEVELOPMENT");
+        vb.getChildren().add(resulttext);
+        return vb;
+    }
+    public void refresh() {
+        setCenter(getCenterDisc());
+    }
 }
