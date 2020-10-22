@@ -1,4 +1,4 @@
-package com.Bookworm.ui.Disc;
+package com.Bookworm.ui;
 
 
 import javafx.application.Application;

@@ -1,6 +1,8 @@
 package com.Bookworm;
 
-import com.Bookworm.ui.Disc.Discover;
+import com.Bookworm.model.Book;
+import com.Bookworm.ui.Discover;
+import com.Bookworm.ui.BookListView;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,10 +32,22 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
+        ArrayList<Book> demoList = new ArrayList<Book>();
+        /*demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, "Francis Scott Fitzgerald", 5));
+        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, new Author("Francis Scott Fitzgerald", null), 5));
+        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, null, new Author("Francis Scott Fitzgerald", null), 5));
+        demoList.add(new Book("A thicc big book", "War and Peace", null, null, new Author("Lev Tolstoj", null), 5));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, null, new Author("J. R. R. Tolkien", null), 5));*/
+
+
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());
-        views.put("Rankings", new Button("lol"));
-        views.put("Lists", new Discover());
+        views.put("Rankings", new BookListView("Best ranking books", demoList));
+        views.put("Lists", new Button("lol"));
         views.put("Settings", new Discover());
 
         var javaVersion = SystemInfo.javaVersion();
