@@ -1,22 +1,25 @@
 package com.Bookworm.model;
+import com.Bookworm.controller.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bookshelf {
 	private String description;
 	private String name;
-	private List<Book> books;
+	private ArrayList<Book> books;
 
-	public Bookshelf(String name, String description, List<Book> books) {
+	public Bookshelf(String name, String description, ArrayList<Book> books) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.books = books;
 	}
 
+
 	public String getName() {
 		return name;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
@@ -33,20 +36,16 @@ public class Bookshelf {
 	}
 
 
-	public void setBooks(List<Book> books) {
+	public void setBooks(ArrayList<Book> books) {
 		this.books = books;
 	}
 
 
-	public List<Book> getBooks() {
-		return null;
+	public ArrayList<Book> getBooks() {
+		return books;
 	}
 
 	public void addBook() {
-		// TODO Auto-generated method stub
-
-	}
-	public void removeBook() {
 		// TODO Auto-generated method stub
 
 	}
