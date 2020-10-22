@@ -66,6 +66,7 @@ public class Discover extends BorderPane {
                 ImageView imageView = new ImageView(b.getImageURL());
                 rect = new Button(b.getName(),imageView);
                 rect.getStyleClass().add("rect");
+                rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
                 hb.getChildren().add(rect);
 
             }}
@@ -105,7 +106,7 @@ public class Discover extends BorderPane {
         search.setOnAction(event -> {
                     booklist = APImanager.searchBooks(search.getText());
                     if(!booklist.isEmpty()){
-                    DiscoverStart.refresh();}
+                    refresh();}
         });
 
         Button apply = new Button("Filter");
@@ -121,9 +122,11 @@ public class Discover extends BorderPane {
 
     private Node centersearch() {
         VBox vb = new VBox();
-        Text resulttext = new Text("THIS WILL BE YOUR RESULTS");
+        Text resulttext = new Text("THIS WILL BE YOUR FILTERED RESULTS. IN DEVELOPMENT");
         vb.getChildren().add(resulttext);
         return vb;
     }
-
+    public void refresh() {
+        setCenter(getCenterDisc());
+    }
 }

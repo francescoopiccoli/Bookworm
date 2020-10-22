@@ -12,11 +12,12 @@ public class DiscoverStart extends Application {
     Scene scene;
     public static BorderPane layout;
     ScrollPane scrollPane;
-    static Discover disc = new Discover();
+    Discover disc;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        disc = new Discover();
         window = primaryStage;
         //Since discover is first scene show that first and set it as initial scene; layout is the current discover scene.
         primaryStage.setTitle("Bookworm - Discover");
@@ -37,7 +38,7 @@ public class DiscoverStart extends Application {
 
 
     public static void refresh() {
-        layout.setCenter(disc.getCenterDisc());
+        //layout.setCenter(disc.getCenterDisc());
     }
 
     public static void main(String[] args) {
