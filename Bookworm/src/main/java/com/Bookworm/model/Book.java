@@ -1,7 +1,8 @@
 package com.Bookworm.model;
+import java.io.Serializable;
 import java.util.List;
 
-public class Book {
+public class Book implements Serializable {
 
 	private String description, name, imageURL;
 	private String category;
@@ -20,10 +21,9 @@ public class Book {
 		this.imageURL = imageURL;
 	}
 
-	public Book(){
+	public Book() {
 
 	}
-
 
 	public String getDescription() {
 		return description;
@@ -69,4 +69,6 @@ public class Book {
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
+
+
 }
