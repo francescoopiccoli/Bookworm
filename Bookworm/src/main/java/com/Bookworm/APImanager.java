@@ -67,6 +67,7 @@ public class APImanager {
     List volumesList = books.volumes().list(query);
    // volumesList.setFilter("ebooks");
     volumesList.setMaxResults((long) 40);
+    //volumesList.setOrderBy("newest");
     // Execute the query.
     Volumes volumes = volumesList.execute();
     if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
