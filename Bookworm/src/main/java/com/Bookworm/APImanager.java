@@ -65,8 +65,9 @@ public class APImanager {
     // Set query string and filter only Google eBooks.
     System.out.println("Query: [" + query + "]");
     List volumesList = books.volumes().list(query);
-    volumesList.setFilter("ebooks");
-
+   // volumesList.setFilter("ebooks");
+    volumesList.setMaxResults((long) 40);
+    //volumesList.setOrderBy("newest");
     // Execute the query.
     Volumes volumes = volumesList.execute();
     if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
@@ -119,18 +120,62 @@ public class APImanager {
   }
 
 
-
-
+  public static LinkedList<Book> searchBooks(String query) {
+    JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+    try {
+      // Verify command line parameters.
+      //if (args.length == 0) {
+       // System.err.println("Usage: BooksSample [--author|--isbn|--title] \"<query>\"");
+      //  System.exit(1);
+     // }
+      // Parse command line parameters into a query.
+      // Query format: "[<author|isbn|intitle>:]<query>"
+      String prefix = null;
+      String[] parameters = query.split(" ");
+      String formalQuery = "";
+      for (String arg : parameters) {
+        if ("--author".equals(arg)) {
+          prefix = "inauthor:";
+        } else if ("--isbn".equals(arg)) {
+          prefix = "isbn:";
+        } else if ("--title".equals(arg)) {
+          prefix = "intitle:";
+        } else if (arg.startsWith("--")) {
+          System.err.println("Unknown argument: " + arg);
+          System.exit(1);
+        } else {
+          formalQuery = arg;
+        }
+      }
+      if (prefix != null) {
+        formalQuery = prefix + formalQuery;
+      }
+      try {
+        LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
+        //for(Book b : foundBooks){
+            //System.out.println(b.getImageURL());
+        //}
+        // Success!
+        return foundBooks;
+      } catch (IOException e) {
+        System.err.println(e.getMessage());
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
+    }
+    System.exit(0);
+     return null;
+   }
 
   private static void queryGoogleBooks(JsonFactory jsonFactory, String query) throws Exception {
-	  
+
     ClientCredentials.errorIfNotSpecified();
-    
+
     // Set up Books client.
     final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
-        .setApplicationName(APPLICATION_NAME)
-        .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
-        .build();
+            .setApplicationName(APPLICATION_NAME)
+            .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
+            .build();
     // Set query string and filter only Google eBooks.
     System.out.println("Query: [" + query + "]");
     List volumesList = books.volumes().list(query);
@@ -186,13 +231,13 @@ public class APImanager {
         double save = saleInfo.getListPrice().getAmount() - saleInfo.getRetailPrice().getAmount();
         if (save > 0.0) {
           System.out.print("List: " + CURRENCY_FORMATTER.format(saleInfo.getListPrice().getAmount())
-              + "  ");
+                  + "  ");
         }
         System.out.print("Google eBooks Price: "
-            + CURRENCY_FORMATTER.format(saleInfo.getRetailPrice().getAmount()));
+                + CURRENCY_FORMATTER.format(saleInfo.getRetailPrice().getAmount()));
         if (save > 0.0) {
           System.out.print("  You Save: " + CURRENCY_FORMATTER.format(save) + " ("
-              + PERCENT_FORMATTER.format(save / saleInfo.getListPrice().getAmount()) + ")");
+                  + PERCENT_FORMATTER.format(save / saleInfo.getListPrice().getAmount()) + ")");
         }
         System.out.println();
       }
@@ -210,53 +255,7 @@ public class APImanager {
     }
     System.out.println("==========");
     System.out.println(
-        volumes.getTotalItems() + " total results at http://books.google.com/ebooks?q="
-        + URLEncoder.encode(query, "UTF-8"));
+            volumes.getTotalItems() + " total results at http://books.google.com/ebooks?q="
+                    + URLEncoder.encode(query, "UTF-8"));
   }
-
-   public static LinkedList<Book> searchBooks(String query) {
-    JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-    try {
-      // Verify command line parameters.
-      //if (args.length == 0) {
-       // System.err.println("Usage: BooksSample [--author|--isbn|--title] \"<query>\"");
-      //  System.exit(1);
-     // }
-      // Parse command line parameters into a query.
-      // Query format: "[<author|isbn|intitle>:]<query>"
-      String prefix = null;
-      String[] parameters = {query};
-      for (String arg : parameters) {
-        if ("--author".equals(arg)) {
-          prefix = "inauthor:";
-        } else if ("--isbn".equals(arg)) {
-          prefix = "isbn:";
-        } else if ("--title".equals(arg)) {
-          prefix = "intitle:";
-        } else if (arg.startsWith("--")) {
-          System.err.println("Unknown argument: " + arg);
-          System.exit(1);
-        } else {
-          query = arg;
-        }
-      }
-      if (prefix != null) {
-        query = prefix + query;
-      }
-      try {
-        LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, query);
-        //for(Book b : foundBooks){
-            //System.out.println(b.getImageURL());
-        //}
-        // Success!
-        return foundBooks;
-      } catch (IOException e) {
-        System.err.println(e.getMessage());
-      }
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-    System.exit(0);
-     return null;
-   }
 }
