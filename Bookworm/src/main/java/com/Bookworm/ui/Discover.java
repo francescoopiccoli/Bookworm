@@ -100,10 +100,10 @@ public class Discover extends BorderPane {
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
                     rect.setOnAction(event -> {
-                        bookinfo(b.getName(),b.getAuthor(),b.getDescription());
+                        bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());
                         Downloader.saveBook(b,"");
                     });
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());});
+                    //rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());});
                     hb.getChildren().add(rect);
                     counter++;
                 }
