@@ -1,4 +1,4 @@
-package com.Bookworm;
+package com.Bookworm.controller;
 
 public class SystemInfo {
 
