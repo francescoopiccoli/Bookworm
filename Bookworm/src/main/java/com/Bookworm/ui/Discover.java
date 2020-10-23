@@ -1,6 +1,7 @@
 package com.Bookworm.ui;
 
 import com.Bookworm.controller.APImanager;
+import com.Bookworm.controller.Downloader;
 import com.Bookworm.model.Book;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -98,7 +99,10 @@ public class Discover extends BorderPane {
                     }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    rect.setOnAction(event -> {
+                        bookinfo(b.getName(),b.getAuthor(),b.getDescription());
+                        Downloader.saveBook(b,"");
+                    });
                     hb.getChildren().add(rect);
                     counter++;
                 }
