@@ -118,13 +118,9 @@ public class Discover extends BorderPane {
 
     private void bookinfo(String title, String author, String description) {
         Stage bookPage = new Stage();
-        VBox vb = new VBox();
-        Text titlebook = new Text(title);
-        Text authrobook = new Text(author);
-        Text descbook = new Text(description);
-        vb.getChildren().addAll(titlebook,authrobook,descbook);
         bookPage.setTitle("Book info: "+title);
-        Scene scenebook = new Scene(vb,500,100);
+        BookInfo book = new BookInfo(title,author,description);
+        Scene scenebook = new Scene(book,500,100);
         bookPage.setScene(scenebook);
         bookPage.show();
 
