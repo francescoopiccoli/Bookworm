@@ -1,6 +1,6 @@
 package com.Bookworm.ui;
 
-import com.Bookworm.APImanager;
+import com.Bookworm.controller.APImanager;
 import com.Bookworm.model.Book;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,8 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 // !!! to fix  input with return null (no results found)
@@ -25,7 +23,7 @@ public class Discover extends BorderPane {
     BorderPane layout;
     ScrollPane scrollPane;
 
-    public static LinkedList<Book> booklist = new LinkedList<Book>();
+    public static LinkedList<Book> booklist = new LinkedList<>();
 
     public Discover() {
         //Create an instance of Discover to fill the borderpane with its functions
@@ -46,7 +44,7 @@ public class Discover extends BorderPane {
         HBox hb = new HBox();
 
         //Button for all single books to be created
-        Button rect = new Button();
+        Button rect;
 
 
         //Add a scroll pane so scrolling is made possible

@@ -1,4 +1,4 @@
-package com.Bookworm;
+package com.Bookworm.controller;
 
 /*
  * Copyright (c) 2011 Google Inc.

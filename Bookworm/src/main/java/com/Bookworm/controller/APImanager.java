@@ -1,4 +1,4 @@
-package com.Bookworm;
+package com.Bookworm.controller;
 /*
  * Copyright (c) 2011 Google Inc.
  *
@@ -54,7 +54,7 @@ public class APImanager {
 
   public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
 
-    foundBooks = new LinkedList<Book>();
+    foundBooks = new LinkedList<>();
     ClientCredentials.errorIfNotSpecified();
 
     // Set up Books client.
@@ -93,7 +93,7 @@ public class APImanager {
       currentBook.setTags(null);
 
       java.util.List<String> authors = volumeInfo.getAuthors();
-      String author = new String("");
+      String author = "";
       if (authors != null && !authors.isEmpty()) {
         for (int i = 0; i < authors.size(); ++i) {
           author += authors.get(i);
@@ -144,7 +144,7 @@ public class APImanager {
           System.err.println("Unknown argument: " + arg);
           System.exit(1);
         } else {
-          formalQuery = arg;
+          formalQuery = formalQuery + " " + arg;
         }
       }
       if (prefix != null) {
