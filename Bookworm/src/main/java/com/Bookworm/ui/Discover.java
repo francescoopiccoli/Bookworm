@@ -79,7 +79,7 @@ public class Discover extends BorderPane {
                     }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(),b.getImageURL());});
                     hb.getChildren().add(rect);
                     counter++;
                 }
@@ -98,7 +98,7 @@ public class Discover extends BorderPane {
                     }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription());});
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());});
                     hb.getChildren().add(rect);
                     counter++;
                 }
@@ -116,11 +116,11 @@ public class Discover extends BorderPane {
 
     }
 
-    private void bookinfo(String title, String author, String description) {
+    private void bookinfo(String title, String author, String description, String url) {
         Stage bookPage = new Stage();
         bookPage.setTitle("Book info: "+title);
-        BookInfo book = new BookInfo(title,author,description);
-        Scene scenebook = new Scene(book,500,100);
+        BookInfo book = new BookInfo(title,author,description,url);
+        Scene scenebook = new Scene(book,750,350);
         bookPage.setScene(scenebook);
         bookPage.show();
 

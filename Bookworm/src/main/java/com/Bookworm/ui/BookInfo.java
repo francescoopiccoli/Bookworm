@@ -18,17 +18,19 @@ public class BookInfo extends BorderPane {
 
     String title;
     String bookDescription;
-    String author;
+    String author,url;
     public static LinkedList<String> authors = new LinkedList<String>();
 
 
 
 
-    public BookInfo(String title, String author, String bookDescription) {
+    public BookInfo(String title, String author, String bookDescription, String url) {
 
         this.title=title;
         this.author=author;
         this.bookDescription=bookDescription;
+        this.url = url;
+
         setTop(addHBoxTop());
         setCenter(addVBox());
 
@@ -77,8 +79,12 @@ public class BookInfo extends BorderPane {
         combo_box.setOnAction(e -> combo_box.getValue());
         combo_box.setEditable(false);
 
+        ImageView imageView = new ImageView(url);
+        imageView.setFitWidth(150);
 
-        hbox.getChildren().addAll(vb,combo_box);
+        imageView.setFitHeight(200);
+
+        hbox.getChildren().addAll(vb,combo_box, imageView);
 
         return hbox;
     }
