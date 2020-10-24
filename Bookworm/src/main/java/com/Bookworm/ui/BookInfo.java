@@ -152,13 +152,3 @@ public class BookInfo extends BorderPane {
 
 
 
-
-
-/*
-
-          //book cover
-        Image image = new Image("http://placekitten.com/200/300");
-        ImageView iv = new ImageView(image);
-        iv.setFitHeight(80);
-        iv.setFitWidth(80);
- */
