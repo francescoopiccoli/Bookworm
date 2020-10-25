@@ -93,17 +93,16 @@ public class BookInfo extends BorderPane {
         description.setText(bookDescription);
         description.setWrapText(true);
         description.setPrefColumnCount(15);
-        description.setPrefSize(200,200);
+
         description.setEditable(false);
-        description.setMouseTransparent(true);
-        description.setFocusTraversable(false);
+
 
         //scroll for description textarea
 
         ScrollPane scrollPane = new ScrollPane(description);
         scrollPane.getStyleClass().add("scrollDescription");
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
+        //scrollPane.setPrefSize(200,200);
+
 
 
         //Vbox for description

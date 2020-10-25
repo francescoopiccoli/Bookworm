@@ -24,6 +24,7 @@ public class Discover extends BorderPane {
     BorderPane layout;
     ScrollPane scrollPane;
 
+
     public static LinkedList<Book> booklist = new LinkedList<>();
 
     public Discover() {
@@ -67,40 +68,51 @@ public class Discover extends BorderPane {
                     vb.getChildren().add(hb);
                     hb = new HBox();
                     ImageView imageView;
+                    ImageView imageView2;
                     if(b.getImageURL()!=null){
                         imageView = new ImageView(b.getImageURL());
                         imageView.setFitWidth(150);
+                        imageView.setFitHeight(200);
+                        imageView2 = new ImageView(b.getImageURL());
 
-                        imageView.setFitHeight(200);}
+                    }
                     else {
 
                         imageView = new ImageView(image);
                         imageView.setFitWidth(150);
                         imageView.setFitHeight(200);
+                        imageView2 = new ImageView(image);
+
                     }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(),imageView);});
+
+                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(),imageView2);});
                     hb.getChildren().add(rect);
                     counter++;
                 }
                 else{
                     ImageView imageView;
+                    ImageView imageView2;
                     if(b.getImageURL()!=null){
-                    imageView = new ImageView(b.getImageURL());
-                    imageView.setFitWidth(150);
-                    imageView.setFitHeight(200);
+                        imageView = new ImageView(b.getImageURL());
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(200);
+                        imageView2 = new ImageView(b.getImageURL());
+
                     }
                     else {
 
                         imageView = new ImageView(image);
                         imageView.setFitWidth(150);
                         imageView.setFitHeight(200);
+                        imageView2 = new ImageView(image);
+
                     }
                     rect = new Button(b.getName(),imageView);
                     rect.getStyleClass().add("rect");
                     rect.setOnAction(event -> {
-                        bookinfo(b.getName(),b.getAuthor(),b.getDescription(), imageView);
+                        bookinfo(b.getName(),b.getAuthor(),b.getDescription(), imageView2);
                         Downloader.saveBook(b,"");
                     });
                     //rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());});
@@ -130,6 +142,7 @@ public class Discover extends BorderPane {
         bookPage.show();
 
     }
+
 
     public Node createTopDisc() {
         VBox vb = new VBox();
