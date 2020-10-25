@@ -20,7 +20,7 @@ public class BookInfo extends BorderPane {
     String bookDescription;
     String author;
     ImageView url;
-    public static LinkedList<String> authors = new LinkedList<String>();
+
 
 
 
@@ -41,15 +41,11 @@ public class BookInfo extends BorderPane {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(40);
-        VBox vb = new VBox();
 
         //book title
 
-        TextArea displayTitle = new TextArea(title);
-        displayTitle.setPrefSize(200, 30);
-        displayTitle.setEditable(false);
-        displayTitle.setMouseTransparent(true);
-        displayTitle.setFocusTraversable(false);
+        Label displayTitle = new Label();
+        displayTitle.setText("You are viewing: " + title + " written by " + author);
 
         //tags
         Button tag1 = new Button("tag1");
@@ -59,33 +55,27 @@ public class BookInfo extends BorderPane {
         HBox buttons = new HBox();
         buttons.getChildren().addAll(tag1, tag2,add);
         buttons.setSpacing(10);
-        vb.setSpacing(10);
-        vb.getChildren().addAll(displayTitle,buttons);
 
-        //author name
+
+        /*author name on combobox to implement
 
         ComboBox combo_box = new ComboBox();
 
 
-        /*to be checked
+        to be checked
         for (String author : authors){
             authors.addAll(Collections.singleton(author));
         }
         combo_box.getItems().addAll(authors);
-        */
-
-
         combo_box.getItems().addAll("");
 
         combo_box.setOnAction(e -> combo_box.getValue());
         combo_box.setEditable(false);
+        */
 
 
-        url.setFitWidth(150);
 
-        url.setFitHeight(200);
-
-        hbox.getChildren().addAll(vb,combo_box, url);
+        hbox.getChildren().addAll(displayTitle, buttons);
 
         return hbox;
     }
@@ -97,14 +87,29 @@ public class BookInfo extends BorderPane {
 
 
         //description
-
+        Label descLabel = new Label();
+        descLabel.setText("Description");
         TextArea description = new TextArea("Short Description");
         description.setText(bookDescription);
+        description.setWrapText(true);
         description.setPrefColumnCount(15);
-        description.setPrefSize(100,100);
+        description.setPrefSize(200,200);
         description.setEditable(false);
         description.setMouseTransparent(true);
         description.setFocusTraversable(false);
+
+        //scroll for description textarea
+
+        ScrollPane scrollPane = new ScrollPane(description);
+        scrollPane.getStyleClass().add("scrollDescription");
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+
+        //Vbox for description
+        VBox vBoxD = new VBox();
+        vBoxD.setSpacing(10);
+        vBoxD.getChildren().addAll(descLabel,scrollPane);
 
         //bookshelf
         Button button1 = new Button("add to #1");
@@ -115,27 +120,46 @@ public class BookInfo extends BorderPane {
 
 
         //Review Area
+        Label reviewLabel = new Label();
+        reviewLabel.setText("Add review");
         TextArea review = new TextArea("review");
         review.setText("review");
+        review.setWrapText(true);
         review.setPrefColumnCount(15);
-        review.setPrefSize(100,100);
+        review.setPrefSize(200,200);
         review.setEditable(true);
         Button bReview = new Button("Review");
+
+        //scroll for review textarea
+        ScrollPane scrollPane2 = new ScrollPane(review);
+        scrollPane2.getStyleClass().add("scrollReview");
+        scrollPane2.setFitToWidth(true);
+        scrollPane2.setFitToHeight(true);
+
+        //Vbox for review
+        VBox reviewBox = new VBox();
+        reviewBox.setSpacing(10);
+        reviewBox.getChildren().addAll(reviewLabel,scrollPane2);
 
         //right side
         VBox reviewVB = new VBox();
         reviewVB.setSpacing(10);
-        reviewVB.getChildren().addAll(review,bReview);
+        reviewVB.getChildren().addAll(reviewBox,bReview);
 
         //left side
         VBox left = new VBox();
         left.setSpacing(20);
-        left.getChildren().addAll(description,bookshelf);
+        left.getChildren().addAll(vBoxD,bookshelf);
+
+        //image
+        url.setFitWidth(150);
+        url.setFitHeight(200);
 
         //overall view
         HBox overall = new HBox();
+
         overall.setSpacing(80);
-        overall.getChildren().addAll(left,reviewVB);
+        overall.getChildren().addAll(url,left,reviewVB);
 
         vbox.getChildren().addAll(overall);
 
