@@ -23,6 +23,8 @@ import java.util.*;
 public class BookInfo extends BorderPane {
 
 
+    private static final int DEFAULT_WIDTH = 600;
+    private static final int DEFAULT_HEIGHT= 300;
     String title;
     String bookDescription;
     String author;
@@ -42,6 +44,14 @@ public class BookInfo extends BorderPane {
         setTop(addHBoxTop());
         setCenter(addVBox());
 
+    }
+
+    public static void spawnWindow(Book book) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    public static void spawnWindow(Book book, Image image) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image);
     }
 
     public static void spawnWindow(Book book, int w, int h) {
