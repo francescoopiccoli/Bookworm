@@ -7,5 +7,4 @@ module com.Bookworm {
 	requires javafx.graphics;
 	requires javafx.fxml;
     exports com.Bookworm;
-	exports com.Bookworm.ui;
 }

@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 // !!! to fix  input with return null (no results found)
@@ -36,7 +37,6 @@ public class Discover extends BorderPane {
 
     public Node getCenterDisc() {
         //Temporary image to replace covers
-        Image image = new Image(getClass().getResourceAsStream("/Images/placeholder.png"));
         //Create vertical box will align all elements one under the other
         VBox vb = new VBox();
 
@@ -46,7 +46,7 @@ public class Discover extends BorderPane {
         HBox hb = new HBox();
 
         //Button for all single books to be created
-        Button rect;
+        //Button rect;
 
 
         //Add a scroll pane so scrolling is made possible
@@ -63,62 +63,26 @@ public class Discover extends BorderPane {
             hb = new HBox();
             for (Book b : booklist){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                if(counter == 4){
+                if(counter == 4) {
                     counter = 0;
                     vb.getChildren().add(hb);
                     hb = new HBox();
-                    ImageView imageView;
-                    ImageView imageView2;
-                    if(b.getImageURL()!=null){
-                        imageView = new ImageView(b.getImageURL());
-                        imageView.setFitWidth(150);
-                        imageView.setFitHeight(200);
-                        imageView2 = new ImageView(b.getImageURL());
-
-                    }
-                    else {
-
-                        imageView = new ImageView(image);
-                        imageView.setFitWidth(150);
-                        imageView.setFitHeight(200);
-                        imageView2 = new ImageView(image);
-
-                    }
-                    rect = new Button(b.getName(),imageView);
-                    rect.getStyleClass().add("rect");
-
-                    rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(),imageView2);});
-                    hb.getChildren().add(rect);
-                    counter++;
+                } else {
                 }
-                else{
-                    ImageView imageView;
-                    ImageView imageView2;
-                    if(b.getImageURL()!=null){
-                        imageView = new ImageView(b.getImageURL());
-                        imageView.setFitWidth(150);
-                        imageView.setFitHeight(200);
-                        imageView2 = new ImageView(b.getImageURL());
 
-                    }
-                    else {
-
-                        imageView = new ImageView(image);
-                        imageView.setFitWidth(150);
-                        imageView.setFitHeight(200);
-                        imageView2 = new ImageView(image);
-
-                    }
-                    rect = new Button(b.getName(),imageView);
-                    rect.getStyleClass().add("rect");
-                    rect.setOnAction(event -> {
-                        bookinfo(b.getName(),b.getAuthor(),b.getDescription(), imageView2);
-                        Downloader.saveBook(b,"");
-                    });
-                    //rect.setOnAction(event -> {bookinfo(b.getName(),b.getAuthor(),b.getDescription(), b.getImageURL());});
-                    hb.getChildren().add(rect);
-                    counter++;
+                Image image;
+                try {
+                    image = new Image(b.getImageURL());
+                } catch (IllegalArgumentException | NullPointerException e){
+                    image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
                 }
+                BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+                Image finalImage = image;
+                Book finalBook = b;
+                bookSquareWidget.setOnMouseClicked(event -> {
+                    BookInfo.spawnWindow(finalBook, finalImage);
+                });
+                hb.getChildren().add(bookSquareWidget);
 
             }}
             vb.getChildren().add(hb);
@@ -157,23 +121,21 @@ public class Discover extends BorderPane {
                     refresh();}
         });
 
-        Button apply = new Button("Filter");
+        /*Button apply = new Button("Filter");
         apply.setOnAction(event -> {filter();});
-        hb.getChildren().addAll(filters,apply);
+        hb.getChildren().addAll(filters,apply);*/
         vb.getChildren().addAll(search,hb);
         vb.setSpacing(5.5);
         return  vb;
     }
-    private void filter() {
-        setCenter(centersearch());
-    }
-
+    /*
     private Node centersearch() {
         VBox vb = new VBox();
         Text resulttext = new Text("THIS WILL BE YOUR FILTERED RESULTS. IN DEVELOPMENT");
         vb.getChildren().add(resulttext);
         return vb;
     }
+    */
     public void refresh() {
         setCenter(getCenterDisc());
     }
