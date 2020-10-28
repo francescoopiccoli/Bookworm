@@ -12,13 +12,13 @@ import javafx.scene.text.Text;
 
 public class BookSquareWidget extends BorderPane {
     Book book;
+    private Image image;
 
     public BookSquareWidget(Book book) {
         this.book = book;
-        double cacheBuster = Math.random();
-        System.out.println("Loading kitten... "+cacheBuster);
-        ImageView image = new ImageView(new Image("https://cataas.com/cat?type=sq&"+cacheBuster));
-        setCenter(image);
+        image = new Image(book.getImageURL());
+        ImageView imageView = new ImageView(this.image);
+        setCenter(imageView);
 
         Text t = new Text(book.getName());
         t.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -32,5 +32,9 @@ public class BookSquareWidget extends BorderPane {
 
     public Book getBook() {
         return book;
+    }
+
+    public Image getImage() {
+        return image;
     }
 }

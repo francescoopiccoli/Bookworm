@@ -6,6 +6,8 @@ import com.Bookworm.model.Tag;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -39,6 +42,22 @@ public class BookInfo extends BorderPane {
         setTop(addHBoxTop());
         setCenter(addVBox());
 
+    }
+
+    public static void spawnWindow(Book book, int w, int h) {
+        Image image = new Image(book.getImageURL());
+        spawnWindow(book, w, h, image);
+    }
+
+    public static void spawnWindow(Book book, int w, int h, Image image) {
+        ImageView imageView = new ImageView(image);
+        BookInfo bookInfo = new BookInfo(book.getName(), book.getAuthor(), book.getDescription(), imageView);
+
+        Stage stage = new Stage();
+        stage.setTitle(book.getName());
+        Scene scene = new Scene(bookInfo,w,h);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public HBox addHBoxTop() {

@@ -3,11 +3,16 @@ package com.Bookworm.ui;
 import com.Bookworm.model.Book;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,32 +62,33 @@ public class BookListView extends BorderPane {
         _updateList("");
     }
     private void _updateList(String filter) {
-        if(books == null || books.size() == 0) {
+        if (books == null || books.size() == 0) {
             setCenter(new Label("This list feels so empty :("));
         } else {
             VBox vb = new VBox();
             vb.setAlignment(Pos.CENTER);
             int i = 0;
             HBox hb = new HBox();
-            for(BookSquareWidget b : books) {
-                if(i > 2) {
+            for (BookSquareWidget b : books) {
+                if (i > 2) {
                     i = 0;
                 }
-                if(i == 0) {
+                if (i == 0) {
                     hb = new HBox();
                     hb.setAlignment(Pos.CENTER);
                     vb.getChildren().add(hb);
                 }
 
                 // filtering
-                if(!b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
+                if (!b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
                         && !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase()))
                     continue;
 
                 b.setOnMouseClicked((event -> {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, b.getBook().getDescription(), ButtonType.CANCEL);
-                    alert.setTitle("Viewing: "+b.getBook().getName());
-                    alert.showAndWait();
+                    Book book = b.getBook();
+                    // bookInfo should accept Book object, not just its parameters!
+
+                    BookInfo.spawnWindow(book, 600, 300, b.getImage());
                 }));
 
                 HBox.setMargin(b, new Insets(10));

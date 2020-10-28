@@ -31,15 +31,15 @@ public class App extends Application {
     public void start(Stage stage) {
 
         ArrayList<Book> demoList = new ArrayList<>();
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, "https://cataas.com/cat?type=sq"));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, "https://cataas.com/cat?type=sq"));
 
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());
