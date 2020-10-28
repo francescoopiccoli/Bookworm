@@ -10,6 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.util.*;
 
@@ -45,7 +49,17 @@ public class BookInfo extends BorderPane {
         //book title
 
         Label displayTitle = new Label();
-        displayTitle.setText("You are viewing: " + title + " written by " + author);
+        displayTitle.setText("Title: "+ title);
+        displayTitle.getStyleClass().add("display");
+        displayTitle.setFont(Font.font(null, FontWeight.BOLD, 15));
+
+
+        //book author
+
+        Label displayAuthor = new Label();
+        displayAuthor.setText("Author: "+ author);
+        displayAuthor.getStyleClass().add("display");
+        displayAuthor.setFont(Font.font(null, FontWeight.BOLD, 15));
 
         //tags
         Button tag1 = new Button("tag1");
@@ -57,25 +71,13 @@ public class BookInfo extends BorderPane {
         buttons.setSpacing(10);
 
 
-        /*author name on combobox to implement
-
-        ComboBox combo_box = new ComboBox();
-
-
-        to be checked
-        for (String author : authors){
-            authors.addAll(Collections.singleton(author));
-        }
-        combo_box.getItems().addAll(authors);
-        combo_box.getItems().addAll("");
-
-        combo_box.setOnAction(e -> combo_box.getValue());
-        combo_box.setEditable(false);
-        */
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.getChildren().addAll(displayTitle,displayAuthor);
 
 
 
-        hbox.getChildren().addAll(displayTitle, buttons);
+        hbox.getChildren().addAll(vBox, buttons);
 
         return hbox;
     }
@@ -102,6 +104,8 @@ public class BookInfo extends BorderPane {
         ScrollPane scrollPane = new ScrollPane(description);
         scrollPane.getStyleClass().add("scrollDescription");
         //scrollPane.setPrefSize(200,200);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
 
 
 
