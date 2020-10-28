@@ -26,6 +26,7 @@ public class BookListView extends BorderPane {
         this.title = title;
         this.books = new ArrayList<>();
         for(Book book : books) {
+            // we could even maybe async-ize this thing as well?
             this.books.add(new BookSquareWidget(book));
         }
 
