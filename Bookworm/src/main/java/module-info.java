@@ -6,6 +6,9 @@ module com.Bookworm {
 	requires google.api.services.books.v1.rev114;
 	requires javafx.graphics;
 	requires javafx.fxml;
+	requires sqlite.jdbc;
+	requires java.sql;
+
     exports com.Bookworm;
 	exports com.Bookworm.ui;
 }
