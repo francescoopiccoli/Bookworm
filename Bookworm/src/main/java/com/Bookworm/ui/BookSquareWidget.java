@@ -15,18 +15,27 @@ public class BookSquareWidget extends BorderPane {
 
     Book book;
     private Image image;
+    private ImageView imageView;
 
     public BookSquareWidget(Book book) {
         this.book = book;
-        try {
-            image = new Image(book.getImageURL());
-        } catch (IllegalArgumentException | NullPointerException e){
-            image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
-        }
-        ImageView imageView = new ImageView(this.image);
+
+        image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+        imageView = new ImageView(this.image);
         imageView.setFitHeight(250);
         imageView.setFitWidth(180);
         setCenter(imageView);
+
+        Thread updateThread = new Thread(() -> {
+            try {
+                image = new Image(book.getImageURL());
+                imageView.setImage(image);
+            } catch (IllegalArgumentException | NullPointerException e) {
+                image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+            }
+        });
+        updateThread.start();
+
 
         String title = book.getName();
         if(title.length() > 20) {
@@ -49,4 +58,5 @@ public class BookSquareWidget extends BorderPane {
     public Image getImage() {
         return image;
     }
+
 }
