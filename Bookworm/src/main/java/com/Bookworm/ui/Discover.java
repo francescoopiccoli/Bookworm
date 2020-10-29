@@ -1,22 +1,21 @@
 package com.Bookworm.ui;
 
 import com.Bookworm.controller.APImanager;
-import com.Bookworm.controller.Downloader;
 import com.Bookworm.model.Book;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 // !!! to fix  input with return null (no results found)
 
@@ -24,9 +23,31 @@ public class Discover extends BorderPane {
 
     BorderPane layout;
     ScrollPane scrollPane;
+    // sicuro che sia static?
+    public static List<Book> bookList = new LinkedList<>();
+    private boolean loadingStatus;
+    private TextField searchWidget;
+    private Label searchPlaceholder;
+
+    public static List<Book> getbookList() {
+        return bookList;
+    }
+
+    public static void setbookList(List<Book> bookList) {
+        Discover.bookList = bookList;
+    }
+
+    private void setLoadingStatus(boolean loadingStatus) {
+        this.loadingStatus = loadingStatus;
+        // ugly af - better have some kind of loading widget
+        searchWidget.setVisible(!loadingStatus);
+        searchPlaceholder.setVisible(loadingStatus);
+    }
+    private boolean getLoadingStatus() {
+        return loadingStatus;
+    }
 
 
-    public static LinkedList<Book> booklist = new LinkedList<>();
 
     public Discover() {
         //Create an instance of Discover to fill the borderpane with its functions
@@ -57,16 +78,18 @@ public class Discover extends BorderPane {
         label.getStyleClass().add("discoverLabel");
         vb.getChildren().add(label);
         //will create (currently 3) rows with at most 5 books on each row
-       // System.out.println(booklist);
+       // System.out.println(bookList);
         int counter = 0;
-        if(!booklist.isEmpty()){
+        if(!bookList.isEmpty()){
             hb = new HBox();
-            for (Book b : booklist){
+            HBox.setMargin(hb, new Insets(10));
+            for (Book b : bookList){
                 //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
                 if(counter == 4) {
                     counter = 0;
                     vb.getChildren().add(hb);
                     hb = new HBox();
+                    HBox.setMargin(hb, new Insets(10));
                 } else {
                 }
 
@@ -111,32 +134,49 @@ public class Discover extends BorderPane {
     public Node createTopDisc() {
         VBox vb = new VBox();
         HBox hb = new HBox();
-        //VBox v = new VBox();
-        TextField search = new TextField();
-        TextField filters = new TextField();
-
-        search.setOnAction(event -> {
-                    booklist = APImanager.searchBooks(search.getText());
-                    if(!booklist.isEmpty()){
-                    refresh();}
+        searchWidget = new TextField();
+        searchWidget.setOnAction(event -> {
+            RefreshThread thread = new RefreshThread(this, searchWidget.getText());
+            thread.start();
         });
 
-        /*Button apply = new Button("Filter");
-        apply.setOnAction(event -> {filter();});
-        hb.getChildren().addAll(filters,apply);*/
-        vb.getChildren().addAll(search,hb);
+        searchPlaceholder = new Label("Search in progress...");
+        searchPlaceholder.setVisible(false);
+
+        vb.getChildren().addAll(searchWidget,searchPlaceholder,hb);
         vb.setSpacing(5.5);
         return  vb;
     }
-    /*
-    private Node centersearch() {
-        VBox vb = new VBox();
-        Text resulttext = new Text("THIS WILL BE YOUR FILTERED RESULTS. IN DEVELOPMENT");
-        vb.getChildren().add(resulttext);
-        return vb;
-    }
-    */
     public void refresh() {
         setCenter(getCenterDisc());
     }
+
+    private class RefreshThread extends Thread {
+        private Discover d;
+        private String query;
+        public RefreshThread(Discover d, String query) {
+            this.d = d;
+            this.query = query;
+        }
+        public void run() {
+            if(d.getLoadingStatus())
+                return; // don't mess with multiple searches at once
+            setLoading(true);
+            List<Book> bookList = APImanager.searchBooks(query);
+            if(!bookList.isEmpty()){
+                d.setbookList(bookList);
+                System.out.println("Generating central widget");
+                // todo: make getCenterDisc kinda async as well - e.g. load images, or even single widgets, one after the other
+                Node centerDisc = d.getCenterDisc();
+                Platform.runLater(() -> d.setCenter(centerDisc));
+            }
+            setLoading(false);
+        }
+
+        private void setLoading(boolean b) {
+            Platform.runLater(() -> d.setLoadingStatus(b));
+        }
+    }
+
+
 }
