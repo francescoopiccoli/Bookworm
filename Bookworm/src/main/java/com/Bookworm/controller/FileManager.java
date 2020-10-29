@@ -1,7 +1,6 @@
 package com.Bookworm.controller;
 
-import com.Bookworm.model.Book;
-import com.Bookworm.model.Bookshelf;
+import com.Bookworm.model.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -14,6 +13,17 @@ public class FileManager implements StorageManager {
     public void reload() {
         loadBookshelves();
     }
+
+    @Override
+    public ArrayList<Book> getBooksByAuthor(String author) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Book> getBooksByTag(String tag) {
+        return null;
+    }
+
     //saves book in the files directory, both in default bookshelf and in the selected bookshelf, if specified
     @Override
     public void saveBook(Book book, String bookshelf) {
@@ -55,6 +65,13 @@ public class FileManager implements StorageManager {
     @Override
     public void modifyBook(String book, String bookshelf) {
 
+    }
+
+    @Override
+    public void addTag(Book book, String bookshelf, String newTag) {
+        ArrayList<Tag> tags = book.getTags();
+        tags.add(new Tag(newTag));
+        book.setTags(tags);
     }
 
     //deletes all bookshelves directories and serialized books
