@@ -92,18 +92,10 @@ public class Discover extends BorderPane {
                     HBox.setMargin(hb, new Insets(10));
                 } else {
                 }
-
-                Image image;
-                try {
-                    image = new Image(b.getImageURL());
-                } catch (IllegalArgumentException | NullPointerException e){
-                    image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
-                }
                 BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
-                Image finalImage = image;
                 Book finalBook = b;
                 bookSquareWidget.setOnMouseClicked(event -> {
-                    BookInfo.spawnWindow(finalBook, finalImage);
+                    BookInfo.spawnWindow(finalBook);
                 });
                 hb.getChildren().add(bookSquareWidget);
 
@@ -163,10 +155,8 @@ public class Discover extends BorderPane {
                 return; // don't mess with multiple searches at once
             setLoading(true);
             List<Book> bookList = APImanager.searchBooks(query);
-            if(!bookList.isEmpty()){
+            if(bookList != null && !bookList.isEmpty()){
                 d.setbookList(bookList);
-                System.out.println("Generating central widget");
-                // todo: make getCenterDisc kinda async as well - e.g. load images, or even single widgets, one after the other
                 Node centerDisc = d.getCenterDisc();
                 Platform.runLater(() -> d.setCenter(centerDisc));
             }
