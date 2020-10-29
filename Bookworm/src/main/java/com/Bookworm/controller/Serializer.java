@@ -10,11 +10,6 @@ public class Serializer {
 
     //main method for test purposes
     public static void  main(String[] args) throws IOException {
-        Book book = new Book("test", "random", "s", null,"test", 1, "ss");
-        Downloader.saveBook(book, "Bookshelf3");
-        Loader.createBookshelves();
-        LibraryManager.removeBook("random", "Bookshelf3");
-        //LibraryManager.reset(new File(pathToFilesDirectory));
     }
 
     //saves a book in a given bookshelf. It creates the folders they do not exist

@@ -11,16 +11,37 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class BookSquareWidget extends BorderPane {
+    public static final String PLACEHOLDER_IMAGE_URI = "/Images/placeholder.png";
+
     Book book;
+    private Image image;
+    private ImageView imageView;
 
     public BookSquareWidget(Book book) {
         this.book = book;
-        double cacheBuster = Math.random();
-        System.out.println("Loading kitten... "+cacheBuster);
-        ImageView image = new ImageView(new Image("https://cataas.com/cat?type=sq&"+cacheBuster));
-        setCenter(image);
 
-        Text t = new Text(book.getName());
+        image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+        imageView = new ImageView(this.image);
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(180);
+        setCenter(imageView);
+
+        Thread updateThread = new Thread(() -> {
+            try {
+                image = new Image(book.getImageURL());
+                imageView.setImage(image);
+            } catch (IllegalArgumentException | NullPointerException e) {
+                image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+            }
+        });
+        updateThread.start();
+
+
+        String title = book.getName();
+        if(title.length() > 20) {
+            title = title.substring(0, 19) + "\u2026";
+        }
+        Text t = new Text(title);
         t.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         setMargin(t, new Insets(20));
         setAlignment(t, Pos.BOTTOM_CENTER);
@@ -33,4 +54,9 @@ public class BookSquareWidget extends BorderPane {
     public Book getBook() {
         return book;
     }
+
+    public Image getImage() {
+        return image;
+    }
+
 }

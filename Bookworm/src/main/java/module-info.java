@@ -10,5 +10,4 @@ module com.Bookworm {
 	requires java.sql;
 
     exports com.Bookworm;
-	exports com.Bookworm.ui;
 }

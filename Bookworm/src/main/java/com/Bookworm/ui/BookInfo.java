@@ -6,16 +6,25 @@ import com.Bookworm.model.Tag;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import java.util.*;
 
 public class BookInfo extends BorderPane {
 
 
+    private static final int DEFAULT_WIDTH = 600;
+    private static final int DEFAULT_HEIGHT= 300;
     String title;
     String bookDescription;
     String author;
@@ -37,6 +46,30 @@ public class BookInfo extends BorderPane {
 
     }
 
+    public static void spawnWindow(Book book) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    public static void spawnWindow(Book book, Image image) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image);
+    }
+
+    public static void spawnWindow(Book book, int w, int h) {
+        Image image = new Image(book.getImageURL());
+        spawnWindow(book, w, h, image);
+    }
+
+    public static void spawnWindow(Book book, int w, int h, Image image) {
+        ImageView imageView = new ImageView(image);
+        BookInfo bookInfo = new BookInfo(book.getName(), book.getAuthor(), book.getDescription(), imageView);
+
+        Stage stage = new Stage();
+        stage.setTitle(book.getName());
+        Scene scene = new Scene(bookInfo,w,h);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public HBox addHBoxTop() {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
@@ -45,7 +78,17 @@ public class BookInfo extends BorderPane {
         //book title
 
         Label displayTitle = new Label();
-        displayTitle.setText("You are viewing: " + title + " written by " + author);
+        displayTitle.setText("Title: "+ title);
+        displayTitle.getStyleClass().add("display");
+        displayTitle.setFont(Font.font(null, FontWeight.BOLD, 15));
+
+
+        //book author
+
+        Label displayAuthor = new Label();
+        displayAuthor.setText("Author: "+ author);
+        displayAuthor.getStyleClass().add("display");
+        displayAuthor.setFont(Font.font(null, FontWeight.BOLD, 15));
 
         //tags
         Button tag1 = new Button("tag1");
@@ -57,25 +100,13 @@ public class BookInfo extends BorderPane {
         buttons.setSpacing(10);
 
 
-        /*author name on combobox to implement
-
-        ComboBox combo_box = new ComboBox();
-
-
-        to be checked
-        for (String author : authors){
-            authors.addAll(Collections.singleton(author));
-        }
-        combo_box.getItems().addAll(authors);
-        combo_box.getItems().addAll("");
-
-        combo_box.setOnAction(e -> combo_box.getValue());
-        combo_box.setEditable(false);
-        */
+        VBox vBox = new VBox();
+        vBox.setSpacing(10);
+        vBox.getChildren().addAll(displayTitle,displayAuthor);
 
 
 
-        hbox.getChildren().addAll(displayTitle, buttons);
+        hbox.getChildren().addAll(vBox, buttons);
 
         return hbox;
     }
@@ -102,6 +133,8 @@ public class BookInfo extends BorderPane {
         ScrollPane scrollPane = new ScrollPane(description);
         scrollPane.getStyleClass().add("scrollDescription");
         //scrollPane.setPrefSize(200,200);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
 
 
 
