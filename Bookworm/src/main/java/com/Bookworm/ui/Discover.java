@@ -90,14 +90,22 @@ public class Discover extends BorderPane {
                     vb.getChildren().add(hb);
                     hb = new HBox();
                     HBox.setMargin(hb, new Insets(10));
-                } else {
+                    BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+                    Book finalBook = b;
+                    bookSquareWidget.setOnMouseClicked(event -> {
+                        BookInfo.spawnWindow(finalBook);
+                    });
+                    hb.getChildren().add(bookSquareWidget);
+                    counter++;
+                } else {BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+                    Book finalBook = b;
+                    bookSquareWidget.setOnMouseClicked(event -> {
+                        BookInfo.spawnWindow(finalBook);
+                    });
+                    hb.getChildren().add(bookSquareWidget);
+                    counter++;
                 }
-                BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
-                Book finalBook = b;
-                bookSquareWidget.setOnMouseClicked(event -> {
-                    BookInfo.spawnWindow(finalBook);
-                });
-                hb.getChildren().add(bookSquareWidget);
+
 
             }}
             vb.getChildren().add(hb);
