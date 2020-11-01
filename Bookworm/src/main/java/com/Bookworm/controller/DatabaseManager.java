@@ -9,6 +9,8 @@ import java.sql.*;
 // https://www.tutorialspoint.com/sqlite/index.htm
 // https://www.sqlitetutorial.net/sqlite-java/
 
+//connection not closed, might cause lock errors
+
 public class DatabaseManager {
     public static Connection con;
     private static boolean hasData = false;
@@ -38,7 +40,6 @@ public class DatabaseManager {
         }
 
         PreparedStatement prep = con.prepareStatement("insert into Book values(?, ?, ?, ?, ?, ?, ?, ?, ?);");
-
         prep.setString(1, null);
         prep.setString(2, b.getName());
         prep.setString(3, b.getDescription());
@@ -51,6 +52,7 @@ public class DatabaseManager {
         prep.setString(9, b.getImageURL());
 
         prep.execute();
+        prep.close();
     }
 
 
@@ -67,6 +69,7 @@ public class DatabaseManager {
                 state2.executeUpdate("create table Bookshelf(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "name TEXT NOT NULL)");
+                state2.close();
             }
 
             res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Book';");
@@ -84,6 +87,7 @@ public class DatabaseManager {
                         "category TEXT," +
                         "imageURL TEXT," +
                         "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id))");
+                state1.close();
             }
 
             res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='BookTags';");
@@ -95,6 +99,7 @@ public class DatabaseManager {
                         "tagName TEXT," +
                         "PRIMARY KEY (bookID, tagName)," +
                         "FOREIGN KEY(bookID) REFERENCES Book(id))");
+                state3.close();
             }
 
            /* //add foreign key on book table only when both book and bookshelf tables exist

@@ -1,6 +1,6 @@
 package com.Bookworm.model;
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Book implements Serializable {
 
@@ -9,11 +9,11 @@ public class Book implements Serializable {
 	private String imageURL;
 	private String review;
 	private String category;
-	private List<Tag> tags;
+	private ArrayList<Tag> tags;
 	private String author;
 	private int rating;
 
-	public Book(String description, String name, String category, List<Tag> tags, String author, int rating, String review, String imageURL) {
+	public Book(String description, String name, String category, ArrayList<Tag> tags, String author, int rating, String review, String imageURL) {
 		super();
 		this.description = description;
 		this.name = name;
@@ -47,10 +47,10 @@ public class Book implements Serializable {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public List<Tag> getTags() {
+	public ArrayList<Tag> getTags() {
 		return tags;
 	}
-	public void setTags(List<Tag> tags) {
+	public void setTags(ArrayList<Tag> tags) {
 		this.tags = tags;
 	}
 	public String getAuthor() {
