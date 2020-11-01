@@ -65,6 +65,12 @@
      -fx-font-size: 24;
 
 }
+.titleBookshelf2{
+
+     -fx-padding: 0 0 0 200;
+     -fx-font-size: 24;
+
+}
 .hbTopBookshelf{
     -fx-padding: 25 0 0 0;
 }

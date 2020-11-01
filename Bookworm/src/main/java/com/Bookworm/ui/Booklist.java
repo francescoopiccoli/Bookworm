@@ -44,6 +44,10 @@ public class Booklist extends BorderPane {
         vb.getStyleClass().add("vbLists");
         //Add default bookshelf
         Button defaultshelf = new Button("Default - Bookshelf");
+        defaultshelf.setOnMouseClicked(event -> {
+            setTop(createTop2("Defaulf - Bookshelf"));
+            setCenter(createCenter2());
+        });;
         defaultshelf.getStyleClass().add("ListsButton");
         vb.getChildren().add(defaultshelf);
         //Placeholder for method getting all existing bookshelves
@@ -58,6 +62,28 @@ public class Booklist extends BorderPane {
 
 
         sc.setContent(vb);
+        return sc;
+    }
+
+
+    public Node createTop2(String title) {
+
+        Label t = new Label(title);
+        t.getStyleClass().add("titleBookshelf2");
+        Button back = new Button("Return - Go back");
+        back.setOnMouseClicked(event -> {
+            setTop(createTop());
+            setCenter(createCenter());
+        });;
+
+
+        HBox hBox = new HBox(back,t);
+        hBox.getStyleClass().add("hbTopBookshelf");
+        return hBox;
+    }
+
+    public Node createCenter2() {
+        ScrollPane sc = new ScrollPane();
         return sc;
     }
 
