@@ -62,6 +62,7 @@ public class Booklist extends BorderPane {
 
 
         sc.setContent(vb);
+
         return sc;
     }
 
@@ -84,6 +85,7 @@ public class Booklist extends BorderPane {
 
     public Node createCenter2() {
         ScrollPane sc = new ScrollPane();
+        sc.getStyleClass().add("scrollCenterLists");
         return sc;
     }
 

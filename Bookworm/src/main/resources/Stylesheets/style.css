@@ -76,6 +76,7 @@
 }
 .scrollCenterLists{
     -fx-padding: 75 0 0 0;
+    -fx-focus-color: transparent;
 }
 .vbLists{
     -fx-padding: 0 0 0 310;
