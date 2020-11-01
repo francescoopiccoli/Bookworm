@@ -106,7 +106,7 @@ public class APImanager {
       currentBook.setAuthor(author);
 
       if (volumeInfo.getAverageRating() != null && volumeInfo.getAverageRating() >= 0) {
-        currentBook.setRate((volumeInfo.getAverageRating().intValue()));
+        currentBook.setRating((volumeInfo.getAverageRating().intValue()));
       }
 
       if(volumeInfo.getImageLinks() != null){

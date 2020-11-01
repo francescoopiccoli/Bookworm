@@ -31,15 +31,15 @@ public class App extends Application {
     public void start(Stage stage) {
 
         ArrayList<Book> demoList = new ArrayList<>();
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, "https://c8.alamy.com/comp/F1WJN3/full-moon-harvest-moon-large-file-size-from-the-archives-of-press-F1WJN3.jpg"));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
-        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5, ""));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, ""));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green"));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green"));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5,null, "https://cataas.com/cat/says/meow?size=50&color=green"));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5,null, "https://c8.alamy.com/comp/F1WJN3/full-moon-harvest-moon-large-file-size-from-the-archives-of-press-F1WJN3.jpg"));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5,null, ""));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5,null, ""));
+        demoList.add(new Book("A thicc big book", "War and Peace", "", null, "Lev Tolstoj", 5, null,""));
+        demoList.add(new Book("A damn epic book", "The Lord of the Rings", "", null, "J. R. R. Tolkien", 5,null, ""));
+        demoList.add(new Book("A cute lil' book", "The Great Gatsby", "", null, "Francis Scott Fitzgerald", 5,null, ""));
 
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());

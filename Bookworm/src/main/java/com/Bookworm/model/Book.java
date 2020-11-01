@@ -4,21 +4,25 @@ import java.util.List;
 
 public class Book implements Serializable {
 
-	private String description, name, imageURL;
+	private String description;
+	private String name;
+	private String imageURL;
+	private String review;
 	private String category;
 	private List<Tag> tags;
 	private String author;
-	private int rate;
+	private int rating;
 
-	public Book(String description, String name, String category, List<Tag> tags, String author, int rate, String imageURL) {
+	public Book(String description, String name, String category, List<Tag> tags, String author, int rating, String review, String imageURL) {
 		super();
 		this.description = description;
 		this.name = name;
 		this.category = category;
 		this.tags = tags;
 		this.author = author;
-		this.rate = rate;
+		this.rating = rating;
 		this.imageURL = imageURL;
+		this.review  = review;
 	}
 
 	public Book() {
@@ -55,11 +59,11 @@ public class Book implements Serializable {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public int getRate() {
-		return rate;
+	public int getRating() {
+		return rating;
 	}
-	public void setRate(int rate) {
-		this.rate = rate;
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 
 	public String getImageURL() {
@@ -69,6 +73,10 @@ public class Book implements Serializable {
 	public void setImageURL(String imageURL) {
 		this.imageURL = imageURL;
 	}
+
+	public String getReview() { return review; }
+
+	public void setReview(String review) { this.review = review;}
 
 
 }
