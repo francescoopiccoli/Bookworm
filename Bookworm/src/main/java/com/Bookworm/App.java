@@ -1,6 +1,7 @@
 package com.Bookworm;
 
 import com.Bookworm.model.Book;
+import com.Bookworm.ui.Booklist;
 import com.Bookworm.ui.Discover;
 import com.Bookworm.ui.BookListView;
 import com.Bookworm.ui.NavToggleButton;
@@ -44,7 +45,7 @@ public class App extends Application {
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());
         views.put("Rankings", new BookListView("Best ranking books", demoList));
-        views.put("Lists", new Button("lol"));
+        views.put("Booklist", new Booklist());
         views.put("Settings", new Discover());
 
         //var javaVersion = SystemInfo.javaVersion();
