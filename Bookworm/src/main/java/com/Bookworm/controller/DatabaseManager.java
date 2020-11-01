@@ -10,20 +10,12 @@ import java.sql.*;
 // https://www.sqlitetutorial.net/sqlite-java/
 
 //connection not closed, might cause lock errors
+//review concept of close() statement and close() connection
 
 public class DatabaseManager {
     public static Connection con;
     private static boolean hasData = false;
-
-    public ResultSet displayBooks() throws SQLException, ClassNotFoundException {
-        if(con == null) {
-            // get connection
-            getConnection();
-        }
-        Statement state = con.createStatement();
-        ResultSet res = state.executeQuery("select name from Book");
-        return res;
-    }
+    private ResultSet res;
 
     private void getConnection() throws ClassNotFoundException, SQLException {
         // sqlite driver
@@ -62,7 +54,7 @@ public class DatabaseManager {
             // check for database table
             Statement state = con.createStatement();
 
-            ResultSet res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Bookshelf';");
+            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Bookshelf';");
             if(!res.next()) {
                 // need to build the table
                 Statement state2 = con.createStatement();
@@ -101,30 +93,53 @@ public class DatabaseManager {
                         "FOREIGN KEY(bookID) REFERENCES Book(id))");
                 state3.close();
             }
-
-           /* //add foreign key on book table only when both book and bookshelf tables exist
-            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='BookTags';");
-            if (res.next()) {
-                res =  state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Book';");
-                if(res.next()){
-                    Statement state4 = con.createStatement();
-                    state4.executeUpdate("ALTER TABLE Book ADD CONSTRAINT bo" +
-                            "                  FOREIGN KEY (bookshelfID)" +
-                            "                  REFERENCES Bookshelf(id);");
-                }
-            }
-
-            //add foreign key on tag table only when both book and booktag tables exist
-            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Book';");
-            if (res.next()) {
-                res =  state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Book';");
-                if(res.next()){
-                    Statement state4 = con.createStatement();
-                    state4.executeUpdate("ALTER TABLE Book ADD CONSTRAINT bo" +
-                            "                  FOREIGN KEY (bookshelfID)" +
-                            "                  REFERENCES Bookshelf(id);");
-                }
-            }*/
         }
+    }
+
+    //return a single book (still as a ResultSet obj) corresponding to the given title/name
+    public ResultSet getBook(String name) throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+        Statement state = con.createStatement();
+        res = state.executeQuery("select * from Book where name = '" + name + "';");
+        return res;
+    }
+
+
+    //return all books (still as a ResultSet obj)
+    public ResultSet getBooks() throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+        Statement state = con.createStatement();
+        res = state.executeQuery("select * from Book;");
+        return res;
+    }
+
+
+    //return all books (still as a ResultSet obj)  belonging to the specified bookshelf
+    public ResultSet getBookShelf(String bookshelfID) throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+        Statement state = con.createStatement();
+        res = state.executeQuery("select * from Book where bookshelfID = " + bookshelfID + ";");
+        return res;
+    }
+
+
+    //return all the existing bookshelves (still as a ResultSet obj)
+    public ResultSet getBookShelves() throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+        Statement state = con.createStatement();
+        res = state.executeQuery("select * from Bookshelf;");
+        return res;
     }
 }
