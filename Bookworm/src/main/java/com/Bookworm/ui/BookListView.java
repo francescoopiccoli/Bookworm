@@ -104,12 +104,19 @@ public class BookListView extends BorderPane {
 
                 i++;
             }
-            //hb.setAlignment(Pos.BASELINE_LEFT); // align last row to left to avoid weirdness
+            // fill with whitespace - ugly hack, but it works ¯\_(ツ)_/¯
+            while(i != 0 && i < numColumns) {
+                BookSquareWidget b = new BookSquareWidget(null);
+                b.setVisible(false);
+                HBox.setMargin(b, new Insets(20));
+                hb.getChildren().add(b);
+                i++;
+            }
             setCenter(scrollPane);
         }
     }
 
     private int getMaxColumns(int width) {
-        return width / 250; // width + margin
+        return width / 230; // width + margin
     }
 }

@@ -36,17 +36,17 @@ public class BookSquareWidget extends BorderPane {
         });
         updateThread.start();
 
-
-        String title = book.getName();
-        if(title.length() > 20) {
-            title = title.substring(0, 19) + "\u2026";
+        if(book != null) {
+            String title = book.getName();
+            if (title.length() > 20) {
+                title = title.substring(0, 19) + "\u2026";
+            }
+            Text t = new Text(title);
+            t.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            setMargin(t, new Insets(20));
+            setAlignment(t, Pos.BOTTOM_CENTER);
+            setBottom(t);
         }
-        Text t = new Text(title);
-        t.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        setMargin(t, new Insets(20));
-        setAlignment(t, Pos.BOTTOM_CENTER);
-        setBottom(t);
-
         //setPadding(new Insets(10));
         setStyle("-fx-background-color: linear-gradient(to top, #ccc, #fff); -fx-border-color: #999;");
     }
