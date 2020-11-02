@@ -91,6 +91,7 @@ public class Discover extends BorderPane {
                     hb = new HBox();
                     HBox.setMargin(hb, new Insets(10));
                     BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+
                     Book finalBook = b;
                     bookSquareWidget.setOnMouseClicked(event -> {
                         BookInfo.spawnWindow(finalBook);
@@ -98,6 +99,7 @@ public class Discover extends BorderPane {
                     hb.getChildren().add(bookSquareWidget);
                     counter++;
                 } else {BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+
                     Book finalBook = b;
                     bookSquareWidget.setOnMouseClicked(event -> {
                         BookInfo.spawnWindow(finalBook);
@@ -105,6 +107,7 @@ public class Discover extends BorderPane {
                     hb.getChildren().add(bookSquareWidget);
                     counter++;
                 }
+
 
 
             }}
