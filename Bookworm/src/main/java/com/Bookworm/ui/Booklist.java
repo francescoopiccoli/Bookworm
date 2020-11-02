@@ -1,11 +1,12 @@
 package com.Bookworm.ui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 public class Booklist extends BorderPane {
 
@@ -21,6 +22,38 @@ public class Booklist extends BorderPane {
         Label title = new Label("Your Bookshelves");
         title.getStyleClass().add("titleBookshelf");
         Button addbutton = new Button("Create new Bookshelf");
+        addbutton.setOnMouseClicked(event -> {
+            Stage test = new Stage();
+            test.setTitle("My New Stage Title");
+            VBox root = new VBox();
+            root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
+            root.setSpacing(5);
+            Label name = new Label("Enter the name of the new Bookshelf");
+            TextField nameField = new TextField();
+
+            root.getChildren().addAll(name, nameField);
+            Label Description = new Label("Description for new Bookshelf");
+            TextArea descfield = new TextArea();
+
+            root.getChildren().addAll(Description, descfield);
+            BorderPane pane = new BorderPane();
+            Button commit = new Button("Create the new Bookshelf");
+            commit.getStyleClass().add("commitBookshelfButton");
+            commit.setOnMouseClicked(e -> {
+
+
+                //ADD code that creates new List
+                test.hide();
+
+                //Reload central part with lists
+                setCenter(createCenter());
+
+            });
+            pane.setCenter(commit);
+            root.getChildren().add(pane);
+            test.setScene(new Scene(root, 450, 250));
+            test.show();
+        });
 
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
@@ -47,7 +80,7 @@ public class Booklist extends BorderPane {
         defaultshelf.setOnMouseClicked(event -> {
             setTop(createTop2("Defaulf - Bookshelf"));
             setCenter(createCenter2());
-        });;
+        });
         defaultshelf.getStyleClass().add("ListsButton");
         vb.getChildren().add(defaultshelf);
         //Placeholder for method getting all existing bookshelves
@@ -89,7 +122,4 @@ public class Booklist extends BorderPane {
         return sc;
     }
 
-    public void refresh() {
-        setCenter(createCenter());
-    }
 }

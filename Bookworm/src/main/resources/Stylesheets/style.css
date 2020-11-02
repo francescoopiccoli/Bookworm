@@ -111,3 +111,15 @@
            -fx-font-size: 14px;
            -fx-padding: 10 20 10 20;
 }
+.commitBookshelfButton{
+    -fx-padding: 25px;
+       -fx-border-insets: 5px;
+       -fx-background-insets: 5px;
+       -fx-background-color:
+                          linear-gradient(#e68400, #ffd65b),
+                          linear-gradient(#f2ba44, #ffef84),
+                          linear-gradient(#efaa22, #ffea6a),
+                          linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+                          linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+
+}
