@@ -3,16 +3,11 @@ package com.Bookworm.ui;
 import com.Bookworm.model.Book;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +16,8 @@ public class BookListView extends BorderPane {
     private final String title;
     private final List<BookSquareWidget> books;
     private final ScrollPane scrollPane;
+    private String currentFilter = "";
+
     public BookListView(String title, List<Book> books) {
         super();
         this.title = title;
@@ -51,6 +48,7 @@ public class BookListView extends BorderPane {
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
 
+        scrollPane.widthProperty().addListener((e) ->  _updateList(null) );
         _updateList();
 
     }
@@ -63,15 +61,23 @@ public class BookListView extends BorderPane {
         _updateList("");
     }
     private void _updateList(String filter) {
+        if(filter != null)
+            currentFilter = filter;
+
         if (books == null || books.size() == 0) {
             setCenter(new Label("This list feels so empty :("));
         } else {
             VBox vb = new VBox();
+            scrollPane.setContent(vb);
             vb.setAlignment(Pos.CENTER);
+
+            int width = (int) scrollPane.getWidth();
+            int numColumns = getMaxColumns(width);
+
             int i = 0;
             HBox hb = new HBox();
             for (BookSquareWidget b : books) {
-                if (i > 2) {
+                if (i >= numColumns) {
                     i = 0;
                 }
                 if (i == 0) {
@@ -81,7 +87,8 @@ public class BookListView extends BorderPane {
                 }
 
                 // filtering
-                if (!b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
+                if (filter != null
+                        && !b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
                         && !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase()))
                     continue;
 
@@ -92,13 +99,17 @@ public class BookListView extends BorderPane {
                     BookInfo.spawnWindow(book, 600, 300, b.getImage());
                 }));
 
-                HBox.setMargin(b, new Insets(10));
+                HBox.setMargin(b, new Insets(20));
                 hb.getChildren().add(b);
 
                 i++;
             }
-            scrollPane.setContent(vb);
+            //hb.setAlignment(Pos.BASELINE_LEFT); // align last row to left to avoid weirdness
             setCenter(scrollPane);
         }
+    }
+
+    private int getMaxColumns(int width) {
+        return width / 250; // width + margin
     }
 }
