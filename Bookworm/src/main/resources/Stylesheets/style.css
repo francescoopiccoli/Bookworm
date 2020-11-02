@@ -38,8 +38,9 @@
 
 
 }
+
 .scrollDescription{
--fx-focus-color: transparent;
+        -fx-focus-color: transparent;
         -fx-padding: 2.25;
         -fx-pref-width:16.5;
         -fx-vbar-policy:always;
@@ -49,7 +50,7 @@
 
 }
 .scrollReview {
--fx-focus-color: transparent;
+        -fx-focus-color: transparent;
         -fx-padding: 2.25;
         -fx-pref-width:16.5;
         -fx-vbar-policy:always;

@@ -2,6 +2,7 @@ package com.Bookworm.ui;
 
 import com.Bookworm.controller.APImanager;
 import com.Bookworm.model.Book;
+import com.Bookworm.model.Tag;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -123,10 +125,10 @@ public class Discover extends BorderPane {
 
     }
 
-    private void bookinfo(String title, String author, String description, ImageView img) {
+    private void bookinfo(String title, String author, String description, String category, ArrayList<Tag> tags, int rating, ImageView img) {
         Stage bookPage = new Stage();
         bookPage.setTitle("Book info: "+title);
-        BookInfo book = new BookInfo(title,author,description,img);
+        BookInfo book = new BookInfo(title,author,description,category,tags, rating,img);
         Scene scenebook = new Scene(book,750,350);
         bookPage.setScene(scenebook);
         bookPage.show();
