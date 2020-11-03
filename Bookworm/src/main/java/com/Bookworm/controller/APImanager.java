@@ -86,10 +86,6 @@ public class APImanager {
 
       currentBook.setName(volumeInfo.getTitle());
 
-      if (volumeInfo.getMainCategory() != null && volumeInfo.getMainCategory().length() > 0) {
-        currentBook.setCategory(volumeInfo.getMainCategory());
-      }
-
       currentBook.setTags(null);
 
       java.util.List<String> authors = volumeInfo.getAuthors();

@@ -40,7 +40,6 @@ public class DatabaseManager {
         prep.setString(6, b.getReview());
         // to be changed
         prep.setString(7, null);
-        prep.setString(8, b.getCategory());
         prep.setString(9, b.getImageURL());
 
         prep.execute();
@@ -76,7 +75,6 @@ public class DatabaseManager {
                         "rating INTEGER," +
                         "review TEXT," +
                         "bookshelfID," +
-                        "category TEXT," +
                         "imageURL TEXT," +
                         "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id))");
                 state1.close();

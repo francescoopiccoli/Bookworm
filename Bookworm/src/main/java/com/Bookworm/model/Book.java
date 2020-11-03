@@ -8,16 +8,14 @@ public class Book implements Serializable {
 	private String name;
 	private String imageURL;
 	private String review;
-	private String category;
 	private ArrayList<Tag> tags;
 	private String author;
 	private int rating;
 
-	public Book(String description, String name, String category, ArrayList<Tag> tags, String author, int rating, String review, String imageURL) {
+	public Book(String description, String name, ArrayList<Tag> tags, String author, int rating, String review, String imageURL) {
 		super();
 		this.description = description;
 		this.name = name;
-		this.category = category;
 		this.tags = tags;
 		this.author = author;
 		this.rating = rating;
@@ -35,21 +33,18 @@ public class Book implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
+
 	public ArrayList<Tag> getTags() {
 		return tags;
 	}
+
 	public void setTags(ArrayList<Tag> tags) {
 		this.tags = tags;
 	}
