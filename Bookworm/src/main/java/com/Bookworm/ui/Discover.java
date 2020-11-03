@@ -125,10 +125,10 @@ public class Discover extends BorderPane {
 
     }
 
-    private void bookinfo(String title, String author, String description, String category, ArrayList<Tag> tags, int rating, ImageView img) {
+    private void bookinfo(String title, String author, String description, ArrayList<Tag> tags, int rating, ImageView img) {
         Stage bookPage = new Stage();
         bookPage.setTitle("Book info: "+title);
-        BookInfo book = new BookInfo(title,author,description,category,tags, rating,img);
+        BookInfo book = new BookInfo(title,author,description,tags, rating,img);
         Scene scenebook = new Scene(book,750,350);
         bookPage.setScene(scenebook);
         bookPage.show();

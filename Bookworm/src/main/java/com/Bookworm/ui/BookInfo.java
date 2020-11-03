@@ -4,11 +4,10 @@ package com.Bookworm.ui;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.model.Tag;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -16,8 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
@@ -34,7 +31,6 @@ public class BookInfo extends BorderPane {
     String bookDescription;
     String author;
     ImageView url;
-    String category;
     int rating;
     ArrayList<Tag> tags;
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
@@ -66,11 +62,11 @@ public class BookInfo extends BorderPane {
     }
 
 
-    public BookInfo(String title, String author, String bookDescription, String category, ArrayList<Tag> tags, int rating, ImageView url) {
+    public BookInfo(String title, String author, String bookDescription, ArrayList<Tag> tags, int rating, ImageView url) {
         this.title = title;
         this.author = author;
         this.bookDescription = bookDescription;
-        this.category = category;
+
         this.tags = tags;
         this.rating = rating;
         this.url = url;
@@ -95,7 +91,7 @@ public class BookInfo extends BorderPane {
 
     public static void spawnWindow(Book book, int w, int h, Image image) {
         ImageView imageView = new ImageView(image);
-        BookInfo bookInfo = new BookInfo(book.getName(), book.getAuthor(), book.getDescription(), book.getCategory(), book.getTags(), book.getRating(), imageView);
+        BookInfo bookInfo = new BookInfo(book.getName(), book.getAuthor(), book.getDescription(), book.getTags(), book.getRating(), imageView);
 
         Stage stage = new Stage();
         stage.setTitle(book.getName());
@@ -114,7 +110,7 @@ public class BookInfo extends BorderPane {
         Label displayTitle = new Label();
         displayTitle.setText("Title: " + title);
         displayTitle.getStyleClass().add("display");
-        displayTitle.setFont(Font.font(null, FontWeight.BOLD, 10));
+        displayTitle.setFont(Font.font(null, FontWeight.BOLD, 15));
 
 
         //book author
@@ -122,7 +118,7 @@ public class BookInfo extends BorderPane {
         Label displayAuthor = new Label();
         displayAuthor.setText("Author: " + author);
         displayAuthor.getStyleClass().add("display");
-        displayAuthor.setFont(Font.font(null, FontWeight.BOLD, 10));
+        displayAuthor.setFont(Font.font(null, FontWeight.BOLD, 15));
 
 
         //tags
@@ -134,11 +130,6 @@ public class BookInfo extends BorderPane {
         tagBox.getChildren().addAll(tagButton);
 
 
-        //display category
-        Label displayCategory = new Label();
-        displayCategory.setText("Category: " + category);
-        displayCategory.getStyleClass().add("display");
-        displayCategory.setFont(Font.font(null, FontWeight.BOLD, 10));
 
         //bookshelf
         HBox bookshelfBox = new HBox();
@@ -146,8 +137,9 @@ public class BookInfo extends BorderPane {
         bookshelfLabel.setText("Add to");
         ComboBox bookshelfCombo = new ComboBox();
         ComboBox<Bookshelf> comboBookshelf = new ComboBox<Bookshelf>();
-
-        //list stays empty need to check later on
+      //  System.out.println(bookList.toString());
+      //  System.out.println(bookShelf.toString());
+        //list stays empty need to check later
         if (!bookShelf.isEmpty()) {
             comboBookshelf.setItems(FXCollections.observableArrayList(bookShelf));
             comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
@@ -162,6 +154,7 @@ public class BookInfo extends BorderPane {
                     return null;
                 }
             });
+
         }
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
         String txt = newVal.getName();
@@ -200,7 +193,7 @@ public class BookInfo extends BorderPane {
         //Vbox for left elements
         VBox vBox = new VBox();
         vBox.setSpacing(8);
-        vBox.getChildren().addAll(displayTitle, displayAuthor, displayCategory);
+        vBox.getChildren().addAll(displayTitle, displayAuthor);
 
         HBox hBox = new HBox();
         hBox.getChildren().addAll(vboxBookshelf,readingList);
@@ -257,6 +250,7 @@ public class BookInfo extends BorderPane {
         review.setPrefColumnCount(15);
         review.setEditable(true);
         Button bReview = new Button("Review");
+
 
         //scroll for review textarea
         ScrollPane scrollPane2 = new ScrollPane(review);
