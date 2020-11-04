@@ -11,6 +11,7 @@ public class Book implements Serializable {
 	private ArrayList<Tag> tags;
 	private String author;
 	private int rating;
+	private int id;
 
 	public Book(String description, String name, ArrayList<Tag> tags, String author, int rating, String review, String imageURL) {
 		super();
@@ -74,4 +75,11 @@ public class Book implements Serializable {
 	public void setReview(String review) { this.review = review;}
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

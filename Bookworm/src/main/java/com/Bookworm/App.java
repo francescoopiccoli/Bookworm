@@ -1,5 +1,6 @@
 package com.Bookworm;
 
+import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.Booklist;
 import com.Bookworm.ui.Discover;
@@ -16,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.*;
 
 
@@ -44,7 +46,13 @@ public class App extends Application {
 
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());
-        views.put("Rankings", new BookListView("Best ranking books", demoList));
+        try {
+            views.put("My Books", new BookListView("Reading List", new DatabaseManager().getBooks()));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         views.put("Booklist", new Booklist());
         views.put("Settings", new Discover());
 

@@ -4,6 +4,9 @@ package com.Bookworm.controller;
 import com.Bookworm.model.Book;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 // sqlite.org/faq.html#q1
 // https://www.tutorialspoint.com/sqlite/index.htm
@@ -95,26 +98,32 @@ public class DatabaseManager {
     }
 
     //return a single book (still as a ResultSet obj) corresponding to the given title/name
-    public ResultSet getBook(String name) throws SQLException, ClassNotFoundException {
+    public Book getBook(String name) throws SQLException, ClassNotFoundException {
         if(con == null) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
         res = state.executeQuery("select * from Book where name = '" + name + "';");
-        return res;
+        return ModelBuilder.makeBook(res);
     }
 
+    public List<Book> getBooks() throws SQLException, ClassNotFoundException {
+        return ModelBuilder.makeBooks(getAll("Book"));
+    }
 
-    //return all books (still as a ResultSet obj)
-    public ResultSet getBooks() throws SQLException, ClassNotFoundException {
+    public List<String> getAuthors() throws SQLException, ClassNotFoundException {
+        List<String> list = new LinkedList<>();
         if(con == null) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
-        res = state.executeQuery("select * from Book;");
-        return res;
+        res = state.executeQuery("select distinct author from Book order by author asc");
+        while(res.next()) {
+            list.add(res.getString(1));
+        }
+        return list;
     }
 
 
@@ -132,12 +141,32 @@ public class DatabaseManager {
 
     //return all the existing bookshelves (still as a ResultSet obj)
     public ResultSet getBookShelves() throws SQLException, ClassNotFoundException {
+        return getAll("bookshelf");
+    }
+
+
+    public ResultSet getAll(String table) throws SQLException, ClassNotFoundException {
         if(con == null) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
-        res = state.executeQuery("select * from Bookshelf;");
+        PreparedStatement prep = con.prepareStatement("select * from "+table);
+        res = prep.executeQuery();
+        return res;
+    }
+    public ResultSet get(String table, int id) throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+        Statement state = con.createStatement();
+        PreparedStatement prep = con.prepareStatement("select * from ? where id = ?;");
+        prep.setString(1, table);
+        prep.setInt(2, id);
+
+        res = prep.executeQuery();
+        prep.close();
         return res;
     }
 }
