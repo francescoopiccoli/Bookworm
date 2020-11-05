@@ -8,6 +8,7 @@ module com.Bookworm {
 	requires javafx.fxml;
 	requires sqlite.jdbc;
 	requires java.sql;
+    requires org.junit.jupiter.api;
 
     exports com.Bookworm;
 }
