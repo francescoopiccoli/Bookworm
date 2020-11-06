@@ -1,6 +1,5 @@
-package com.Bookworm.test;
+package com.Bookworm.controller;
 
-import com.Bookworm.controller.ModelBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,6 @@ class ModelBuilderTest {
 
     @Test
     void makeBookshelves() {
-
     }
 
     @Test
