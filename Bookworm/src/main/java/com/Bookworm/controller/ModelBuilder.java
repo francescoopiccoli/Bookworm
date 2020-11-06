@@ -6,7 +6,6 @@ import com.Bookworm.model.Tag;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class ModelBuilder {
         book.setImageURL(rs.getString("imageURL"));
         book.setReview(rs.getString("review"));
         return book;
-
     }
 
     public static List<Book> makeBooks(ResultSet rs) throws SQLException {
