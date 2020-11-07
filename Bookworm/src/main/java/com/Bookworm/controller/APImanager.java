@@ -25,6 +25,7 @@ import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volume;
 import com.google.api.services.books.model.Volumes;
 
+import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -52,16 +53,31 @@ public class APImanager {
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
   public static LinkedList<Book> foundBooks;
 
+  public static Books connectToAPI(JsonFactory jsonFactory) {
+    try {
+      return new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
+              .setApplicationName(APPLICATION_NAME)
+              .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
+              .build();
+    } catch (GeneralSecurityException e) {
+      System.out.println("Error instantiating google api client");
+      e.printStackTrace();
+    } catch (IOException e) {
+      System.out.println("Error instantiating google api client");
+      e.printStackTrace();
+    }
+    return null;
+  }
+
   public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
+
+    final Books books = connectToAPI(jsonFactory);
 
     foundBooks = new LinkedList<>();
     ClientCredentials.errorIfNotSpecified();
 
     // Set up Books client.
-    final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
-            .setApplicationName(APPLICATION_NAME)
-            .setGoogleClientRequestInitializer(new BooksRequestInitializer(ClientCredentials.API_KEY))
-            .build();
+
     // Set query string and filter only Google eBooks.
     System.out.println("Query: [" + query + "]");
     List volumesList = books.volumes().list(query);

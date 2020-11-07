@@ -1,13 +1,11 @@
 package com.Bookworm.model;
-import com.Bookworm.controller.*;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class Bookshelf {
 	private String description;
 	private String name;
 	private ArrayList<Book> books;
+	private int id;
 
 	public Bookshelf(String name, String description, ArrayList<Book> books) {
 		super();
@@ -48,6 +46,14 @@ public class Bookshelf {
 	public void addBook() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

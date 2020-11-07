@@ -2,10 +2,11 @@ package com.Bookworm.controller;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ModelBuilderTest {
+    void setUp() {
 
+    }
     @Test
     void makeBook() {
     }

@@ -4,7 +4,6 @@ package com.Bookworm.controller;
 import com.Bookworm.model.Book;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,6 +47,8 @@ public class DatabaseManager {
         prep.execute();
         prep.close();
     }
+
+
 
 
     private void initialiseDB() throws SQLException {
