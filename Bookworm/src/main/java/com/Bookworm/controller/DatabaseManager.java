@@ -19,6 +19,13 @@ public class DatabaseManager {
     public static Connection con;
     private static boolean hasData = false;
     private ResultSet res;
+    private static DatabaseManager dbmanager = new DatabaseManager();
+
+    private DatabaseManager() {}
+
+    public static DatabaseManager getInstance() {
+        return dbmanager;
+    }
 
     private void getConnection() throws ClassNotFoundException, SQLException {
         // sqlite driver

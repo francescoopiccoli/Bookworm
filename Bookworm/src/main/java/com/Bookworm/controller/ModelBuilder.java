@@ -13,7 +13,7 @@ public class ModelBuilder {
     private static DatabaseManager databaseManager;
 
     public ModelBuilder() {
-        databaseManager = new DatabaseManager();
+        databaseManager = DatabaseManager.getInstance();
     }
 
     public static Book makeBook(ResultSet rs) throws SQLException {
