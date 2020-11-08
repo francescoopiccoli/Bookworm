@@ -2,6 +2,7 @@ package com.Bookworm.controller;
 
 
 import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -27,28 +28,6 @@ public class DatabaseManager {
         initialiseDB();
     }
 
-    public void insertBook(Book b) throws ClassNotFoundException, SQLException {
-        if(con == null) {
-            // get connection
-            getConnection();
-        }
-
-        PreparedStatement prep = con.prepareStatement("insert into Book values(?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        prep.setString(1, null);
-        prep.setString(2, b.getName());
-        prep.setString(3, b.getDescription());
-        prep.setString(4, b.getAuthor());
-        prep.setInt(5, b.getRating());
-        prep.setString(6, b.getReview());
-        // to be changed
-        prep.setString(7, null);
-        prep.setString(9, b.getImageURL());
-
-        prep.execute();
-        prep.close();
-    }
-
-
 
 
     private void initialiseDB() throws SQLException {
@@ -63,7 +42,8 @@ public class DatabaseManager {
                 Statement state2 = con.createStatement();
                 state2.executeUpdate("create table Bookshelf(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "name TEXT NOT NULL)");
+                        "name TEXT NOT NULL," +
+                        "description TEXT)");
                 state2.close();
             }
 
@@ -98,7 +78,7 @@ public class DatabaseManager {
         }
     }
 
-    //return a single book (still as a ResultSet obj) corresponding to the given title/name
+
     public Book getBook(String name) throws SQLException, ClassNotFoundException {
         if(con == null) {
             // get connection
@@ -156,6 +136,8 @@ public class DatabaseManager {
         res = prep.executeQuery();
         return res;
     }
+
+
     public ResultSet get(String table, int id) throws SQLException, ClassNotFoundException {
         if(con == null) {
             // get connection
@@ -169,5 +151,72 @@ public class DatabaseManager {
         res = prep.executeQuery();
         prep.close();
         return res;
+    }
+
+    public String insert(String table) throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+
+        String insertStatement = "insert into "  + table + " VALUES";
+        return insertStatement;
+    }
+
+
+    //since bookshelf is not an attribute of Book, it has to be passed as parameter
+    public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
+
+        String query = insert("Book");
+        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?);");
+        prep.setString(1, null);
+        prep.setString(2, b.getName());
+        prep.setString(3, b.getDescription());
+        prep.setString(4, b.getAuthor());
+        prep.setInt(5, b.getRating());
+        prep.setString(6, b.getReview());
+
+        // in case bookshelf id is not found, the bookshelfID column in DB will contain a 0
+        if(getBookshelfID(bookshelf) == 0){
+            prep.setInt(7, 0);
+        }
+        else{
+            prep.setInt(7, getBookshelfID(bookshelf));
+        }
+
+        prep.setString(8, b.getImageURL());
+        prep.execute();
+        prep.close();
+    }
+
+
+    public void insertBookshelf(Bookshelf bs) throws ClassNotFoundException, SQLException {
+
+        String query = insert("Bookshelf");
+        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?);");
+        prep.setString(1, null);
+        prep.setString(2, bs.getName());
+        prep.setString(3, bs.getDescription());
+        prep.execute();
+        prep.close();
+    }
+
+
+    private int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            // get connection
+            getConnection();
+        }
+
+        Statement state = con.createStatement();
+        PreparedStatement prep = con.prepareStatement("select id from Bookshelf where name = ?;");
+        prep.setString(1, bookshelfName);
+        res = prep.executeQuery();
+        prep.close();
+        //res.isClosed == nothing found
+        if(res.isClosed()) {
+        return 0;
+        }
+        return res.getInt("id");
     }
 }
