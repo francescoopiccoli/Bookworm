@@ -17,11 +17,22 @@ import java.util.List;
 
 public class DatabaseManager {
     public static Connection con;
-    private static boolean hasData = false;
     private ResultSet res;
-    private static DatabaseManager dbmanager = new DatabaseManager();
+    private static DatabaseManager dbmanager;
 
-    private DatabaseManager() {}
+    static {
+        try {
+            dbmanager = new DatabaseManager();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private DatabaseManager() throws SQLException, ClassNotFoundException {
+        initialiseDB();
+    }
 
     public static DatabaseManager getInstance() {
         return dbmanager;
@@ -32,67 +43,57 @@ public class DatabaseManager {
         Class.forName("org.sqlite.JDBC");
         // database path, if it's new database, it will be created in the project folder
         con = DriverManager.getConnection("jdbc:sqlite:BookwormDB.db");
-        initialiseDB();
     }
 
 
 
-    private void initialiseDB() throws SQLException {
-        if( !hasData ) {
-            hasData = true;
-            // check for database table
-            Statement state = con.createStatement();
+    private void initialiseDB() throws SQLException, ClassNotFoundException {
 
-            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Bookshelf';");
-            if(!res.next()) {
-                // need to build the table
-                Statement state2 = con.createStatement();
-                state2.executeUpdate("create table Bookshelf(" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "name TEXT NOT NULL," +
-                        "description TEXT)");
-                state2.close();
-            }
-
-            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='Book';");
-            if(!res.next()) {
-                // need to build the table
-                Statement state1 = con.createStatement();
-                state1.executeUpdate("create table Book(" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        "name TEXT NOT NULL," +
-                        "description," +
-                        "author TEXT," +
-                        "rating INTEGER," +
-                        "review TEXT," +
-                        "bookshelfID," +
-                        "imageURL TEXT," +
-                        "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id))");
-                state1.close();
-            }
-
-            res = state.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='BookTags';");
-            if( !res.next()) {
-                // need to build the table
-                Statement state3 = con.createStatement();
-                state3.executeUpdate("create table BookTags(" +
-                        "bookID INTEGER," +
-                        "tagName TEXT," +
-                        "PRIMARY KEY (bookID, tagName)," +
-                        "FOREIGN KEY(bookID) REFERENCES Book(id))");
-                state3.close();
-            }
+        if(con == null || con.isClosed()) {
+            // get connection
+            getConnection();
         }
+
+        Statement state1 = con.createStatement();
+        state1.executeUpdate("CREATE TABLE IF NOT EXISTS Bookshelf(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name TEXT NOT NULL," +
+                "description TEXT)");
+        state1.close();
+
+        Statement state2 = con.createStatement();
+        state2.executeUpdate("CREATE TABLE IF NOT EXISTS Book(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name TEXT NOT NULL," +
+                "description," +
+                "author TEXT," +
+                "rating INTEGER," +
+                "review TEXT," +
+                "bookshelfID," +
+                "imageURL TEXT," +
+                "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id))");
+        state2.close();
+
+        Statement state3 = con.createStatement();
+        state3.executeUpdate("CREATE TABLE IF NOT EXISTS BookTags(" +
+                "bookID INTEGER," +
+                "tagName TEXT," +
+                "PRIMARY KEY (bookID, tagName)," +
+                "FOREIGN KEY(bookID) REFERENCES Book(id))");
+        state3.close();
+        con.close();
     }
 
 
     public Book getBook(String name) throws SQLException, ClassNotFoundException {
-        if (con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
         res = state.executeQuery("select * from Book where name = '" + name + "';");
+        state.close();
+        con.close();
         return ModelBuilder.makeBook(res);
     }
 
@@ -102,7 +103,7 @@ public class DatabaseManager {
 
     public List<String> getAuthors() throws SQLException, ClassNotFoundException {
         List<String> list = new LinkedList<>();
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
@@ -111,19 +112,22 @@ public class DatabaseManager {
         while(res.next()) {
             list.add(res.getString(1));
         }
+        state.close();
+        con.close();
         return list;
     }
 
 
     //return all books (still as a ResultSet obj)  belonging to the specified bookshelf
     public Bookshelf getBookShelf(String bookshelfID) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
         res = state.executeQuery("select * from Book where bookshelfID = " + bookshelfID + ";");
         state.close();
+        con.close();
         return ModelBuilder.makeBookshelf(res);
     }
 
@@ -135,46 +139,46 @@ public class DatabaseManager {
 
 
     public ResultSet getAll(String table) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
-        Statement state = con.createStatement();
         PreparedStatement prep = con.prepareStatement("select * from "+table);
         res = prep.executeQuery();
+        prep.close();
+        con.close();
         return res;
     }
 
 
     public ResultSet get(String table, int id) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
-        Statement state = con.createStatement();
         PreparedStatement prep = con.prepareStatement("select * from ? where id = ?;");
         prep.setString(1, table);
         prep.setInt(2, id);
 
         res = prep.executeQuery();
         prep.close();
+        con.close();
         return res;
     }
 
     public String insert(String table) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
 
-        String insertStatement = "insert into "  + table + " VALUES";
-        return insertStatement;
+        return "insert into "  + table + " VALUES";
     }
 
 
     //since bookshelf is not an attribute of Book, it has to be passed as parameter
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
-
+        int bookshelfID = getBookshelfID(bookshelf);
         String query = insert("Book");
         PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?, ?);");
         prep.setString(1, null);
@@ -186,16 +190,16 @@ public class DatabaseManager {
         prep.setString(7, null); // bookshelf.getId
 
         // in case bookshelf id is not found, the bookshelfID column in DB will contain a 0
-        if(getBookshelfID(bookshelf) == 0){
+        if(bookshelfID == 0)
             prep.setInt(7, 0);
-        }
-        else{
-            prep.setInt(7, getBookshelfID(bookshelf));
-        }
+        else
+            prep.setInt(7, bookshelfID);
+
 
         prep.setString(8, b.getImageURL());
         prep.execute();
         prep.close();
+        con.close();
     }
 
 
@@ -208,29 +212,31 @@ public class DatabaseManager {
         prep.setString(3, bs.getDescription());
         prep.execute();
         prep.close();
+        con.close();
     }
 
 
     private int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
 
-        Statement state = con.createStatement();
         PreparedStatement prep = con.prepareStatement("select id from Bookshelf where name = ?;");
         prep.setString(1, bookshelfName);
         res = prep.executeQuery();
         prep.close();
         //res.isClosed == nothing found
+        con.close();
         if(res.isClosed()) {
         return 0;
         }
         return res.getInt("id");
     }
 
+
     public boolean delete(String table, int id) throws SQLException, ClassNotFoundException {
-        if (con == null) {
+        if(con == null || con.isClosed()) {
             // get connection
             getConnection();
         }
@@ -240,8 +246,11 @@ public class DatabaseManager {
 
         boolean result = prep.execute();
         prep.close();
+        con.close();
         return result;
     }
+
+
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
         return delete("Book", book.getId());
     }

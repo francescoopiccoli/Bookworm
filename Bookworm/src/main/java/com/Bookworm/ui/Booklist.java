@@ -1,5 +1,7 @@
 package com.Bookworm.ui;
 
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Bookshelf;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -7,6 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Booklist extends BorderPane {
 
@@ -84,14 +90,22 @@ public class Booklist extends BorderPane {
         defaultshelf.getStyleClass().add("ListsButton");
         vb.getChildren().add(defaultshelf);
         //Placeholder for method getting all existing bookshelves
-        if(true){
             //Placeholder for will have to iterate over list of all shelves
-            for(int i = 0; i<8; i++) {
-                Button list = new Button("Placeholder");
-                list.getStyleClass().add("ListsButton");
-                vb.getChildren().add(list);
+            try {
+                LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+                System.out.println(b.isEmpty());
+                for(Bookshelf bookshelf : b) {
+                    System.out.println(bookshelf.getName() + "ciao");
+                    Button list = new Button(bookshelf.getName());
+                    list.getStyleClass().add("ListsButton");
+                    vb.getChildren().add(list);
+                }
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-        }
 
 
         sc.setContent(vb);
