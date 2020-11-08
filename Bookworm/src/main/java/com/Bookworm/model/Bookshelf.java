@@ -15,6 +15,10 @@ public class Bookshelf {
 	}
 
 
+	public Bookshelf(){
+
+	}
+
 	public String getName() {
 		return name;
 	}

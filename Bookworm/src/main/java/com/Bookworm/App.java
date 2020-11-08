@@ -47,7 +47,7 @@ public class App extends Application {
         views.put("Home", new Label("implement me"));
         views.put("Discover", new Discover());
         try {
-            views.put("My Books", new BookListView("Reading List", new DatabaseManager().getBooks()));
+            views.put("My Books", new BookListView("Reading List", DatabaseManager.getInstance().getBooks()));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {

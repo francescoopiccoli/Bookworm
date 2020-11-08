@@ -28,6 +28,14 @@ public class ModelBuilder {
         return book;
     }
 
+    public static Bookshelf makeBookshelf(ResultSet rs) throws SQLException {
+        Bookshelf bookshelf = new Bookshelf();
+        bookshelf.setId(rs.getInt("id"));
+        bookshelf.setName(rs.getString("name"));
+        bookshelf.setDescription(rs.getString("description"));
+        return bookshelf;
+    }
+
     public static List<Book> makeBooks(ResultSet rs) throws SQLException {
         List<Book> list = new LinkedList<>();
 

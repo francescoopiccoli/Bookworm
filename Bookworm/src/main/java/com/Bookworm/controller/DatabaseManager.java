@@ -116,20 +116,21 @@ public class DatabaseManager {
 
 
     //return all books (still as a ResultSet obj)  belonging to the specified bookshelf
-    public ResultSet getBookShelf(String bookshelfID) throws SQLException, ClassNotFoundException {
+    public Bookshelf getBookShelf(String bookshelfID) throws SQLException, ClassNotFoundException {
         if(con == null) {
             // get connection
             getConnection();
         }
         Statement state = con.createStatement();
         res = state.executeQuery("select * from Book where bookshelfID = " + bookshelfID + ";");
-        return res;
+        state.close();
+        return ModelBuilder.makeBookshelf(res);
     }
 
 
     //return all the existing bookshelves (still as a ResultSet obj)
-    public ResultSet getBookShelves() throws SQLException, ClassNotFoundException {
-        return getAll("bookshelf");
+    public List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException {
+        return ModelBuilder.makeBookshelves(getAll("Bookshelf"));
     }
 
 
