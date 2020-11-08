@@ -2,10 +2,8 @@ package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
-import com.Bookworm.ui.Booklist;
-import com.Bookworm.ui.Discover;
-import com.Bookworm.ui.BookListView;
-import com.Bookworm.ui.NavToggleButton;
+import com.Bookworm.ui.*;
+import com.google.api.client.util.Data;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,6 +27,7 @@ public class App extends Application {
 	private Region currentView = new Discover();
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
+
 	
     @Override
     public void start(Stage stage) {

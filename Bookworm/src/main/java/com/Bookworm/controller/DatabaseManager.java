@@ -180,7 +180,7 @@ public class DatabaseManager {
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
         int bookshelfID = getBookshelfID(bookshelf);
         String query = insert("Book");
-        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?);");
         prep.setString(1, null);
         prep.setString(2, b.getName());
         prep.setString(3, b.getDescription());
@@ -216,7 +216,7 @@ public class DatabaseManager {
     }
 
 
-    private int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
+    public int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
         if(con == null || con.isClosed()) {
             // get connection
             getConnection();

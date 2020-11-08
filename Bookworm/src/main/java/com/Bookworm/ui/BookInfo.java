@@ -39,7 +39,7 @@ public class BookInfo extends BorderPane {
     private Book book;
     private BookListView parent;
     ImageView imageView;
-    private static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
+    public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
 
     public static List<Book> getBookList() {
         return bookList;

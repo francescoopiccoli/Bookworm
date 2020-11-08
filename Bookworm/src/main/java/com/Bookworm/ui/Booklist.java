@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Booklist extends BorderPane {
-
+    private DatabaseManager db = BookInfo.dbManager;
     public Booklist() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
@@ -46,8 +46,18 @@ public class Booklist extends BorderPane {
             Button commit = new Button("Create the new Bookshelf");
             commit.getStyleClass().add("commitBookshelfButton");
             commit.setOnMouseClicked(e -> {
-
-
+                Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());
+                try {
+                    //int bookshelfID = db.getBookshelfID(nameField.getText());
+                    //String bookshelfIDString = ""+bookshelfID;
+                   // if(db.getBookShelf(bookshelfIDString)==null){
+                    System.out.println("Bookshelf inserted!");
+                    db.insertBookshelf(list); //}
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 //ADD code that creates new List
                 test.hide();
 
@@ -93,7 +103,7 @@ public class Booklist extends BorderPane {
             //Placeholder for will have to iterate over list of all shelves
             try {
                 LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
-                System.out.println(b.isEmpty());
+                System.out.println(b.isEmpty() +"There are no bookshelves");
                 for(Bookshelf bookshelf : b) {
                     System.out.println(bookshelf.getName() + "ciao");
                     Button list = new Button(bookshelf.getName());
