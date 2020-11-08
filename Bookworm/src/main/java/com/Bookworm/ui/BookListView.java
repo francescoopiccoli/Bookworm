@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BookListView extends BorderPane {
     private final String title;
-    private final List<BookSquareWidget> books;
+    private List<BookSquareWidget> books;
     private final ScrollPane scrollPane;
     private String currentFilter = "";
 
@@ -40,7 +40,7 @@ public class BookListView extends BorderPane {
         textField.setPromptText("dragons, cats, tolkien...");
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             String filter = newValue;
-            _updateList(filter);
+            updateList(filter);
         });
 
         headerPane.setRight(textField);
@@ -48,8 +48,8 @@ public class BookListView extends BorderPane {
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
 
-        scrollPane.widthProperty().addListener((e) ->  _updateList(null) );
-        _updateList();
+        scrollPane.widthProperty().addListener((e) ->  updateList(null) );
+        updateList();
 
     }
 
@@ -57,10 +57,10 @@ public class BookListView extends BorderPane {
         return title;
     }
 
-    private void _updateList() {
-        _updateList("");
+    public void updateList() {
+        updateList("");
     }
-    private void _updateList(String filter) {
+    public void updateList(String filter) {
         if(filter != null)
             currentFilter = filter;
 
@@ -96,7 +96,7 @@ public class BookListView extends BorderPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    BookInfo.spawnWindow(book, 600, 300, b.getImage());
+                    BookInfo.spawnWindow(book, 600, 300, b.getImage(), this);
                 }));
 
                 HBox.setMargin(b, new Insets(20));
@@ -119,4 +119,12 @@ public class BookListView extends BorderPane {
     private int getMaxColumns(int width) {
         return width / 230; // width + margin
     }
+
+    public List<BookSquareWidget> getBooks() {
+        return books;
+    }
+    public void setBooks(List<BookSquareWidget> books) {
+        this.books = books;
+    }
+
 }

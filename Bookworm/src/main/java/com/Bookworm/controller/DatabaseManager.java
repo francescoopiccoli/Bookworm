@@ -87,7 +87,7 @@ public class DatabaseManager {
 
 
     public Book getBook(String name) throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if (con == null) {
             // get connection
             getConnection();
         }
@@ -175,13 +175,14 @@ public class DatabaseManager {
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
 
         String query = insert("Book");
-        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?);");
+        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?, ?);");
         prep.setString(1, null);
         prep.setString(2, b.getName());
         prep.setString(3, b.getDescription());
         prep.setString(4, b.getAuthor());
         prep.setInt(5, b.getRating());
         prep.setString(6, b.getReview());
+        prep.setString(7, null); // bookshelf.getId
 
         // in case bookshelf id is not found, the bookshelfID column in DB will contain a 0
         if(getBookshelfID(bookshelf) == 0){
@@ -225,5 +226,22 @@ public class DatabaseManager {
         return 0;
         }
         return res.getInt("id");
+    }
+
+    public boolean delete(String table, int id) throws SQLException, ClassNotFoundException {
+        if (con == null) {
+            // get connection
+            getConnection();
+        }
+
+        PreparedStatement prep = con.prepareStatement("delete from "+table+" where id = ?");
+        prep.setInt(1, id);
+
+        boolean result = prep.execute();
+        prep.close();
+        return result;
+    }
+    public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
+        return delete("Book", book.getId());
     }
 }

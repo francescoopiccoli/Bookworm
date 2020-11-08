@@ -1,11 +1,14 @@
 package com.Bookworm.ui;
 
 
+import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.model.Tag;
+import com.google.api.client.util.Data;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class BookInfo extends BorderPane {
@@ -25,17 +29,17 @@ public class BookInfo extends BorderPane {
 
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 350;
+    private static final String LABEL_NO_BOOKSHELF = "Save to bookshelf...";
+    private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
 
-
-    String title;
-    String bookDescription;
-    String author;
-    ImageView url;
-    int rating;
     ArrayList<Tag> tags;
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
-    public static List<Book> bookList = new LinkedList<>();
+    public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookSquareWidget> books;
+    private Book book;
+    private BookListView parent;
+    ImageView imageView;
+    private static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
 
     public static List<Book> getBookList() {
         return bookList;
@@ -62,36 +66,38 @@ public class BookInfo extends BorderPane {
     }
 
 
-    public BookInfo(String title, String author, String bookDescription, ArrayList<Tag> tags, int rating, ImageView url) {
-        this.title = title;
-        this.author = author;
-        this.bookDescription = bookDescription;
-
-        this.tags = tags;
-        this.rating = rating;
-        this.url = url;
+    public BookInfo(Book book, BookListView parent) {
+        this.book = book;
+        this.parent = parent;
+        Image image;
+        try {
+            image = new Image(book.getImageURL(), true);
+        } catch (Exception e) {
+            image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+        }
+        this.imageView = new ImageView(image);
 
         setTop(addHBoxTop());
         setCenter(addVBox());
 
     }
 
-    public static void spawnWindow(Book book) {
-        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    public static void spawnWindow(Book book, BookListView parent) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, parent);
     }
 
-    public static void spawnWindow(Book book, Image image) {
-        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image);
+    public static void spawnWindow(Book book, Image image, BookListView parent) {
+        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h) {
+    public static void spawnWindow(Book book, int w, int h, BookListView parent) {
         Image image = new Image(book.getImageURL());
-        spawnWindow(book, w, h, image);
+        spawnWindow(book, w, h, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, Image image) {
+    public static void spawnWindow(Book book, int w, int h, Image image, BookListView parent) {
         ImageView imageView = new ImageView(image);
-        BookInfo bookInfo = new BookInfo(book.getName(), book.getAuthor(), book.getDescription(), book.getTags(), book.getRating(), imageView);
+        BookInfo bookInfo = new BookInfo(book, parent);
 
         Stage stage = new Stage();
         stage.setTitle(book.getName());
@@ -108,87 +114,101 @@ public class BookInfo extends BorderPane {
         //book title
 
         Label displayTitle = new Label();
-        displayTitle.setText("Title: " + title);
+        displayTitle.setText(book.getName());
         displayTitle.getStyleClass().add("display");
-        displayTitle.setFont(Font.font(null, FontWeight.BOLD, 15));
+        displayTitle.setFont(Font.font("Cantarell", FontWeight.BOLD, 18));
 
 
         //book author
 
         Label displayAuthor = new Label();
-        displayAuthor.setText("Author: " + author);
+        displayAuthor.setText(book.getAuthor());
         displayAuthor.getStyleClass().add("display");
-        displayAuthor.setFont(Font.font(null, FontWeight.BOLD, 15));
-
-
-        //tags
-        HBox tagBox = new HBox();
-        Button tagButton = new Button();
-        tagButton.setText("Tag");
-
-        tagBox.setSpacing(5);
-        tagBox.getChildren().addAll(tagButton);
-
+        displayAuthor.setFont(Font.font("Arial", FontWeight.BOLD, 12));
 
 
         //bookshelf
         HBox bookshelfBox = new HBox();
-        Label bookshelfLabel = new Label();
-        bookshelfLabel.setText("Add to");
         ComboBox bookshelfCombo = new ComboBox();
+        HBox.setHgrow(bookshelfCombo, Priority.ALWAYS);
         ComboBox<Bookshelf> comboBookshelf = new ComboBox<Bookshelf>();
+        comboBookshelf.setPlaceholder(new Label("None"));
       //  System.out.println(bookList.toString());
       //  System.out.println(bookShelf.toString());
         //list stays empty need to check later
-        if (!bookShelf.isEmpty()) {
-            comboBookshelf.setItems(FXCollections.observableArrayList(bookShelf));
-            comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
 
-                @Override
-                public String toString(Bookshelf bookshelf) {
+        ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
+        list.add(0, new Bookshelf(LABEL_NO_BOOKSHELF, "", null));
+        list.add(1, new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null));
+
+        comboBookshelf.setItems(list);
+        comboBookshelf.getSelectionModel().select(0);
+        comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
+
+            @Override
+            public String toString(Bookshelf bookshelf) {
+                if(bookshelf != null)
                     return bookshelf.getName();
-                }
-
-                @Override
-                public Bookshelf fromString(String s) {
+                else
                     return null;
-                }
-            });
+            }
 
-        }
+            @Override
+            public Bookshelf fromString(String s) {
+                return null;
+            }
+        });
+
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
-        String txt = newVal.getName();
-        System.out.println(txt);
-                });
-        //button to add in a bookshelf
-        Button add = new Button();
-        add.setText("Add");
-        add.setOnMouseClicked(e->{
-        //implement to add to a bookshelf
+            if(!oldVal.getName().equals(newVal.getName())) {
+                System.out.println(oldVal+" "+newVal);
+                if(oldVal.getName().equals(LABEL_NO_BOOKSHELF)) {
+                    // todo: insert book only if it really exists
+                    try {
+                        dbManager.insertBook(book, null);
+                        if(parent != null) {
+                            List<BookSquareWidget> books = parent.getBooks();
+                            books.add(new BookSquareWidget(book));
+                            parent.updateList(null);
+                        }
+                        System.out.println("Saved book "+book.getName());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if(newVal.getName().equals(LABEL_NO_BOOKSHELF)) {
+                    try {
+                        dbManager.deleteBook(book);
+                        if(parent != null) {
+                            List<BookSquareWidget> books = parent.getBooks();
+                            Iterator<BookSquareWidget> iter = books.iterator();
 
+                            while (iter.hasNext()) {
+                                BookSquareWidget widget = iter.next();
+
+                                if (widget.getBook().getId() == book.getId()) {
+                                   iter.remove();
+                                }
+                            }
+                            parent.updateList(null);
+                        }
+                        System.out.println("Deleted book "+book.getName());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    //if(newVal.equals(LABEL_DEFAULT_BOOKSHELF))
+                        // setBookshelf(book, getIdFromName(name))
+                    //else
+                        // setBookshelf(book, null)
+                }
+            }
         });
 
-        //add to reading list
-        HBox readingList=new HBox();
-        readingList.setSpacing(5);
-        Label reading = new Label();
-        reading.setText("Add to reading list");
-        Button addBook = new Button();
-        addBook.setText("+");
-        addBook.setOnMouseClicked(e->{
 
-        });
-        readingList.getChildren().addAll(reading,addBook);
-
-
-        //vbox for bookshelf
-        VBox vboxBookshelf = new VBox();
-        vboxBookshelf.setSpacing(8);
-        vboxBookshelf.getChildren().addAll(comboBookshelf,add);
 
 
         bookshelfBox.setSpacing(20);
-        bookshelfBox.getChildren().addAll(bookshelfLabel, vboxBookshelf,readingList);
+        bookshelfBox.getChildren().addAll(comboBookshelf);
 
         //Vbox for left elements
         VBox vBox = new VBox();
@@ -196,10 +216,12 @@ public class BookInfo extends BorderPane {
         vBox.getChildren().addAll(displayTitle, displayAuthor);
 
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(vboxBookshelf,readingList);
+        hBox.getChildren().addAll(comboBookshelf);
         hBox.setSpacing(30);
 
-        hbox.getChildren().addAll(vBox,tagBox, hBox);
+
+
+        hbox.getChildren().addAll(vBox, hBox);
 
         return hbox;
     }
@@ -214,11 +236,9 @@ public class BookInfo extends BorderPane {
         //description
 
         TextArea description = new TextArea("Short Description");
-        description.setText(bookDescription);
+        description.setText(book.getDescription());
         description.setWrapText(true);
-        description.setPrefColumnCount(15);
-        description.setPrefWidth(150);
-        description.setPrefHeight(200);
+        //description.setPrefColumnCount(15);
         description.setFont(Font.font(null, FontWeight.NORMAL, 12));
         description.setEditable(false);
 
@@ -232,24 +252,15 @@ public class BookInfo extends BorderPane {
         scrollPane.setFitToHeight(true);
 
 
-        //Vbox for description
-        VBox vBoxD = new VBox();
-        vBoxD.setSpacing(10);
-        vBoxD.getChildren().addAll(scrollPane);
-
-
         //Review Area
         Label reviewLabel = new Label();
-        reviewLabel.setText("Add review");
+        reviewLabel.setText("{star_widget}");
         TextArea review = new TextArea("review");
         review.setText("review");
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
         review.setWrapText(true);
-        review.setPrefWidth(150);
-        review.setPrefHeight(200);
         review.setPrefColumnCount(15);
         review.setEditable(true);
-        Button bReview = new Button("Review");
 
 
         //scroll for review textarea
@@ -263,27 +274,36 @@ public class BookInfo extends BorderPane {
         reviewBox.setSpacing(10);
         reviewBox.getChildren().addAll(reviewLabel, scrollPane2);
 
-        //right side
-        VBox reviewVB = new VBox();
-        reviewVB.setSpacing(10);
-        reviewVB.getChildren().addAll(reviewBox, bReview);
-
         //left side
         VBox left = new VBox();
         left.setSpacing(20);
-        left.getChildren().addAll(vBoxD);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        VBox.setVgrow(scrollPane2, Priority.ALWAYS);
+        left.getChildren().addAll(scrollPane);
 
         //image
-        url.setFitWidth(150);
-        url.setFitHeight(200);
+        imageView.setFitWidth(150);
+        imageView.setFitHeight(220);
+        imageView.setPreserveRatio(false);
+        HBox.setHgrow(imageView, Priority.ALWAYS);
+        VBox.setVgrow(imageView, Priority.ALWAYS);
 
         //overall view
         HBox overall = new HBox();
 
         overall.setSpacing(50);
-        overall.getChildren().addAll(url, left, reviewVB);
+        overall.getChildren().addAll(imageView, left, reviewBox);
 
-        vbox.getChildren().addAll(overall);
+
+        //tags
+        HBox tagBox = new HBox();
+        Button tagButton = new Button();
+        tagButton.setText("Tag");
+
+        tagBox.setSpacing(5);
+        tagBox.getChildren().addAll(tagButton);
+
+        vbox.getChildren().addAll(overall, tagBox);
 
 
         return vbox;

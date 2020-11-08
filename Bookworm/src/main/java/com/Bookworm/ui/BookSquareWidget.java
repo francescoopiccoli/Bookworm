@@ -26,15 +26,14 @@ public class BookSquareWidget extends BorderPane {
         imageView.setFitWidth(180);
         setCenter(imageView);
 
-        Thread updateThread = new Thread(() -> {
-            try {
-                image = new Image(book.getImageURL());
-                imageView.setImage(image);
-            } catch (IllegalArgumentException | NullPointerException e) {
-                image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
-            }
-        });
-        updateThread.start();
+        // is this responsible for the weird NullPointerException stuff?
+
+        try {
+            image = new Image(book.getImageURL(), true);
+            imageView.setImage(image);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+        }
 
         if(book != null) {
             String title = book.getName();

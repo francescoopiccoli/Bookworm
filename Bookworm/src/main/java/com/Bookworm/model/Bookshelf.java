@@ -2,10 +2,10 @@ package com.Bookworm.model;
 import java.util.ArrayList;
 
 public class Bookshelf {
+	private int id;
 	private String description;
 	private String name;
 	private ArrayList<Book> books;
-	private int id;
 
 	public Bookshelf(String name, String description, ArrayList<Book> books) {
 		super();
@@ -43,7 +43,7 @@ public class Bookshelf {
 		return books;
 	}
 
-	public void addBook() {
+	public void addBook(Book book) {
 		// TODO Auto-generated method stub
 
 	}
@@ -55,5 +55,4 @@ public class Bookshelf {
 	public int getId() {
 		return id;
 	}
-
 }

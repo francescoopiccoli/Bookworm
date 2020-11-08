@@ -96,7 +96,7 @@ public class Discover extends BorderPane {
 
                     Book finalBook = b;
                     bookSquareWidget.setOnMouseClicked(event -> {
-                        BookInfo.spawnWindow(finalBook);
+                        BookInfo.spawnWindow(finalBook, null);
                     });
                     hb.getChildren().add(bookSquareWidget);
                     counter++;
@@ -104,7 +104,7 @@ public class Discover extends BorderPane {
 
                     Book finalBook = b;
                     bookSquareWidget.setOnMouseClicked(event -> {
-                        BookInfo.spawnWindow(finalBook);
+                        BookInfo.spawnWindow(finalBook, null);
                     });
                     hb.getChildren().add(bookSquareWidget);
                     counter++;
@@ -124,17 +124,6 @@ public class Discover extends BorderPane {
 
 
     }
-
-    private void bookinfo(String title, String author, String description, ArrayList<Tag> tags, int rating, ImageView img) {
-        Stage bookPage = new Stage();
-        bookPage.setTitle("Book info: "+title);
-        BookInfo book = new BookInfo(title,author,description,tags, rating,img);
-        Scene scenebook = new Scene(book,750,350);
-        bookPage.setScene(scenebook);
-        bookPage.show();
-
-    }
-
 
     public Node createTopDisc() {
         VBox vb = new VBox();
@@ -167,6 +156,7 @@ public class Discover extends BorderPane {
             if(d.getLoadingStatus())
                 return; // don't mess with multiple searches at once
             setLoading(true);
+
             List<Book> bookList = APImanager.searchBooks(query);
             if(bookList != null && !bookList.isEmpty()){
                 d.setbookList(bookList);

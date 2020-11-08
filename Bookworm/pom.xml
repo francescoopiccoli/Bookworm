@@ -48,7 +48,7 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.32.3.2</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
@@ -59,7 +59,7 @@
             <artifactId>mockito-core</artifactId>
             <version>3.1.0</version>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
     </dependencies>
     <build>
 
