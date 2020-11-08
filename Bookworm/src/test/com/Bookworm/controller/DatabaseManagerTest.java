@@ -15,15 +15,15 @@ import java.util.List;
 //connection not closed, might cause lock errors
 //review concept of close() statement and close() connection
 
-public class DatabaseManager {
+public class DatabaseManagerTest {
     public static Connection con;
     private static boolean hasData = false;
     private ResultSet res;
-    private static DatabaseManager dbmanager = new DatabaseManager();
+    private static DatabaseManagerTest dbmanager = new DatabaseManagerTest();
 
-    private DatabaseManager() {}
+    private DatabaseManagerTest() {}
 
-    public static DatabaseManager getInstance() {
+    public static DatabaseManagerTest getInstance() {
         return dbmanager;
     }
 
@@ -194,7 +194,7 @@ public class DatabaseManager {
         }
 
         prep.setString(8, b.getImageURL());
-        System.out.println(prep.execute());
+        prep.execute();
         prep.close();
     }
 
@@ -224,7 +224,7 @@ public class DatabaseManager {
         prep.close();
         //res.isClosed == nothing found
         if(res.isClosed()) {
-        return 0;
+            return 0;
         }
         return res.getInt("id");
     }
