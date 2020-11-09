@@ -2,10 +2,8 @@ package com.Bookworm.controller;
 
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.model.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,14 +15,14 @@ class ModelBuilderTest {
     // a new database only for tests
     // use methods of DatabaseManagerTest
     // i think insertBook is not working
-    DatabaseManagerTest dbtest = DatabaseManagerTest.getInstance();
+    DatabaseManager dbtest = DatabaseManager.getInstance();
+    Book book1 = new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
+    Book book2 = new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 1, null, "https://cataas.com/cat/says/meow?size=50&color=green");
+    Book book3 = new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
+
 
     @Test
     void setUp() throws SQLException, ClassNotFoundException {
-        Book book1 = new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
-        Book book2 = new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 1, null, "https://cataas.com/cat/says/meow?size=50&color=green");
-        Book book3 = new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
-
         dbtest.insertBook(book1, "FirstBookshelf");
         dbtest.insertBook(book2, "FirstBookshelf");
         dbtest.insertBook(book3, "FirstBookshelf");
@@ -54,15 +52,18 @@ class ModelBuilderTest {
         }
     }
 
+    //@Test
+    //void makeTags() throws SQLException {
+    //    List<Tag> tagList = dbtest.getTags();
+     //   if (tagList == null) {
+     //       fail("The list of tags cannot be null");
+     //   }
+    //}
+
     @Test
-    void makeTags() throws SQLException {
-        List<Tag> tagList = dbtest.getTags();
-        if (tagList == null) {
-            fail("The list of tags cannot be null");
-        }
-    }
-
-    void tearDown() {
-
+    void tearDown() throws SQLException, ClassNotFoundException {
+        dbtest.deleteBook(book1);
+        dbtest.deleteBook(book2);
+        dbtest.deleteBook(book3);
     }
 }
