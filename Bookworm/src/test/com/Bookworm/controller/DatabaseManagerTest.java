@@ -3,6 +3,7 @@ package com.Bookworm.controller;
 
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
+import com.Bookworm.model.Tag;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -176,7 +177,7 @@ public class DatabaseManagerTest {
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
 
         String query = insert("Book");
-        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        PreparedStatement prep = con.prepareStatement(query + " (?, ?, ?, ?, ?, ?, ?, ?);");
         prep.setString(1, null);
         prep.setString(2, b.getName());
         prep.setString(3, b.getDescription());
@@ -244,5 +245,8 @@ public class DatabaseManagerTest {
     }
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
         return delete("Book", book.getId());
+    }
+    public List<Tag> getTags () throws SQLException {
+        return ModelBuilder.makeTags(res);
     }
 }

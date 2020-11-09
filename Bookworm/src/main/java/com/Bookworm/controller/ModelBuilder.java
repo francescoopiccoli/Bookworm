@@ -39,7 +39,7 @@ public class ModelBuilder {
     public static List<Book> makeBooks(ResultSet rs) throws SQLException {
         List<Book> list = new LinkedList<>();
 
-        while(rs.next()) {
+        while (rs.next()) {
             Book book = makeBook(rs);
             list.add(book);
         }
@@ -47,12 +47,11 @@ public class ModelBuilder {
     }
 
 
-
     public static List<Bookshelf> makeBookshelves(ResultSet rs) throws SQLException {
         List<Bookshelf> list = new LinkedList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             Bookshelf bookshelf = new Bookshelf(rs.getString("name"), rs.getString("description")
-            , null);
+                    , null);
             //bookshelf.setBooks(); -> todo, but how?
             list.add(bookshelf);
         }
@@ -61,7 +60,7 @@ public class ModelBuilder {
 
     public static List<Tag> makeTags(ResultSet rs) throws SQLException {
         List<Tag> list = new LinkedList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             Tag tag = new Tag(rs.getString("tagName"));
             //tag.setBook(...)
             list.add(tag);
