@@ -1,5 +1,7 @@
 package com.Bookworm.ui;
 
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Bookshelf;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -8,8 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class Booklist extends BorderPane {
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
+public class Booklist extends BorderPane {
+    private DatabaseManager db = BookInfo.dbManager;
     public Booklist() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
@@ -40,8 +46,18 @@ public class Booklist extends BorderPane {
             Button commit = new Button("Create the new Bookshelf");
             commit.getStyleClass().add("commitBookshelfButton");
             commit.setOnMouseClicked(e -> {
-
-
+                Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());
+                try {
+                    //int bookshelfID = db.getBookshelfID(nameField.getText());
+                    //String bookshelfIDString = ""+bookshelfID;
+                   // if(db.getBookShelf(bookshelfIDString)==null){
+                    System.out.println("Bookshelf inserted!");
+                    db.insertBookshelf(list); //}
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
                 //ADD code that creates new List
                 test.hide();
 
@@ -84,14 +100,21 @@ public class Booklist extends BorderPane {
         defaultshelf.getStyleClass().add("ListsButton");
         vb.getChildren().add(defaultshelf);
         //Placeholder for method getting all existing bookshelves
-        if(true){
             //Placeholder for will have to iterate over list of all shelves
-            for(int i = 0; i<8; i++) {
-                Button list = new Button("Placeholder");
-                list.getStyleClass().add("ListsButton");
-                vb.getChildren().add(list);
+            try {
+                LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+                for(Bookshelf bookshelf : b) {
+                    System.out.println(bookshelf.getName() + "ciao");
+                    Button list = new Button(bookshelf.getName());
+                    list.getStyleClass().add("ListsButton");
+                    vb.getChildren().add(list);
+                }
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-        }
 
 
         sc.setContent(vb);

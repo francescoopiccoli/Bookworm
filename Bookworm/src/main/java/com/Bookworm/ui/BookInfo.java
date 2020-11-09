@@ -39,7 +39,7 @@ public class BookInfo extends BorderPane {
     private Book book;
     private BookListView parent;
     ImageView imageView;
-    private static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
+    public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
 
     public static List<Book> getBookList() {
         return bookList;
@@ -140,6 +140,21 @@ public class BookInfo extends BorderPane {
         ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
         list.add(0, new Bookshelf(LABEL_NO_BOOKSHELF, "", null));
         list.add(1, new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null));
+
+        //temporary index to be changed
+        int index = 2;
+        try {
+            LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+            for(Bookshelf bookshelf : b) {
+                list.add(index, new Bookshelf(bookshelf.getName(), "", null));
+                index++;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         comboBookshelf.setItems(list);
         comboBookshelf.getSelectionModel().select(0);
