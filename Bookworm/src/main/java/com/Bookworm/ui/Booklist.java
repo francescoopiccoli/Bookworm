@@ -103,7 +103,6 @@ public class Booklist extends BorderPane {
             //Placeholder for will have to iterate over list of all shelves
             try {
                 LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
-                System.out.println(b.isEmpty() +"There are no bookshelves");
                 for(Bookshelf bookshelf : b) {
                     System.out.println(bookshelf.getName() + "ciao");
                     Button list = new Button(bookshelf.getName());

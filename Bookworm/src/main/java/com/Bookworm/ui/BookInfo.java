@@ -141,6 +141,21 @@ public class BookInfo extends BorderPane {
         list.add(0, new Bookshelf(LABEL_NO_BOOKSHELF, "", null));
         list.add(1, new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null));
 
+        //temporary index to be changed
+        int index = 2;
+        try {
+            LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+            for(Bookshelf bookshelf : b) {
+                list.add(index, new Bookshelf(bookshelf.getName(), "", null));
+                index++;
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         comboBookshelf.setItems(list);
         comboBookshelf.getSelectionModel().select(0);
         comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
