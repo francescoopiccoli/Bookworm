@@ -33,12 +33,18 @@ class ModelBuilderTest {
     @Test
     void makeBook() throws SQLException, ClassNotFoundException {
         List<Book> bookList = dbtest.getBooks();
-        if (bookList == null) {
-            fail("List of book cannot be null");
+        if (bookList == null || bookList.isEmpty()) {
+            fail("List of book cannot be neither null nor empty");
         }
     }
 
-
+    @Test
+    void getAuthors() throws SQLException, ClassNotFoundException {
+        List<String> authorList = dbtest.getAuthors();
+        if (authorList == null || authorList.isEmpty()) {
+            fail("Author List cannot be neither null nor empty");
+        }
+    }
 
     @Test
     void makeBookshelves() throws SQLException, ClassNotFoundException {
