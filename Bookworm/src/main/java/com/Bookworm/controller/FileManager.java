@@ -6,27 +6,28 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
-public class FileManager implements StorageManager {
+// implements StorageManager
+public class FileManager {
     public static String pathToFilesDirectory = "./src/main/java/com/Bookworm/files/";
 
-    @Override
+    //@Override
     public void reload() {
         loadBookshelves();
     }
 
-    @Override
-    public ArrayList<Book> getBooksByAuthor(String author) {
+    //@Override
+    public ArrayList<Book> getAuthors(String author) {
         return null;
     }
 
-    @Override
+    //@Override
     public ArrayList<Book> getBooksByTag(String tag) {
         return null;
     }
 
     //saves book in the files directory, both in default bookshelf and in the selected bookshelf, if specified
-    @Override
-    public void saveBook(Book book, String bookshelf) {
+    //@Override
+    public void insertBook(Book book, String bookshelf) {
         if (bookshelf == "") {
             Serializer.serializeBook(book, "default", 1);
         } else {
@@ -36,7 +37,7 @@ public class FileManager implements StorageManager {
     }
 
     // creates all bookshelves objects and populates them with their books
-    @Override
+    //@Override
     public ArrayList<Bookshelf> loadBookshelves() {
         String[] bookshelvesNames = getBookshelves();
         ArrayList<Bookshelf> bookshelves = new ArrayList();
@@ -53,8 +54,8 @@ public class FileManager implements StorageManager {
         return bookshelves;
     }
 
-    @Override
-    public void removeBook(String book, String bookshelf) {
+    //@Override
+    public void deleteBook(String book, String bookshelf) {
         File fileToDelete = new File(pathToFilesDirectory + "/" + bookshelf + "/" +  book);
         File fileToDelete2 = new File(pathToFilesDirectory + "/default/" +  book);
         resetSystem(fileToDelete);
@@ -62,12 +63,7 @@ public class FileManager implements StorageManager {
         reload();
     }
 
-    @Override
-    public void modifyBook(String book, String bookshelf) {
-
-    }
-
-    @Override
+    //@Override
     public void addTag(Book book, String bookshelf, String newTag) {
         ArrayList<Tag> tags = book.getTags();
         tags.add(new Tag(newTag));
@@ -75,7 +71,7 @@ public class FileManager implements StorageManager {
     }
 
     //deletes all bookshelves directories and serialized books
-    @Override
+    //@Override
     public boolean resetSystem(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();

@@ -15,7 +15,7 @@ import java.util.List;
 //connection not closed, might cause lock errors
 //review concept of close() statement and close() connection
 
-public class DatabaseManager {
+public class DatabaseManager implements StorageManager {
     public static Connection con;
     private static boolean hasData = false;
     private ResultSet res;
@@ -95,6 +95,7 @@ public class DatabaseManager {
         res = state.executeQuery("select * from Book where name = '" + name + "';");
         return ModelBuilder.makeBook(res);
     }
+
 
     public List<Book> getBooks() throws SQLException, ClassNotFoundException {
         return ModelBuilder.makeBooks(getAll("Book"));
