@@ -12,7 +12,7 @@ import java.util.List;
 // https://www.tutorialspoint.com/sqlite/index.htm
 // https://www.sqlitetutorial.net/sqlite-java/
 
-public class DatabaseManager {
+public class DatabaseManager implements StorageManager {
     public static Connection con;
     private Statement s;
     private PreparedStatement ps;

@@ -3,7 +3,6 @@ package com.Bookworm.controller;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,6 +14,5 @@ public interface StorageManager {
     public List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException;
     public Book getBook(String name) throws SQLException, ClassNotFoundException;
     public List<Book> getBooks() throws SQLException, ClassNotFoundException;
-    public ResultSet getAll(String table) throws SQLException, ClassNotFoundException;
     public List<String> getAuthors() throws SQLException, ClassNotFoundException;
 }
