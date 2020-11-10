@@ -371,4 +371,10 @@ public class DatabaseManager implements StorageManager {
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
         return delete("Book", book.getId());
     }
+
+    public boolean deleteBookshelf(Bookshelf bookshelf) throws SQLException, ClassNotFoundException {
+        return delete("Bookshelf", bookshelf.getId());
+    }
+
+
 }

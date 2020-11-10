@@ -13,6 +13,7 @@ public class SqliteRunner {
             //test.insertBook(bo, null);
             //Bookshelf b = new Bookshelf("horrir", "r", null);
             //test.insertBookshelf(b);
+            //test.deleteBook()
             System.out.println(test.getBookShelves());
         } catch (Exception e) {
             e.printStackTrace();
