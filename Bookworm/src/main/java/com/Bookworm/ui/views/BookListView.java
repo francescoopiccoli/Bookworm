@@ -1,6 +1,7 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.views;
 
 import com.Bookworm.model.Book;
+import com.Bookworm.ui.widgets.BookWidget;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class BookListView extends BorderPane {
     private final String title;
-    private List<BookSquareWidget> books;
+    private List<BookWidget> books;
     private final ScrollPane scrollPane;
     private String currentFilter = "";
 
@@ -24,7 +25,7 @@ public class BookListView extends BorderPane {
         this.books = new ArrayList<>();
         for(Book book : books) {
             // we could even maybe async-ize this thing as well?
-            this.books.add(new BookSquareWidget(book));
+            this.books.add(new BookWidget(book));
         }
 
         BorderPane headerPane = new BorderPane();
@@ -76,7 +77,7 @@ public class BookListView extends BorderPane {
 
             int i = 0;
             HBox hb = new HBox();
-            for (BookSquareWidget b : books) {
+            for (BookWidget b : books) {
                 if (i >= numColumns) {
                     i = 0;
                 }
@@ -96,7 +97,7 @@ public class BookListView extends BorderPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    BookInfo.spawnWindow(book, 600, 300, b.getImage(), this);
+                    BookInfoView.spawnWindow(book, 600, 300, b.getImage(), this);
                 }));
 
                 HBox.setMargin(b, new Insets(20));
@@ -106,7 +107,7 @@ public class BookListView extends BorderPane {
             }
             // fill with whitespace - ugly hack, but it works ¯\_(ツ)_/¯
             while(i != 0 && i < numColumns) {
-                BookSquareWidget b = new BookSquareWidget(null);
+                BookWidget b = new BookWidget(null);
                 b.setVisible(false);
                 HBox.setMargin(b, new Insets(20));
                 hb.getChildren().add(b);
@@ -120,10 +121,10 @@ public class BookListView extends BorderPane {
         return width / 230; // width + margin
     }
 
-    public List<BookSquareWidget> getBooks() {
+    public List<BookWidget> getBooks() {
         return books;
     }
-    public void setBooks(List<BookSquareWidget> books) {
+    public void setBooks(List<BookWidget> books) {
         this.books = books;
     }
 

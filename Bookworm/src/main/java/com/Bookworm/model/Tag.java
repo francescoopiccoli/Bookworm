@@ -1,5 +1,4 @@
 package com.Bookworm.model;
-import java.util.List;
 
 public class Tag {
 	private String name;

@@ -16,9 +16,9 @@ class ModelBuilderTest {
     // use methods of DatabaseManagerTest
     // i think insertBook is not working
     DatabaseManager dbtest = DatabaseManager.getInstance();
-    Book book1 = new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
-    Book book2 = new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 1, null, "https://cataas.com/cat/says/meow?size=50&color=green");
-    Book book3 = new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green");
+    Book book1 = new Book("The Great Gatsby", "Francis Scott Fitzgerald", "");
+    Book book2 = new Book("War and Peace", "A thicc big book", "Lev Tolstoj");
+    Book book3 = new Book("The Lord of the Rings", "J. R. R. Tolkien", "A damn epic book");
 
 
     @Test

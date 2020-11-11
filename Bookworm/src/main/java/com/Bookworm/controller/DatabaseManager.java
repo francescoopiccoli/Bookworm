@@ -12,7 +12,7 @@ import java.util.List;
 // https://www.tutorialspoint.com/sqlite/index.htm
 // https://www.sqlitetutorial.net/sqlite-java/
 
-public class DatabaseManager implements StorageManager {
+public class DatabaseManager implements BookStorage {
     public static Connection con;
     private Statement s;
     private PreparedStatement ps;
@@ -235,36 +235,6 @@ public class DatabaseManager implements StorageManager {
         }
     }
 
-/*
-    public ResultSet getAll(String table) throws SQLException, ClassNotFoundException {
-        if(con == null || con.isClosed()) {
-            // get connection
-            getConnection();
-        }
-        PreparedStatement prep = con.prepareStatement("select * from "+table);
-        res = prep.executeQuery();
-        prep.close();
-        con.close();
-        return res;
-    }
-
-
-    public ResultSet get(String table, int id) throws SQLException, ClassNotFoundException {
-        if(con == null || con.isClosed()) {
-            // get connection
-            getConnection();
-        }
-        PreparedStatement prep = con.prepareStatement("select * from ? where id = ?;");
-        prep.setString(1, table);
-        prep.setInt(2, id);
-
-        res = prep.executeQuery();
-        prep.close();
-        con.close();
-        return res;
-    }*/
-
-
     //since bookshelf is not an attribute of Book, it has to be passed as parameter
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
         try {
@@ -369,7 +339,21 @@ public class DatabaseManager implements StorageManager {
     }
 
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
-        return delete("Book", book.getId());
+        try {
+            if(con == null || con.isClosed()) {
+                // get connection
+                getConnection();
+            }
+            ps = con.prepareStatement("delete from book where id = ?");
+            ps.setInt(1, book.getId());
+            boolean result = ps.execute();
+            return result;
+        } finally {
+            if(ps != null) {
+                ps.close();
+            }
+            con.close();
+        }
     }
 
     public boolean deleteBookshelf(Bookshelf bookshelf) throws SQLException, ClassNotFoundException {

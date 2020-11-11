@@ -1,12 +1,11 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.views;
 
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.model.Tag;
-import com.google.api.client.util.Data;
-import javafx.beans.value.ChangeListener;
+import com.Bookworm.ui.widgets.BookWidget;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,7 +23,7 @@ import javafx.util.StringConverter;
 import java.sql.SQLException;
 import java.util.*;
 
-public class BookInfo extends BorderPane {
+public class BookInfoView extends BorderPane {
 
 
     private static final int DEFAULT_WIDTH = 600;
@@ -35,7 +34,7 @@ public class BookInfo extends BorderPane {
     ArrayList<Tag> tags;
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
-    private  List<BookSquareWidget> books;
+    private  List<BookWidget> books;
     private Book book;
     private BookListView parent;
     ImageView imageView;
@@ -46,14 +45,14 @@ public class BookInfo extends BorderPane {
     }
 
     public static void setBookList(List<Book> bookList) {
-        BookInfo.bookList = bookList;
+        BookInfoView.bookList = bookList;
     }
 
-    public List<BookSquareWidget> getBooks() {
+    public List<BookWidget> getBooks() {
         return books;
     }
 
-    public void setBooks(List<BookSquareWidget> books) {
+    public void setBooks(List<BookWidget> books) {
         this.books = books;
     }
 
@@ -62,18 +61,18 @@ public class BookInfo extends BorderPane {
     }
 
     public static void setBookShelf(ArrayList<Bookshelf> bookShelf) {
-        BookInfo.bookShelf = bookShelf;
+        BookInfoView.bookShelf = bookShelf;
     }
 
 
-    public BookInfo(Book book, BookListView parent) {
+    public BookInfoView(Book book, BookListView parent) {
         this.book = book;
         this.parent = parent;
         Image image;
         try {
             image = new Image(book.getImageURL(), true);
         } catch (Exception e) {
-            image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
         }
         this.imageView = new ImageView(image);
 
@@ -97,11 +96,11 @@ public class BookInfo extends BorderPane {
 
     public static void spawnWindow(Book book, int w, int h, Image image, BookListView parent) {
         ImageView imageView = new ImageView(image);
-        BookInfo bookInfo = new BookInfo(book, parent);
+        BookInfoView bookInfoView = new BookInfoView(book, parent);
 
         Stage stage = new Stage();
         stage.setTitle(book.getName());
-        Scene scene = new Scene(bookInfo, w, h);
+        Scene scene = new Scene(bookInfoView, w, h);
         stage.setScene(scene);
         stage.show();
     }
@@ -182,8 +181,8 @@ public class BookInfo extends BorderPane {
                     try {
                         dbManager.insertBook(book, null);
                         if(parent != null) {
-                            List<BookSquareWidget> books = parent.getBooks();
-                            books.add(new BookSquareWidget(book));
+                            List<BookWidget> books = parent.getBooks();
+                            books.add(new BookWidget(book));
                             parent.updateList(null);
                         }
                         System.out.println("Saved book "+book.getName());
@@ -194,11 +193,11 @@ public class BookInfo extends BorderPane {
                     try {
                         dbManager.deleteBook(book);
                         if(parent != null) {
-                            List<BookSquareWidget> books = parent.getBooks();
-                            Iterator<BookSquareWidget> iter = books.iterator();
+                            List<BookWidget> books = parent.getBooks();
+                            Iterator<BookWidget> iter = books.iterator();
 
                             while (iter.hasNext()) {
-                                BookSquareWidget widget = iter.next();
+                                BookWidget widget = iter.next();
 
                                 if (widget.getBook().getId() == book.getId()) {
                                    iter.remove();

@@ -1,27 +1,22 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.views;
 
-import com.Bookworm.controller.APImanager;
+import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
-import com.Bookworm.model.Tag;
+import com.Bookworm.ui.widgets.BookWidget;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 // !!! to fix  input with return null (no results found)
 
-public class Discover extends BorderPane {
+public class DiscoverView extends BorderPane {
 
     BorderPane layout;
     ScrollPane scrollPane;
@@ -36,7 +31,7 @@ public class Discover extends BorderPane {
     }
 
     public static void setbookList(List<Book> bookList) {
-        Discover.bookList = bookList;
+        DiscoverView.bookList = bookList;
     }
 
     private void setLoadingStatus(boolean loadingStatus) {
@@ -51,7 +46,7 @@ public class Discover extends BorderPane {
 
 
 
-    public Discover() {
+    public DiscoverView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTopDisc());
         setCenter(getCenterDisc());
@@ -92,21 +87,22 @@ public class Discover extends BorderPane {
                     vb.getChildren().add(hb);
                     hb = new HBox();
                     HBox.setMargin(hb, new Insets(10));
-                    BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+                    BookWidget bookWidget = new BookWidget(b);
 
                     Book finalBook = b;
-                    bookSquareWidget.setOnMouseClicked(event -> {
-                        BookInfo.spawnWindow(finalBook, null);
+                    bookWidget.setOnMouseClicked(event -> {
+                        BookInfoView.spawnWindow(finalBook, null);
                     });
-                    hb.getChildren().add(bookSquareWidget);
+                    hb.getChildren().add(bookWidget);
                     counter++;
-                } else {BookSquareWidget bookSquareWidget = new BookSquareWidget(b);
+                } else {
+                    BookWidget bookWidget = new BookWidget(b);
 
                     Book finalBook = b;
-                    bookSquareWidget.setOnMouseClicked(event -> {
-                        BookInfo.spawnWindow(finalBook, null);
+                    bookWidget.setOnMouseClicked(event -> {
+                        BookInfoView.spawnWindow(finalBook, null);
                     });
-                    hb.getChildren().add(bookSquareWidget);
+                    hb.getChildren().add(bookWidget);
                     counter++;
                 }
 
@@ -146,9 +142,9 @@ public class Discover extends BorderPane {
     }
 
     private class RefreshThread extends Thread {
-        private Discover d;
+        private DiscoverView d;
         private String query;
-        public RefreshThread(Discover d, String query) {
+        public RefreshThread(DiscoverView d, String query) {
             this.d = d;
             this.query = query;
         }
@@ -157,7 +153,7 @@ public class Discover extends BorderPane {
                 return; // don't mess with multiple searches at once
             setLoading(true);
 
-            List<Book> bookList = APImanager.searchBooks(query);
+            List<Book> bookList = GoogleBooksClient.searchBooks(query);
             if(bookList != null && !bookList.isEmpty()){
                 d.setbookList(bookList);
                 Node centerDisc = d.getCenterDisc();

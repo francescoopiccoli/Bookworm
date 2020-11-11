@@ -2,8 +2,10 @@ package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
-import com.Bookworm.ui.*;
-import com.google.api.client.util.Data;
+import com.Bookworm.ui.views.BookListView;
+import com.Bookworm.ui.views.BookshelfView;
+import com.Bookworm.ui.views.DiscoverView;
+import com.Bookworm.ui.widgets.NavToggleButton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,27 +26,15 @@ import java.util.*;
  */
 public class App extends Application {
 
-	private Region currentView = new Discover();
+	private Region currentView = new DiscoverView();
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
 
 	
     @Override
     public void start(Stage stage) {
-
-        ArrayList<Book> demoList = new ArrayList<>();
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 5, null, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5,null, "https://cataas.com/cat/says/meow?size=50&color=green"));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5,null, "https://c8.alamy.com/comp/F1WJN3/full-moon-harvest-moon-large-file-size-from-the-archives-of-press-F1WJN3.jpg"));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 5,null, ""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5,null, ""));
-        demoList.add(new Book("A thicc big book", "War and Peace", null, "Lev Tolstoj", 5, null,""));
-        demoList.add(new Book("A damn epic book", "The Lord of the Rings", null, "J. R. R. Tolkien", 5,null, ""));
-        demoList.add(new Book("A cute lil' book", "The Great Gatsby", null, "Francis Scott Fitzgerald", 5,null, ""));
-
-        views.put("Home", new Label("implement me"));
-        views.put("Discover", new Discover());
+        //views.put("Home", new Label("implement me"));
+        views.put("Discover", new DiscoverView());
         try {
             views.put("My Books", new BookListView("Reading List", DatabaseManager.getInstance().getBooks()));
         } catch (SQLException throwables) {
@@ -52,11 +42,8 @@ public class App extends Application {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        views.put("Booklist", new Booklist());
-        views.put("Settings", new Discover());
-
-        //var javaVersion = SystemInfo.javaVersion();
-        //var javafxVersion = SystemInfo.javafxVersion();
+        views.put("Bookshelves", new BookshelfView());
+        //views.put("Settings", new DiscoverView()); -> reset library ; about / info ; ...?
 
         mainPane = new BorderPane();
         mainPane.setTop(_generateTopBar());

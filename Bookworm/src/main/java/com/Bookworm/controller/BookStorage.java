@@ -6,7 +6,7 @@ import com.Bookworm.model.Bookshelf;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface StorageManager {
+public interface BookStorage {
     public void insertBook(Book book, String bookshelf) throws ClassNotFoundException, SQLException;
     public void insertBookshelf(Bookshelf bs)  throws ClassNotFoundException, SQLException;
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException;

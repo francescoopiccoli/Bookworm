@@ -13,20 +13,19 @@ public class Book implements Serializable {
 	private int rating;
 	private int id;
 
-	public Book(String description, String name, ArrayList<Tag> tags, String author, int rating, String review, String imageURL) {
+	public Book(String name, String author, String description) {
 		super();
 		this.description = description;
 		this.name = name;
-		this.tags = tags;
+		this.tags = null;
 		this.author = author;
-		this.rating = rating;
-		this.imageURL = imageURL;
-		this.review  = review;
+		this.rating = 0;
+		this.imageURL = "";
+		this.review  = "";
+		this.id = -1;
 	}
 
-	public Book() {
-
-	}
+	public Book() {}
 
 	public String getDescription() {
 		return description;
@@ -78,7 +77,6 @@ public class Book implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
     public int getId() {
         return id;
     }

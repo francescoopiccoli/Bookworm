@@ -1,9 +1,7 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.views;
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Bookshelf;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,11 +10,10 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.List;
 
-public class Booklist extends BorderPane {
-    private DatabaseManager db = BookInfo.dbManager;
-    public Booklist() {
+public class BookshelfView extends BorderPane {
+    private DatabaseManager db = BookInfoView.dbManager;
+    public BookshelfView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
         setCenter(createCenter());

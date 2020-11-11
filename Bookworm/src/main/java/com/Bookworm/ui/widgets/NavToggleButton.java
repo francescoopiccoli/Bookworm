@@ -1,4 +1,4 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.widgets;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ToggleButton;

@@ -17,11 +17,10 @@ public class Bookshelf {
 		super();
 		this.name = name;
 		this.description = description;
+		this.books = null;
 	}
 
-	public Bookshelf(){
-
-	}
+	public Bookshelf() {}
 
 	public String getName() {
 		return name;
@@ -31,29 +30,18 @@ public class Bookshelf {
 		this.name = name;
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
 
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
+	public void setDescription(String description) { this.description = description; }
 
 	public void setBooks(ArrayList<Book> books) {
 		this.books = books;
 	}
 
-
 	public ArrayList<Book> getBooks() {
 		return books;
-	}
-
-	public void addBook(Book book) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setId(int id) {

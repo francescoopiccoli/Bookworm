@@ -1,4 +1,4 @@
-package com.Bookworm.ui;
+package com.Bookworm.ui.widgets;
 
 import com.Bookworm.model.Book;
 import javafx.geometry.Insets;
@@ -10,17 +10,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class BookSquareWidget extends BorderPane {
+public class BookWidget extends BorderPane {
     public static final String PLACEHOLDER_IMAGE_URI = "/Images/placeholder.png";
 
     Book book;
     private Image image;
     private ImageView imageView;
 
-    public BookSquareWidget(Book book) {
+    public BookWidget(Book book) {
         this.book = book;
 
-        image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+        image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
         imageView = new ImageView(this.image);
         imageView.setFitHeight(250);
         imageView.setFitWidth(180);
@@ -32,7 +32,7 @@ public class BookSquareWidget extends BorderPane {
             image = new Image(book.getImageURL(), true);
             imageView.setImage(image);
         } catch (IllegalArgumentException | NullPointerException e) {
-            image = new Image(getClass().getResourceAsStream(BookSquareWidget.PLACEHOLDER_IMAGE_URI));
+            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
         }
 
         if(book != null) {
