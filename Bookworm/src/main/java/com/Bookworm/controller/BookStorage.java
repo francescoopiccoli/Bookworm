@@ -7,12 +7,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface BookStorage {
-    public void insertBook(Book book, String bookshelf) throws ClassNotFoundException, SQLException;
-    public void insertBookshelf(Bookshelf bs)  throws ClassNotFoundException, SQLException;
-    public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException;
-    public Bookshelf getBookShelf(String bookshelfID) throws SQLException, ClassNotFoundException ;
-    public List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException;
-    public Book getBook(String name) throws SQLException, ClassNotFoundException;
-    public List<Book> getBooks() throws SQLException, ClassNotFoundException;
-    public List<String> getAuthors() throws SQLException, ClassNotFoundException;
+    void insertBook(Book book, String bookshelf) throws ClassNotFoundException, SQLException;
+    void insertBookshelf(Bookshelf bs)  throws ClassNotFoundException, SQLException;
+    boolean deleteBook(Book book) throws SQLException, ClassNotFoundException;
+    List<Book> getBookShelfBooks(String bookshelfID) throws SQLException, ClassNotFoundException ;
+    List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException;
+    Book getBook(String name, String author) throws SQLException, ClassNotFoundException;
+    List<Book> getBooks() throws SQLException, ClassNotFoundException;
+    List<String> getAuthors() throws SQLException, ClassNotFoundException;
+    void insertRating(Book b, int rating) throws SQLException, ClassNotFoundException;
+    void insertReview(Book b, String review) throws SQLException, ClassNotFoundException;
+    int getRating(Book b) throws SQLException, ClassNotFoundException;
+    String getReview(Book b)  throws SQLException, ClassNotFoundException;
 }
