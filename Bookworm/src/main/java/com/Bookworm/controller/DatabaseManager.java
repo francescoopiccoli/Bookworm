@@ -147,6 +147,8 @@ public class DatabaseManager implements BookStorage {
             ps.setString(2, author);
             res = ps.executeQuery();
 
+            //check if resultset returned something
+            if (!res.isClosed()) {
             Book book = new Book();
             book.setId(res.getInt("id"));
             book.setName(res.getString("name"));
@@ -156,6 +158,10 @@ public class DatabaseManager implements BookStorage {
             book.setImageURL(res.getString("imageURL"));
             book.setReview(res.getString("review"));
             return book;
+            }
+            else{
+                return null;
+            }
         } finally{
             if(ps != null) {
                 ps.close();
