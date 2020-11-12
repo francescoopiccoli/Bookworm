@@ -7,6 +7,7 @@ import com.Bookworm.model.Bookshelf;
 import com.Bookworm.model.Tag;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
+import com.Bookworm.ui.widgets.StarWidget;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -71,7 +72,7 @@ public class BookInfoView extends BorderPane {
         this.parent = parent;
         Image image;
         try {
-            image = new Image(book.getImageURL(), true);
+           image = new Image(book.getImageURL(), true);
         } catch (Exception e) {
             image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
         }
@@ -272,6 +273,7 @@ public class BookInfoView extends BorderPane {
         //Review Area
         Label reviewLabel = new Label();
         reviewLabel.setText("{star_widget}");
+        HBox starwidget = StarWidget.getStarWidget();
         TextArea review = new TextArea("review");
         review.setText("review");
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
@@ -289,7 +291,7 @@ public class BookInfoView extends BorderPane {
         //Vbox for review
         VBox reviewBox = new VBox();
         reviewBox.setSpacing(10);
-        reviewBox.getChildren().addAll(reviewLabel, scrollPane2);
+        reviewBox.getChildren().addAll(starwidget, scrollPane2);
 
         //left side
         VBox left = new VBox();
