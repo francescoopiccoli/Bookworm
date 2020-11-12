@@ -7,10 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
-class ModelBuilderTest {
+class DatabaseManagerTest {
     // copy and paste DatabaseManager in DatabaseManagerTest and change name to the database to create
     // a new database only for tests
     // use methods of DatabaseManagerTest
@@ -29,7 +30,7 @@ class ModelBuilderTest {
     }
 
     @Test
-    void makeBook() throws SQLException, ClassNotFoundException {
+    void getBooks() throws SQLException, ClassNotFoundException {
         List<Book> bookList = dbtest.getBooks();
         if (bookList == null) {
             fail("List of book cannot be null ");
@@ -45,11 +46,8 @@ class ModelBuilderTest {
     }
 
     @Test
-    void makeBookshelves() throws SQLException, ClassNotFoundException {
-        List<Bookshelf> bookshelfList = dbtest.getBookShelves();
-        if (bookshelfList == null) {
-            fail("The list of bookshelf cannot be null");
-        }
+    void getBookshelves() throws SQLException, ClassNotFoundException {
+        assertNotNull(dbtest.getBookShelves(), "The list of bookshelf cannot be null");
     }
 
     //@Test
