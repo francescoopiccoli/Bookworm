@@ -2,6 +2,7 @@ package com.Bookworm.ui.views;
 
 import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
+import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -19,7 +20,7 @@ import java.util.List;
 public class DiscoverView extends BorderPane {
 
     BorderPane layout;
-    ScrollPane scrollPane;
+    BookListWidget bookListWidget;
     // sicuro che sia static?
     public static List<Book> bookList = new LinkedList<>();
     private boolean loadingStatus;
@@ -54,70 +55,14 @@ public class DiscoverView extends BorderPane {
     }
 
     public Node getCenterDisc() {
-        //Temporary image to replace covers
-        //Create vertical box will align all elements one under the other
-        VBox vb = new VBox();
+        if(bookListWidget == null)
+            bookListWidget = new BookListWidget(bookList);
 
-        vb.getStyleClass().add("vbrect");
-        vb.setSpacing(50);
-        //Create horizontal box will align all elements one next to the other
-        HBox hb = new HBox();
+        bookListWidget.setBooks(bookList);
 
-        //Button for all single books to be created
-        //Button rect;
+        bookListWidget.updateList();
 
-
-        //Add a scroll pane so scrolling is made possible
-        ScrollPane scrollPane;
-
-
-        Label label  = new Label("Discover new books!");
-        label.getStyleClass().add("discoverLabel");
-        vb.getChildren().add(label);
-        //will create (currently 3) rows with at most 5 books on each row
-       // System.out.println(bookList);
-        int counter = 0;
-        if(!bookList.isEmpty()){
-            hb = new HBox();
-            HBox.setMargin(hb, new Insets(10));
-            for (Book b : bookList){
-                //This will be replaced with the function giving us the cover of the book and also setting the reaction to clicking the "button"
-                if(counter == 4) {
-                    counter = 0;
-                    vb.getChildren().add(hb);
-                    hb = new HBox();
-                    HBox.setMargin(hb, new Insets(10));
-                    BookWidget bookWidget = new BookWidget(b);
-
-                    Book finalBook = b;
-                    bookWidget.setOnMouseClicked(event -> {
-                        BookInfoView.spawnWindow(finalBook, null);
-                    });
-                    hb.getChildren().add(bookWidget);
-                    counter++;
-                } else {
-                    BookWidget bookWidget = new BookWidget(b);
-
-                    Book finalBook = b;
-                    bookWidget.setOnMouseClicked(event -> {
-                        BookInfoView.spawnWindow(finalBook, null);
-                    });
-                    hb.getChildren().add(bookWidget);
-                    counter++;
-                }
-
-
-
-            }}
-            vb.getChildren().add(hb);
-
-
-        scrollPane = new ScrollPane(vb);
-        scrollPane.getStyleClass().add("scrollpane");
-
-        return  scrollPane;
-
-
+        return bookListWidget;
 
     }
 
@@ -156,8 +101,7 @@ public class DiscoverView extends BorderPane {
             List<Book> bookList = GoogleBooksClient.searchBooks(query);
             if(bookList != null && !bookList.isEmpty()){
                 d.setbookList(bookList);
-                Node centerDisc = d.getCenterDisc();
-                Platform.runLater(() -> d.setCenter(centerDisc));
+                Platform.runLater(() -> d.setCenter(d.getCenterDisc()));
             }
             setLoading(false);
         }
