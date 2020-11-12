@@ -5,6 +5,7 @@ import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.model.Tag;
+import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,7 +37,7 @@ public class BookInfoView extends BorderPane {
     public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookWidget> books;
     private Book book;
-    private BookListView parent;
+    private BookListWidget parent;
     ImageView imageView;
     public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
 
@@ -65,7 +66,7 @@ public class BookInfoView extends BorderPane {
     }
 
 
-    public BookInfoView(Book book, BookListView parent) {
+    public BookInfoView(Book book, BookListWidget parent) {
         this.book = book;
         this.parent = parent;
         Image image;
@@ -81,20 +82,20 @@ public class BookInfoView extends BorderPane {
 
     }
 
-    public static void spawnWindow(Book book, BookListView parent) {
+    public static void spawnWindow(Book book, BookListWidget parent) {
         spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, parent);
     }
 
-    public static void spawnWindow(Book book, Image image, BookListView parent) {
+    public static void spawnWindow(Book book, Image image, BookListWidget parent) {
         spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, BookListView parent) {
+    public static void spawnWindow(Book book, int w, int h, BookListWidget parent) {
         Image image = new Image(book.getImageURL());
         spawnWindow(book, w, h, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, Image image, BookListView parent) {
+    public static void spawnWindow(Book book, int w, int h, Image image, BookListWidget parent) {
         ImageView imageView = new ImageView(image);
         BookInfoView bookInfoView = new BookInfoView(book, parent);
 
