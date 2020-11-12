@@ -140,13 +140,10 @@ public class BookInfoView extends BorderPane {
         list.add(0, new Bookshelf(LABEL_NO_BOOKSHELF, "", null));
         list.add(1, new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null));
 
-        //temporary index to be changed
-        int index = 2;
         try {
             LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
             for(Bookshelf bookshelf : b) {
-                list.add(index, new Bookshelf(bookshelf.getName(), "", null));
-                index++;
+                list.add(bookshelf.getId(), bookshelf);
             }
 
         } catch (SQLException throwables) {
@@ -179,33 +176,38 @@ public class BookInfoView extends BorderPane {
                 if(oldVal.getName().equals(LABEL_NO_BOOKSHELF)) {
                     // todo: insert book only if it really exists
                     try {
-                        dbManager.insertBook(book, null);
-                        if(parent != null) {
-                            List<BookWidget> books = parent.getBooks();
-                            books.add(new BookWidget(book));
-                            parent.updateList(null);
+                        if(dbManager.getBook(book.getName(), book.getAuthor()) == null){
+                            dbManager.insertBook(book, null);
+
+                            if(parent != null) {
+                                List<BookWidget> books = parent.getBooks();
+                                books.add(new BookWidget(book));
+                                parent.updateList(null);
+                            }
+                            System.out.println("Saved book "+book.getName());
                         }
-                        System.out.println("Saved book "+book.getName());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if(newVal.getName().equals(LABEL_NO_BOOKSHELF)) {
                     try {
-                        dbManager.deleteBook(book);
-                        if(parent != null) {
-                            List<BookWidget> books = parent.getBooks();
-                            Iterator<BookWidget> iter = books.iterator();
+                        if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
+                            dbManager.deleteBook(book);
+                            if(parent != null) {
+                                List<BookWidget> books = parent.getBooks();
+                                Iterator<BookWidget> iter = books.iterator();
 
-                            while (iter.hasNext()) {
-                                BookWidget widget = iter.next();
+                                while (iter.hasNext()) {
+                                    BookWidget widget = iter.next();
 
-                                if (widget.getBook().getId() == book.getId()) {
-                                   iter.remove();
+                                    if (widget.getBook().getId() == book.getId()) {
+                                       iter.remove();
+                                    }
                                 }
+                                parent.updateList(null);
                             }
-                            parent.updateList(null);
+                            System.out.println("Deleted book "+book.getName());
                         }
-                        System.out.println("Deleted book "+book.getName());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

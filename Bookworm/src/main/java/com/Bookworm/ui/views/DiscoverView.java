@@ -126,8 +126,10 @@ public class DiscoverView extends BorderPane {
         HBox hb = new HBox();
         searchWidget = new TextField();
         searchWidget.setOnAction(event -> {
-            RefreshThread thread = new RefreshThread(this, searchWidget.getText());
-            thread.start();
+            if (!searchWidget.getText().equals("")) {
+                RefreshThread thread = new RefreshThread(this, searchWidget.getText());
+                thread.start();
+            }
         });
 
         searchPlaceholder = new Label("Search in progress...");
