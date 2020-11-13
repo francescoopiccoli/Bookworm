@@ -38,6 +38,8 @@ public class StarWidget {
 
         for(int i = 0; i < 5; i++){
             b = new Button();
+            b.getStyleClass().add("starButton");
+
             if(i < rating){
                 imageview = new ImageView(filledStar);
                 b.setGraphic(imageview);
@@ -48,8 +50,8 @@ public class StarWidget {
                 b.setGraphic(imageview);
             }
 
-            imageview.setFitWidth(20);
-            imageview.setFitHeight(20);
+            imageview.setFitWidth(18);
+            imageview.setFitHeight(18);
             starWidgetBox.getChildren().add(b);
             starWidgetBox.setHgrow(b, Priority.ALWAYS);
 
@@ -78,6 +80,7 @@ public class StarWidget {
         book = b;
         biv = parent;
         starWidgetBox = new HBox();
+        starWidgetBox.getStylesheets().add(StarWidget.class.getResource("/Stylesheets/style.css").toExternalForm());
         return generateWidget();
     }
 }
