@@ -14,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,13 @@ public class BookListWidget extends ScrollPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    BookInfoView.spawnWindow(book, 600, 300, b.getImage(), this);
+                    try {
+                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), this);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }));
 
                 HBox.setMargin(b, new Insets(20));

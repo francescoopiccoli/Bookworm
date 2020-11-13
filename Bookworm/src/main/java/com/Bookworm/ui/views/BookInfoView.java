@@ -67,7 +67,7 @@ public class BookInfoView extends BorderPane {
     }
 
 
-    public BookInfoView(Book book, BookListWidget parent) {
+    public BookInfoView(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
         this.book = book;
         this.parent = parent;
         Image image;
@@ -83,20 +83,20 @@ public class BookInfoView extends BorderPane {
 
     }
 
-    public static void spawnWindow(Book book, BookListWidget parent) {
+    public static void spawnWindow(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
         spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, parent);
     }
 
-    public static void spawnWindow(Book book, Image image, BookListWidget parent) {
+    public static void spawnWindow(Book book, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
         spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, BookListWidget parent) {
+    public static void spawnWindow(Book book, int w, int h, BookListWidget parent) throws SQLException, ClassNotFoundException {
         Image image = new Image(book.getImageURL());
         spawnWindow(book, w, h, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, Image image, BookListWidget parent) {
+    public static void spawnWindow(Book book, int w, int h, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
         ImageView imageView = new ImageView(image);
         BookInfoView bookInfoView = new BookInfoView(book, parent);
 
@@ -244,7 +244,7 @@ public class BookInfoView extends BorderPane {
         return hbox;
     }
 
-    public VBox addVBox() {
+    public VBox addVBox() throws SQLException, ClassNotFoundException {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(5);
@@ -273,7 +273,7 @@ public class BookInfoView extends BorderPane {
         //Review Area
         Label reviewLabel = new Label();
         reviewLabel.setText("{star_widget}");
-        HBox starwidget = StarWidget.getStarWidget();
+        HBox starwidget = StarWidget.getStarWidget(this, book);
         TextArea review = new TextArea("review");
         review.setText("review");
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
@@ -329,6 +329,9 @@ public class BookInfoView extends BorderPane {
     }
 
 
+    public void refresh() throws SQLException, ClassNotFoundException {
+        setCenter(addVBox());
+    }
 }
 
 
