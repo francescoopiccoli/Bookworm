@@ -25,7 +25,7 @@ public class StarWidget {
     private static ImageView imageview;
     private static Button b;
     private static DatabaseManager db = DatabaseManager.getInstance();
-    private static BookInfoView biv;
+    private static BookInfoView parent;
 
     private static HBox generateWidget() throws SQLException, ClassNotFoundException {
 
@@ -58,7 +58,9 @@ public class StarWidget {
             int newRating = i+1;
             b.setOnAction(e -> {
                 try {
-                    updateWidget(newRating);
+                    if(db.getBook(book.getName(), book.getAuthor()) != null){
+                        updateWidget(newRating);
+                    }
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (ClassNotFoundException classNotFoundException) {
@@ -73,12 +75,12 @@ public class StarWidget {
     private static void updateWidget(int newRating) throws SQLException, ClassNotFoundException {
         db.insertRating(book, newRating);
         rating = newRating;
-        biv.refresh();
+        parent.refresh();
     }
 
-    public static HBox getStarWidget(BookInfoView parent, Book b) throws SQLException, ClassNotFoundException {
+    public static HBox getStarWidget(BookInfoView parentView, Book b) throws SQLException, ClassNotFoundException {
         book = b;
-        biv = parent;
+        parent = parentView;
         starWidgetBox = new HBox();
         starWidgetBox.getStylesheets().add(StarWidget.class.getResource("/Stylesheets/style.css").toExternalForm());
         return generateWidget();

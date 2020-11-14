@@ -8,6 +8,8 @@ import com.Bookworm.model.Tag;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import com.Bookworm.ui.widgets.StarWidget;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -272,14 +274,35 @@ public class BookInfoView extends BorderPane {
 
         //Review Area
         Label reviewLabel = new Label();
-        reviewLabel.setText("{star_widget}");
         HBox starwidget = StarWidget.getStarWidget(this, book);
         TextArea review = new TextArea("review");
-        review.setText("review");
+        if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
+            review.setEditable(true);
+            review.setText(dbManager.getReview(book));
+        }
+        else{
+            review.setText("Add the book to your library to review it!");
+            review.setEditable(false);
+
+
+        }
+
+        review.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                // this will run whenever text is changed
+                try {
+                    dbManager.insertReview(book, review.getText());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
         review.setWrapText(true);
         review.setPrefColumnCount(15);
-        review.setEditable(true);
 
 
         //scroll for review textarea
