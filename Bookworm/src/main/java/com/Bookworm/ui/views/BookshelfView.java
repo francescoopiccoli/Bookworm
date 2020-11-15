@@ -123,7 +123,7 @@ public class BookshelfView extends BorderPane {
             for(Bookshelf bookshelf : b) {
                 Button list = new Button(bookshelf.getName());
                 list.setOnMouseClicked(e ->{
-                    setTop(createTop2());
+                    setTop(createTop2(bookshelf.getDescription()));
                     //List<Book> books = queryBooksOfBookshelf(bookshelf.getName());
                     //setCenter(new BookshelfWidget(bookshelf.getName(),books));
                     setCenter(createCenter3(bookshelf.getName()));
@@ -142,6 +142,21 @@ public class BookshelfView extends BorderPane {
         sc.setContent(vb);
 
         return sc;
+    }
+
+    private Node createTop2(String description) {
+        Button back = new Button("Return - Go back");
+        back.setOnMouseClicked(event -> {
+            setTop(createTop());
+            setCenter(createCenter());
+        });
+        Text t = new Text(description);
+
+
+        HBox hBox = new HBox(back,t);
+        hBox.setSpacing(50.0);
+        hBox.getStyleClass().add("hbTopBookshelf");
+        return hBox;
     }
 
 
