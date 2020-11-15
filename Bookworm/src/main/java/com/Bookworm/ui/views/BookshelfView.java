@@ -1,18 +1,29 @@
 package com.Bookworm.ui.views;
 
 import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
+import com.Bookworm.ui.widgets.BookListWidget;
+import com.Bookworm.ui.widgets.BookWidget;
+import com.Bookworm.ui.widgets.BookshelfWidget;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class BookshelfView extends BorderPane {
     private DatabaseManager db = BookInfoView.dbManager;
+    boolean flagExist = false;
     public BookshelfView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
@@ -31,25 +42,34 @@ public class BookshelfView extends BorderPane {
             VBox root = new VBox();
             root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
             root.setSpacing(5);
-            Label name = new Label("Enter the name of the new Bookshelf");
+            Label name = new Label("Bookshelf name");
             TextField nameField = new TextField();
 
             root.getChildren().addAll(name, nameField);
-            Label Description = new Label("Description for new Bookshelf");
+            Label Description = new Label("Description");
             TextArea descfield = new TextArea();
 
             root.getChildren().addAll(Description, descfield);
             BorderPane pane = new BorderPane();
             Button commit = new Button("Create the new Bookshelf");
             commit.getStyleClass().add("commitBookshelfButton");
+            flagExist = false;
             commit.setOnMouseClicked(e -> {
                 Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());
                 try {
                     //int bookshelfID = db.getBookshelfID(nameField.getText());
-                    //String bookshelfIDString = ""+bookshelfID;
-                   // if(db.getBookShelf(bookshelfIDString)==null){
-                    System.out.println("Bookshelf inserted!");
-                    db.insertBookshelf(list); //}
+                    List<Bookshelf> allBookshelves = db.getBookShelves();
+
+                    for (Bookshelf b : allBookshelves) {
+                        if(b.getName().contentEquals(list.getName())){
+                            flagExist=true;
+                            System.out.println("Bookshelf already exists");
+                        }
+                    }
+                    if(flagExist==false){
+                        System.out.println("Bookshelf inserted!");
+                        db.insertBookshelf(list);
+                    }
                 } catch (ClassNotFoundException e1) {
                     e1.printStackTrace();
                 } catch (SQLException e1) {
@@ -91,27 +111,32 @@ public class BookshelfView extends BorderPane {
         //Add default bookshelf
         Button defaultshelf = new Button("Default - Bookshelf");
         defaultshelf.setOnMouseClicked(event -> {
-            setTop(createTop2("Defaulf - Bookshelf"));
+            setTop(createTop2());
             setCenter(createCenter2());
         });
         defaultshelf.getStyleClass().add("ListsButton");
         vb.getChildren().add(defaultshelf);
         //Placeholder for method getting all existing bookshelves
-            //Placeholder for will have to iterate over list of all shelves
-            try {
-                LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
-                for(Bookshelf bookshelf : b) {
-                    System.out.println(bookshelf.getName() + "ciao");
-                    Button list = new Button(bookshelf.getName());
-                    list.getStyleClass().add("ListsButton");
-                    vb.getChildren().add(list);
-                }
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+        //Placeholder for will have to iterate over list of all shelves
+        try {
+            LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+            for(Bookshelf bookshelf : b) {
+                Button list = new Button(bookshelf.getName());
+                list.setOnMouseClicked(e ->{
+                    setTop(createTop2());
+                    //List<Book> books = queryBooksOfBookshelf(bookshelf.getName());
+                    //setCenter(new BookshelfWidget(bookshelf.getName(),books));
+                    setCenter(createCenter3(bookshelf.getName()));
+                });
+                list.getStyleClass().add("ListsButton");
+                vb.getChildren().add(list);
             }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
         sc.setContent(vb);
@@ -120,26 +145,61 @@ public class BookshelfView extends BorderPane {
     }
 
 
-    public Node createTop2(String title) {
+    public Node createTop2() {
 
-        Label t = new Label(title);
-        t.getStyleClass().add("titleBookshelf2");
+
         Button back = new Button("Return - Go back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             setCenter(createCenter());
-        });;
+        });
 
 
-        HBox hBox = new HBox(back,t);
+        HBox hBox = new HBox(back);
         hBox.getStyleClass().add("hbTopBookshelf");
         return hBox;
     }
 
     public Node createCenter2() {
-        ScrollPane sc = new ScrollPane();
-        sc.getStyleClass().add("scrollCenterLists");
-        return sc;
+        List<Book> books = null;
+        try {
+            books = db.getBooks();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        BorderPane pane = new BorderPane();
+        BookListView blv = new BookListView("Default Bookshelf",books);
+        pane.setCenter(blv);
+        return pane;
+
+    }
+    public Node createCenter3(String bookshelf) {
+        List<Book> books = null;
+        books = (queryBooksOfBookshelf(bookshelf));
+        BorderPane pane = new BorderPane();
+        BookListView blv = new BookListView(bookshelf,books);
+        pane.setCenter(blv);
+        return pane;
+
+    }
+    private List<Book> queryBooksOfBookshelf(String bookshelf){
+        List<Book> books = null;
+        try {
+            books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));
+            //String.valueOf((db.getBookshelfID(bookshelf)))
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        for (Book b: books
+             ) {
+            System.out.println("BOOK : ");
+
+        }
+        return books;
     }
 
 }

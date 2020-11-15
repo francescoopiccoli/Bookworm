@@ -298,14 +298,14 @@ public class DatabaseManager implements BookStorage {
 
     //return all books belonging to a bookshelf
     //could be refactored and integrated directly in getBooks by passing a bookshelfID as parameter
-    public List<Book> getBookShelfBooks(String bookshelfID) throws SQLException, ClassNotFoundException {
+    public List<Book> getBookShelfBooks(int bookshelfID) throws SQLException, ClassNotFoundException {
         try{
             if(con == null || con.isClosed()) {
                 getConnection();
             }
 
             ps = con.prepareStatement("SELECT * FROM Book WHERE bookshelfID = ? ;");
-            ps.setString(1, bookshelfID);
+            ps.setInt(1, bookshelfID);
             res = ps.executeQuery();
 
             List<Book> list = new LinkedList<>();

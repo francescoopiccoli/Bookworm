@@ -10,7 +10,7 @@ public interface BookStorage {
     void insertBook(Book book, String bookshelf) throws ClassNotFoundException, SQLException;
     void insertBookshelf(Bookshelf bs)  throws ClassNotFoundException, SQLException;
     boolean deleteBook(Book book) throws SQLException, ClassNotFoundException;
-    List<Book> getBookShelfBooks(String bookshelfID) throws SQLException, ClassNotFoundException ;
+    List<Book> getBookShelfBooks(int bookshelfID) throws SQLException, ClassNotFoundException ;
     List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException;
     Book getBook(String name, String author) throws SQLException, ClassNotFoundException;
     List<Book> getBooks() throws SQLException, ClassNotFoundException;

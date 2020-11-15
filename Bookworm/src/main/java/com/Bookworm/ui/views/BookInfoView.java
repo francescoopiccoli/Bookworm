@@ -181,7 +181,7 @@ public class BookInfoView extends BorderPane {
                     // todo: insert book only if it really exists
                     try {
                         if(dbManager.getBook(book.getName(), book.getAuthor()) == null){
-                            dbManager.insertBook(book, null);
+                            dbManager.insertBook(book, newVal.getName());
 
                             if(parent != null) {
                                 List<BookWidget> books = parent.getBooks();
