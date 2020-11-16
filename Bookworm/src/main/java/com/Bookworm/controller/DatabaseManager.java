@@ -50,11 +50,10 @@ public class DatabaseManager implements BookStorage {
         con = DriverManager.getConnection("jdbc:sqlite:BookwormDB.db");
     }
 
-
     private void initialiseDB() throws SQLException, ClassNotFoundException {
 
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             //sqlite Foreign key constraints are not active by default. You must enable them with the following command, once per database session :
@@ -64,16 +63,16 @@ public class DatabaseManager implements BookStorage {
             s.executeUpdate("PRAGMA foreign_keys = ON;");
 
         } finally {
-            if(s != null) {
+            if (s != null) {
                 s.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
 
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -82,16 +81,16 @@ public class DatabaseManager implements BookStorage {
                     "name TEXT NOT NULL," +
                     "description TEXT)");
         } finally {
-            if(s != null) {
+            if (s != null) {
                 s.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
 
-        try{
-            if(con == null || con.isClosed()) {
+        try {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -105,18 +104,17 @@ public class DatabaseManager implements BookStorage {
                     "bookshelfID," +
                     "imageURL TEXT," +
                     "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id) ON DELETE CASCADE)"); //!!! ON DELETE CASCADE not sure if works
-        }
-        finally{
-            if(s != null) {
+        } finally {
+            if (s != null) {
                 s.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
 
-        try{
-            if(con == null || con.isClosed()) {
+        try {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -125,21 +123,20 @@ public class DatabaseManager implements BookStorage {
                     "tagName TEXT," +
                     "PRIMARY KEY (bookID, tagName)," +
                     "FOREIGN KEY(bookID) REFERENCES Book(id))");
-        }
-        finally {
-            if(s != null) {
+        } finally {
+            if (s != null) {
                 s.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
     }
 
-
+    // selects book from database where name and author are equal
     public Book getBook(String name, String author) throws SQLException, ClassNotFoundException {
-        try{
-            if(con == null || con.isClosed()) {
+        try {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT * FROM Book WHERE name = ? and author = ?;");
@@ -149,44 +146,41 @@ public class DatabaseManager implements BookStorage {
 
             //check if resultset returned something
             if (!res.isClosed()) {
-            Book book = new Book();
-            book.setId(res.getInt("id"));
-            book.setName(res.getString("name"));
-            book.setAuthor(res.getString("author"));
-            book.setDescription(res.getString("description"));
-            book.setRating(res.getInt("rating"));
-            book.setImageURL(res.getString("imageURL"));
-            book.setReview(res.getString("review"));
-            return book;
-            }
-            else{
+                Book book = new Book();
+                book.setId(res.getInt("id"));
+                book.setName(res.getString("name"));
+                book.setAuthor(res.getString("author"));
+                book.setDescription(res.getString("description"));
+                book.setRating(res.getInt("rating"));
+                book.setImageURL(res.getString("imageURL"));
+                book.setReview(res.getString("review"));
+                return book;
+            } else {
                 return null;
             }
-        } finally{
-            if(ps != null) {
+        } finally {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
     }
 
-
     public List<Book> getBooks() throws SQLException, ClassNotFoundException {
-
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT * FROM Book");
             res = ps.executeQuery();
             List<Book> list = new LinkedList<>();
 
-            while(res.next()) {
+            while (res.next()) {
                 Book book = new Book();
                 book.setId(res.getInt("id"));
                 book.setName(res.getString("name"));
@@ -200,14 +194,14 @@ public class DatabaseManager implements BookStorage {
 
             return list;
 
-        } finally{
-            if(ps != null) {
+        } finally {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -215,9 +209,9 @@ public class DatabaseManager implements BookStorage {
 
 
     //could be removed and instead getBook can be used
-    public String getReview(Book b)  throws SQLException, ClassNotFoundException {
+    public String getReview(Book b) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT review FROM Book WHERE id = ?;");
@@ -228,14 +222,18 @@ public class DatabaseManager implements BookStorage {
                 return "";
             }
             return res.getString("review");
-        } finally {
-            if(ps != null) {
+        } catch (NullPointerException e) {
+                System.out.println("Error in getReview: book was null");
+                return null;
+        }
+        finally {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -245,7 +243,7 @@ public class DatabaseManager implements BookStorage {
     //could be removed and instead getBook can be used
     public int getRating(Book b) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT rating FROM Book WHERE id = ?;");
@@ -256,14 +254,18 @@ public class DatabaseManager implements BookStorage {
                 return 0;
             }
             return res.getInt("rating");
-        } finally {
-            if(ps != null) {
+        } catch(NullPointerException e) {
+            System.out.println("Error in getRating: book is null");
+            return -1;
+        }
+        finally {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -271,25 +273,25 @@ public class DatabaseManager implements BookStorage {
 
 
     public List<String> getAuthors() throws SQLException, ClassNotFoundException {
-        try{
+        try {
             List<String> list = new LinkedList<>();
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT distinct author FROM Book order by author asc");
             res = ps.executeQuery();
-            while(res.next()) {
+            while (res.next()) {
                 list.add(res.getString(1));
             }
             return list;
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -299,8 +301,8 @@ public class DatabaseManager implements BookStorage {
     //return all books belonging to a bookshelf
     //could be refactored and integrated directly in getBooks by passing a bookshelfID as parameter
     public List<Book> getBookShelfBooks(int bookshelfID) throws SQLException, ClassNotFoundException {
-        try{
-            if(con == null || con.isClosed()) {
+        try {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
 
@@ -309,7 +311,7 @@ public class DatabaseManager implements BookStorage {
             res = ps.executeQuery();
 
             List<Book> list = new LinkedList<>();
-            while(res.next()) {
+            while (res.next()) {
                 Book book = new Book();
                 book.setId(res.getInt("id"));
                 book.setName(res.getString("name"));
@@ -323,13 +325,13 @@ public class DatabaseManager implements BookStorage {
             }
             return list;
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -339,13 +341,13 @@ public class DatabaseManager implements BookStorage {
     //return all bookshelf objects, with name and descriptions
     public List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT * FROM Bookshelf");
             res = ps.executeQuery();
             List<Bookshelf> list = new LinkedList<>();
-            while(res.next()) {
+            while (res.next()) {
                 Bookshelf bookshelf = new Bookshelf();
                 bookshelf.setId(res.getInt("id"));
                 bookshelf.setName(res.getString("name"));
@@ -354,29 +356,32 @@ public class DatabaseManager implements BookStorage {
                 list.add(bookshelf);
             }
             return list;
-        } finally{
-            if(ps != null) {
+        } finally {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
     }
 
+    public boolean bookAlreadySaved(Book book) throws SQLException, ClassNotFoundException {
+        if (getBook(book.getName(), book.getAuthor()) != null)
+            return true;
+        return false;
+    }
 
     //since bookshelf is not an attribute of Book, it has to be passed as parameter
     public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
         try {
             int bookshelfID = getBookshelfID(bookshelf);
-
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
-
             ps = con.prepareStatement("INSERT INTO Book VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
             ps.setString(1, null);
             ps.setString(2, b.getName());
@@ -385,18 +390,17 @@ public class DatabaseManager implements BookStorage {
             ps.setInt(5, b.getRating());
             ps.setString(6, b.getReview());
             ps.setString(7, null); // bookshelf.getId
-
             // in case bookshelf id is not found, the bookshelfID column in DB will contain a 0
             if (bookshelfID == 0) {
                 ps.setInt(7, 0);
-            } else
-                ps.setInt(7, bookshelfID);
-
-
+            }
+            ps.setInt(7, bookshelfID);
             ps.setString(8, b.getImageURL());
             ps.executeUpdate();
+        } catch (NullPointerException e) {
+            System.out.println("Error in insert book: inserted bookshelf or book was null");
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -409,7 +413,7 @@ public class DatabaseManager implements BookStorage {
     //instead of the whole book, just the id could be passed as parameter
     public void insertRating(Book b, int rating) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("UPDATE Book set rating = ? WHERE id= ?");
@@ -417,8 +421,11 @@ public class DatabaseManager implements BookStorage {
             ps.setInt(2, b.getId());
             ps.executeUpdate();
 
-        } finally {
-            if(ps != null) {
+        } catch(NullPointerException e) {
+            System.out.println("Error in insertRating: book is empty");
+        }
+        finally {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -430,7 +437,7 @@ public class DatabaseManager implements BookStorage {
     //instead of the whole book, just the id could be passed as parameter
     public void insertReview(Book b, String review) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("UPDATE Book set review = ? WHERE id= ?");
@@ -438,8 +445,11 @@ public class DatabaseManager implements BookStorage {
             ps.setInt(2, b.getId());
             ps.executeUpdate();
 
-        } finally {
-            if(ps != null) {
+        } catch(NullPointerException e) {
+            System.out.println("Error in insert review, book was null");
+        }
+        finally {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -451,7 +461,7 @@ public class DatabaseManager implements BookStorage {
 
     public void insertBookshelf(Bookshelf bs) throws ClassNotFoundException, SQLException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("INSERT INTO Bookshelf VALUES (?, ?, ?);");
@@ -459,9 +469,10 @@ public class DatabaseManager implements BookStorage {
             ps.setString(2, bs.getName());
             ps.setString(3, bs.getDescription());
             ps.executeUpdate();
-
+        } catch (NullPointerException e) {
+            System.out.println("Error in insert bookshelf: inserted bookshelf was null");
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -473,7 +484,7 @@ public class DatabaseManager implements BookStorage {
 
     public int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("SELECT id FROM Bookshelf WHERE name = ?;");
@@ -481,17 +492,17 @@ public class DatabaseManager implements BookStorage {
             res = ps.executeQuery();
             //res.isClosed == nothing found
             if (res.isClosed()) {
-                return 0;
+                return -1;
             }
             return res.getInt("id");
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
-            if(res != null) {
+            if (res != null) {
                 res.close();
             }
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         }
@@ -500,15 +511,20 @@ public class DatabaseManager implements BookStorage {
 
     public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
+            }
+            if (book == null) {
+                System.out.println("Error in delete book: book is null");
+                return false;
             }
             ps = con.prepareStatement("DELETE FROM Book WHERE id = ?");
             ps.setInt(1, book.getId());
+            System.out.println(book.getId());
             return ps.execute();
 
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -520,15 +536,18 @@ public class DatabaseManager implements BookStorage {
 
     public boolean deleteBookshelf(Bookshelf bookshelf) throws SQLException, ClassNotFoundException {
         try {
-            if(con == null || con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             ps = con.prepareStatement("DELETE FROM Bookshelf WHERE id = ?");
             ps.setInt(1, bookshelf.getId());
             return ps.execute();
 
+        } catch (NullPointerException e) {
+            System.out.println("Error in delete bookshelf: bookshelf is null");
+            return false;
         } finally {
-            if(ps != null) {
+            if (ps != null) {
                 ps.close();
             }
             if (con != null) {
@@ -537,3 +556,5 @@ public class DatabaseManager implements BookStorage {
         }
     }
 }
+
+

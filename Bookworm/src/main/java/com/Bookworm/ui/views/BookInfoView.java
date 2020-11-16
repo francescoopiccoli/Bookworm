@@ -174,6 +174,7 @@ public class BookInfoView extends BorderPane {
             }
         });
 
+        // saving book: problem -> bookId is never assigned
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
             if(!oldVal.getName().equals(newVal.getName())) {
                 System.out.println(oldVal+" "+newVal);
@@ -182,7 +183,6 @@ public class BookInfoView extends BorderPane {
                     try {
                         if(dbManager.getBook(book.getName(), book.getAuthor()) == null){
                             dbManager.insertBook(book, newVal.getName());
-
                             if(parent != null) {
                                 List<BookWidget> books = parent.getBooks();
                                 books.add(new BookWidget(book));

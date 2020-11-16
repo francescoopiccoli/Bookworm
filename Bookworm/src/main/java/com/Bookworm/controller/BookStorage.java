@@ -19,4 +19,5 @@ public interface BookStorage {
     void insertReview(Book b, String review) throws SQLException, ClassNotFoundException;
     int getRating(Book b) throws SQLException, ClassNotFoundException;
     String getReview(Book b)  throws SQLException, ClassNotFoundException;
+    boolean bookAlreadySaved(Book book) throws SQLException, ClassNotFoundException;
 }
