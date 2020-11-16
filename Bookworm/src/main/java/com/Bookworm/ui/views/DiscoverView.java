@@ -3,12 +3,9 @@ package com.Bookworm.ui.views;
 import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
-import com.Bookworm.ui.widgets.BookWidget;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
@@ -20,18 +17,28 @@ import java.util.List;
 public class DiscoverView extends BorderPane {
 
     BorderPane layout;
-    BookListWidget bookListWidget;
+    BookListWidget bookListWidget; // the widget from the other page
+
+    public BookListWidget getMyBooksWidget() {
+        return myBooksWidget;
+    }
+
+    public void setMyBooksWidget(BookListWidget myBooksWidget) {
+        this.myBooksWidget = myBooksWidget;
+    }
+
+    BookListWidget myBooksWidget;
     // sicuro che sia static?
     public static List<Book> bookList = new LinkedList<>();
     private boolean loadingStatus;
     private TextField searchWidget;
     private Label searchPlaceholder;
 
-    public static List<Book> getbookList() {
+    public static List<Book> getBookList() {
         return bookList;
     }
 
-    public static void setbookList(List<Book> bookList) {
+    public static void setBookList(List<Book> bookList) {
         DiscoverView.bookList = bookList;
     }
 
@@ -45,8 +52,6 @@ public class DiscoverView extends BorderPane {
         return loadingStatus;
     }
 
-
-
     public DiscoverView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTopDisc());
@@ -59,6 +64,8 @@ public class DiscoverView extends BorderPane {
             bookListWidget = new BookListWidget(bookList);
 
         bookListWidget.setBooks(bookList);
+        // don't update the Discover list, but the My Books one by default
+        bookListWidget.setParentWidget(myBooksWidget);
 
         bookListWidget.updateList();
 
@@ -88,6 +95,7 @@ public class DiscoverView extends BorderPane {
         setCenter(getCenterDisc());
     }
 
+    // a support class for parallel processing of queries, in order not to clog the UI thread during search operation
     private class RefreshThread extends Thread {
         private DiscoverView d;
         private String query;
@@ -102,7 +110,7 @@ public class DiscoverView extends BorderPane {
 
             List<Book> bookList = GoogleBooksClient.searchBooks(query);
             if(bookList != null && !bookList.isEmpty()){
-                d.setbookList(bookList);
+                d.setBookList(bookList);
                 Platform.runLater(() -> d.setCenter(d.getCenterDisc()));
             }
             setLoading(false);

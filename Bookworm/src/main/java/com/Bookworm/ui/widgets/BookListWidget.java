@@ -21,6 +21,16 @@ import java.util.List;
 public class BookListWidget extends ScrollPane {
     private List<BookWidget> books;
     private String currentFilter = "";
+    // by default the spawned book list will update this window, but it can be changed
+    private BookListWidget parentWidget = this;
+
+    public BookListWidget getParentWidget() {
+        return parentWidget;
+    }
+
+    public void setParentWidget(BookListWidget parentWidget) {
+        this.parentWidget = parentWidget;
+    }
 
     public BookListWidget(List<Book> books) {
         super();
@@ -82,7 +92,7 @@ public class BookListWidget extends ScrollPane {
                     // bookInfo should accept Book object, not just its parameters!
 
                     try {
-                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), this);
+                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     } catch (ClassNotFoundException e) {

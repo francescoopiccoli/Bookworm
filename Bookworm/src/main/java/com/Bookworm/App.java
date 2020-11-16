@@ -5,6 +5,7 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookListView;
 import com.Bookworm.ui.views.BookshelfView;
 import com.Bookworm.ui.views.DiscoverView;
+import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.NavToggleButton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -34,9 +35,13 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         //views.put("Home", new Label("implement me"));
-        views.put("Discover", new DiscoverView());
+        DiscoverView discoverView = new DiscoverView();
+        BookListWidget readingListWidget;
+        views.put("Discover", discoverView);
         try {
-            views.put("My Books", new BookListView("Reading List", DatabaseManager.getInstance().getBooks()));
+            BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+            views.put("My Books", readingListView);
+            discoverView.setMyBooksWidget(readingListView.getListWidget());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {

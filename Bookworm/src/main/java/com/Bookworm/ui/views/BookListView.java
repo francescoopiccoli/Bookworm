@@ -17,6 +17,7 @@ import java.util.List;
 public class BookListView extends BorderPane {
     private final String title;
     private List<BookWidget> books;
+
     private final BookListWidget listWidget;
     private String currentFilter = "";
 
@@ -50,6 +51,10 @@ public class BookListView extends BorderPane {
 
         headerPane.setRight(textField);
 
+    }
+
+    public BookListWidget getListWidget() {
+        return listWidget;
     }
 
     public String getTitle() {
