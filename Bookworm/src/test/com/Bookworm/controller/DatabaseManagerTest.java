@@ -2,6 +2,9 @@ package com.Bookworm.controller;
 
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -31,12 +34,20 @@ class DatabaseManagerTest {
 
     @Test
     void getBooks() throws SQLException, ClassNotFoundException {
-        List<Book> bookList = dbtest.getBooks();
-        if (bookList == null) {
-            fail("List of book cannot be null ");
-        }
+        assertNotNull(dbtest.getBooks(), "List of book cannot be null ");
+
     }
 
+    /* @Test
+   void getRewiew () throws SQLException, ClassNotFoundException {
+
+   }
+
+   @Test
+   void getRating () throws SQLException, ClassNotFoundException {
+
+   }
+*/
     @Test
     void getAuthors() throws SQLException, ClassNotFoundException {
         List<String> authorList = dbtest.getAuthors();
@@ -53,10 +64,11 @@ class DatabaseManagerTest {
     //@Test
     //void makeTags() throws SQLException {
     //    List<Tag> tagList = dbtest.getTags();
-     //   if (tagList == null) {
-     //       fail("The list of tags cannot be null");
-     //   }
+    //   if (tagList == null) {
+    //       fail("The list of tags cannot be null");
+    //   }
     //}
+
 
     @Test
     void tearDown() throws SQLException, ClassNotFoundException {
