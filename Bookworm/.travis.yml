@@ -1,6 +1,6 @@
 language: Java
 jdk: 
-  - oraclejdk13
+  - openjdk13
 sudo: false # faster builds
 script: mvn clean verify
 notifications: 
