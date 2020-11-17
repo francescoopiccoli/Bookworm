@@ -1,0 +1,7 @@
+language: Java
+jdk: 
+  - oraclejdk13
+sudo: false # faster builds
+script: mvn clean verify
+notifications: 
+  email: xfrancescopiccolix@gmail.com
