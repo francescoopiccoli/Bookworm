@@ -3,7 +3,7 @@ jdk:
   - openjdk13
 sudo: false # faster builds
 script:
-  -cd Bookworm
-  -mvn clean verify
+  - cd Bookworm
+  - mvn clean verify
 notifications: 
   email: xfrancescopiccolix@gmail.com
