@@ -4,6 +4,6 @@ jdk:
 sudo: false # faster builds
 script:
   - cd Bookworm
-  - mvn clean verify
+  - ./mvnw clean install
 notifications: 
   email: xfrancescopiccolix@gmail.com
