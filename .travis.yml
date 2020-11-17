@@ -2,6 +2,8 @@ language: Java
 jdk: 
   - openjdk13
 sudo: false # faster builds
-script: mvn clean verify
+script:
+  -cd Bookworm
+  -mvn clean verify
 notifications: 
   email: xfrancescopiccolix@gmail.com
