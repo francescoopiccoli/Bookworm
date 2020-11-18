@@ -89,8 +89,6 @@ public class GoogleBooksClient {
 
       currentBook.setName(volumeInfo.getTitle());
 
-      currentBook.setTags(null);
-
       java.util.List<String> authors = volumeInfo.getAuthors();
       String author = "";
       if (authors != null && !authors.isEmpty()) {
