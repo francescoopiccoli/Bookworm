@@ -102,15 +102,16 @@ public class BookInfoView extends BorderPane {
 
         Stage stage = new Stage();
         stage.setTitle(book.getName());
-        Scene scene = new Scene(bookInfoView, w, h);
+        //Scene scene = new Scene(bookInfoView, w, h);
+        Scene scene = new Scene(bookInfoView);
         stage.setScene(scene);
+        stage.setWidth(w);
         stage.show();
     }
 
     public HBox addHBoxTop() {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(40);
 
         //book title
 
@@ -129,10 +130,8 @@ public class BookInfoView extends BorderPane {
 
 
         //bookshelf
-        HBox bookshelfBox = new HBox();
-        ComboBox bookshelfCombo = new ComboBox();
-        HBox.setHgrow(bookshelfCombo, Priority.ALWAYS);
-        ComboBox<Bookshelf> comboBookshelf = new ComboBox<Bookshelf>();
+        BorderPane bookshelfBox = new BorderPane();
+        ComboBox<Bookshelf> comboBookshelf = new ComboBox<>();
         comboBookshelf.setPlaceholder(new Label("None"));
       //  System.out.println(bookList.toString());
       //  System.out.println(bookShelf.toString());
@@ -148,19 +147,17 @@ public class BookInfoView extends BorderPane {
                 list.add(bookshelf.getId(), bookshelf);
             }
 
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         comboBookshelf.setItems(list);
         comboBookshelf.getSelectionModel().select(0);
-        comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
+        comboBookshelf.setConverter(new StringConverter<>() {
 
             @Override
             public String toString(Bookshelf bookshelf) {
-                if(bookshelf != null)
+                if (bookshelf != null)
                     return bookshelf.getName();
                 else
                     return null;
@@ -197,15 +194,8 @@ public class BookInfoView extends BorderPane {
                             dbManager.deleteBook(book);
                             if(parent != null) {
                                 List<BookWidget> books = parent.getBooks();
-                                Iterator<BookWidget> iter = books.iterator();
 
-                                while (iter.hasNext()) {
-                                    BookWidget widget = iter.next();
-
-                                    if (widget.getBook().getId() == book.getId()) {
-                                       iter.remove();
-                                    }
-                                }
+                                books.removeIf(widget -> widget.getBook().getId() == book.getId());
                                 parent.updateList(null);
                             }
                             System.out.println("Deleted book "+book.getName());
@@ -225,21 +215,16 @@ public class BookInfoView extends BorderPane {
 
 
 
-        bookshelfBox.setSpacing(20);
-        bookshelfBox.getChildren().addAll(comboBookshelf);
+        bookshelfBox.setRight(comboBookshelf);
 
         //Vbox for left elements
         VBox vBox = new VBox();
         vBox.setSpacing(8);
         vBox.getChildren().addAll(displayTitle, displayAuthor);
+        bookshelfBox.setLeft(vBox);
 
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(comboBookshelf);
-        hBox.setSpacing(30);
-
-
-
-        hbox.getChildren().addAll(vBox, hBox);
+        HBox.setHgrow(bookshelfBox, Priority.ALWAYS);
+        hbox.getChildren().addAll(bookshelfBox);
 
         return hbox;
     }
@@ -259,6 +244,10 @@ public class BookInfoView extends BorderPane {
         //description.setPrefColumnCount(15);
         description.setFont(Font.font(null, FontWeight.NORMAL, 12));
         description.setEditable(false);
+        description.getStyleClass().add("description");
+        description.getStyleClass().add("text-area");
+
+
 
 
         //scroll for description textarea
@@ -286,17 +275,12 @@ public class BookInfoView extends BorderPane {
 
         }
         //if review is changed, update/insert the new review in the database
-        review.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-                // this will run whenever text is changed
-                try {
-                    dbManager.insertReview(book, review.getText());
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+        review.textProperty().addListener((observable, oldValue, newValue) -> {
+            // this will run whenever text is changed
+            try {
+                dbManager.insertReview(book, review.getText());
+            } catch (SQLException | ClassNotFoundException throwables) {
+                throwables.printStackTrace();
             }
         });
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
@@ -317,22 +301,26 @@ public class BookInfoView extends BorderPane {
 
         //left side
         VBox left = new VBox();
+        HBox.setHgrow(left, Priority.ALWAYS);
         left.setSpacing(20);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
         VBox.setVgrow(scrollPane2, Priority.ALWAYS);
         left.getChildren().addAll(scrollPane);
 
         //image
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(220);
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(280);
         imageView.setPreserveRatio(false);
         HBox.setHgrow(imageView, Priority.ALWAYS);
         VBox.setVgrow(imageView, Priority.ALWAYS);
 
         //overall view
         HBox overall = new HBox();
+        VBox.setVgrow(overall, Priority.ALWAYS);
 
-        overall.setSpacing(50);
+        overall.setSpacing(20);
+        overall.maxHeightProperty().bind(imageView.fitHeightProperty());
+        HBox.setHgrow(reviewBox, Priority.SOMETIMES);
         overall.getChildren().addAll(imageView, left, reviewBox);
 
 
