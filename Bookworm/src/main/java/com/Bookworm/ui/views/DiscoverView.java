@@ -4,6 +4,8 @@ import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -42,12 +44,13 @@ public class DiscoverView extends BorderPane {
         DiscoverView.bookList = bookList;
     }
 
-    private void setLoadingStatus(boolean loadingStatus) {
+    private void setLoadingStatus(boolean loadingStatus) throws NullPointerException {
         this.loadingStatus = loadingStatus;
         // ugly af - better have some kind of loading widget
         searchWidget.setVisible(!loadingStatus);
         searchPlaceholder.setVisible(loadingStatus);
     }
+
     private boolean getLoadingStatus() {
         return loadingStatus;
     }
@@ -59,8 +62,8 @@ public class DiscoverView extends BorderPane {
 
     }
 
-    public Node getCenterDisc() {
-        if(bookListWidget == null)
+    public Node getCenterDisc() throws  NullPointerException{
+        if (bookListWidget == null)
             bookListWidget = new BookListWidget(bookList);
 
         bookListWidget.setBooks(bookList);
@@ -76,7 +79,22 @@ public class DiscoverView extends BorderPane {
     public Node createTopDisc() {
         VBox vb = new VBox();
         HBox hb = new HBox();
+
+        //create group labels for text
+
+        Label title = new Label();
+        title.setText("Discover new books");
+        title.setStyle("-fx-font-size: 16;-fx-font-weight:bold");
+        Label descriptionText = new Label();
+        descriptionText.setText("Search for books and add them to your libraries");
+        vb.getChildren().addAll(title,descriptionText);
+        vb.setSpacing(1);
+        vb.setAlignment(Pos.TOP_LEFT);
+        //search box
+
         searchWidget = new TextField();
+        searchWidget.setEditable(true);
+        searchWidget.setPrefColumnCount(10);
         searchWidget.setOnAction(event -> {
             if (!searchWidget.getText().equals("")) {
                 RefreshThread thread = new RefreshThread(this, searchWidget.getText());
@@ -84,13 +102,18 @@ public class DiscoverView extends BorderPane {
             }
         });
 
-        searchPlaceholder = new Label("Search in progress...");
-        searchPlaceholder.setVisible(false);
+        //hbox for spacing
 
-        vb.getChildren().addAll(searchWidget,searchPlaceholder,hb);
-        vb.setSpacing(5.5);
-        return  vb;
+        HBox spaceBox = new HBox();
+        spaceBox.setHgrow(spaceBox,Priority.ALWAYS);
+
+
+        hb.getChildren().addAll(vb,spaceBox,searchWidget);
+
+
+        return hb;
     }
+
     public void refresh() {
         setCenter(getCenterDisc());
     }
@@ -99,17 +122,19 @@ public class DiscoverView extends BorderPane {
     private class RefreshThread extends Thread {
         private DiscoverView d;
         private String query;
+
         public RefreshThread(DiscoverView d, String query) {
             this.d = d;
             this.query = query;
         }
-        public void run() {
-            if(d.getLoadingStatus())
+
+        public void run() throws NullPointerException {
+            if (d.getLoadingStatus())
                 return; // don't mess with multiple searches at once
             setLoading(true);
 
             List<Book> bookList = GoogleBooksClient.searchBooks(query);
-            if(bookList != null && !bookList.isEmpty()){
+            if (bookList != null && !bookList.isEmpty()) {
                 d.setBookList(bookList);
                 Platform.runLater(() -> d.setCenter(d.getCenterDisc()));
             }
