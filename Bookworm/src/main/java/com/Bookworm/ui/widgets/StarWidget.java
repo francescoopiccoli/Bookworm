@@ -27,6 +27,7 @@ public class StarWidget {
     private static DatabaseManager db = DatabaseManager.getInstance();
     private static BookInfoView parent;
 
+    //generate the correct widget: according to the rating, draw the correct number of filled / empty stars
     private static HBox generateWidget() throws SQLException, ClassNotFoundException {
 
         if(db.getBook(book.getName(), book.getAuthor()) != null){
@@ -72,12 +73,17 @@ public class StarWidget {
         return starWidgetBox;
     }
 
+
+
+    //updates bookinfo by inserting new rating value in the database and refreshing the bookinfo window
     private static void updateWidget(int newRating) throws SQLException, ClassNotFoundException {
         db.insertRating(book, newRating);
         rating = newRating;
         parent.refresh();
     }
 
+
+    //method called in bookinfo to create the initial starwidget
     public static HBox getStarWidget(BookInfoView parentView, Book b) throws SQLException, ClassNotFoundException {
         book = b;
         parent = parentView;

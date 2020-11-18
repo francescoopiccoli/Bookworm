@@ -272,10 +272,11 @@ public class BookInfoView extends BorderPane {
         scrollPane.setFitToHeight(true);
 
 
-        //Review Area
-        Label reviewLabel = new Label();
+        //Review and rating Area
+        //generates starwidget calling the static method getStarWidget of Starwidget class
         HBox starwidget = StarWidget.getStarWidget(this, book);
         TextArea review = new TextArea("review");
+        //in case the book is already in DB, retrives the already existing review
         if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
             review.setEditable(true);
             review.setText(dbManager.getReview(book));
@@ -286,7 +287,7 @@ public class BookInfoView extends BorderPane {
 
 
         }
-
+        //if review is changed, update/insert the new review in the database
         review.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
@@ -351,7 +352,7 @@ public class BookInfoView extends BorderPane {
         return vbox;
     }
 
-
+//method called in StarWidget class to refresh the bookinfo window once a new rating has been inserted
     public void refresh() throws SQLException, ClassNotFoundException {
         setCenter(addVBox());
     }

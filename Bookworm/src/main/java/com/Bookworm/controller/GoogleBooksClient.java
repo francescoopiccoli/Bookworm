@@ -12,8 +12,6 @@ package com.Bookworm.controller;
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
-//  metodo search ritorna lista di libri, anche querygooglebook.
 //
 import com.Bookworm.model.Book;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -57,6 +55,8 @@ public class GoogleBooksClient {
     return null;
   }
 
+
+  //method called by searchBooks to find all books given the  query written in a formal way
   public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
 
     final Books books = connectToAPI(jsonFactory);
@@ -118,7 +118,7 @@ public class GoogleBooksClient {
     return foundBooks;
   }
 
-
+  //method called in method RefreshThread in DiscoverView to retrieve a list of "Book" objects given the user-formulated query
   public static LinkedList<Book> searchBooks(String query) {
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
     try {
@@ -151,10 +151,6 @@ public class GoogleBooksClient {
       }
       try {
         LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
-        //for(Book b : foundBooks){
-            //System.out.println(b.getImageURL());
-        //}
-        // Success!
         return foundBooks;
       } catch (IOException e) {
         System.err.println(e.getMessage());

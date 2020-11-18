@@ -8,13 +8,6 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-// sqlite.org/faq.html#q1
-// https://www.tutorialspoint.com/sqlite/index.htm
-// https://www.sqlitetutorial.net/sqlite-java/
-
-
-//implement clean deletion methods
-
 //QUESTIONS:
 // if I delete a bookshelf, what happens to the book within it?
 // inserting a book in default reading list, what about is bookshelfID attribute? as for now, set to 0
@@ -27,6 +20,7 @@ public class DatabaseManager implements BookStorage {
     private static DatabaseManager dbmanager;
 
 
+    //singleton design pattern
     static {
         try {
             dbmanager = new DatabaseManager();
@@ -35,6 +29,7 @@ public class DatabaseManager implements BookStorage {
         }
     }
 
+    //initialise DB in the constructor
     private DatabaseManager() throws SQLException, ClassNotFoundException {
         initialiseDB();
     }
@@ -43,6 +38,7 @@ public class DatabaseManager implements BookStorage {
         return dbmanager;
     }
 
+    //connecting to the local database file "BookwormDB.db"
     private void getConnection() throws ClassNotFoundException, SQLException {
         // sqlite driver
         Class.forName("org.sqlite.JDBC");
@@ -50,6 +46,7 @@ public class DatabaseManager implements BookStorage {
         con = DriverManager.getConnection("jdbc:sqlite:BookwormDB.db");
     }
 
+    //initialiseDB creates the database tables in case they do not exist yet
     private void initialiseDB() throws SQLException, ClassNotFoundException {
 
         try {
@@ -103,6 +100,7 @@ public class DatabaseManager implements BookStorage {
                     "review TEXT," +
                     "bookshelfID," +
                     "imageURL TEXT," +
+                    "UNIQUE(name,author)," +
                     "FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id) ON DELETE CASCADE)"); //!!! ON DELETE CASCADE not sure if works
         } finally {
             if (s != null) {
@@ -133,7 +131,7 @@ public class DatabaseManager implements BookStorage {
         }
     }
 
-    // selects book from database where name and author are equal
+    // retrieve a book from database given the name and the author of the book
     public Book getBook(String name, String author) throws SQLException, ClassNotFoundException {
         try {
             if (con == null || con.isClosed()) {
@@ -171,6 +169,7 @@ public class DatabaseManager implements BookStorage {
         }
     }
 
+    //retrieves all books saved in the database
     public List<Book> getBooks() throws SQLException, ClassNotFoundException {
         try {
             if (con == null || con.isClosed()) {
@@ -208,7 +207,7 @@ public class DatabaseManager implements BookStorage {
     }
 
 
-    //could be removed and instead getBook can be used
+    //retrieves the review of the specified book
     public String getReview(Book b) throws SQLException, ClassNotFoundException {
         try {
             if (con == null || con.isClosed()) {
@@ -240,7 +239,7 @@ public class DatabaseManager implements BookStorage {
     }
 
 
-    //could be removed and instead getBook can be used
+    //retrieves the rating of the specified book
     public int getRating(Book b) throws SQLException, ClassNotFoundException {
         try {
             if (con == null || con.isClosed()) {
@@ -272,6 +271,7 @@ public class DatabaseManager implements BookStorage {
     }
 
 
+    //retrieves a list of strings containing all authors
     public List<String> getAuthors() throws SQLException, ClassNotFoundException {
         try {
             List<String> list = new LinkedList<>();
@@ -338,7 +338,7 @@ public class DatabaseManager implements BookStorage {
     }
 
 
-    //return all bookshelf objects, with name and descriptions
+    //return a list of bookshelf objects, namely all the bookshelves existing in the database
     public List<Bookshelf> getBookShelves() throws SQLException, ClassNotFoundException {
         try {
             if (con == null || con.isClosed()) {
