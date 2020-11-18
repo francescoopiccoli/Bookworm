@@ -19,12 +19,7 @@ public class FileManager {
     public ArrayList<Book> getAuthors(String author) {
         return null;
     }
-
-    //@Override
-    public ArrayList<Book> getBooksByTag(String tag) {
-        return null;
-    }
-
+    
     //saves book in the files directory, both in default bookshelf and in the selected bookshelf, if specified
     //@Override
     public void insertBook(Book book, String bookshelf) {
@@ -62,14 +57,6 @@ public class FileManager {
         resetSystem(fileToDelete2);
         reload();
     }
-
-    //@Override
-    public void addTag(Book book, String bookshelf, String newTag) {
-        ArrayList<Tag> tags = book.getTags();
-        tags.add(new Tag(newTag));
-        book.setTags(tags);
-    }
-
     //deletes all bookshelves directories and serialized books
     //@Override
     public boolean resetSystem(File dir) {

@@ -4,7 +4,6 @@ package com.Bookworm.ui.views;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.model.Tag;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import com.Bookworm.ui.widgets.StarWidget;
@@ -35,7 +34,6 @@ public class BookInfoView extends BorderPane {
     private static final String LABEL_NO_BOOKSHELF = "Save to bookshelf...";
     private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
 
-    ArrayList<Tag> tags;
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookWidget> books;
@@ -338,15 +336,8 @@ public class BookInfoView extends BorderPane {
         overall.getChildren().addAll(imageView, left, reviewBox);
 
 
-        //tags
-        HBox tagBox = new HBox();
-        Button tagButton = new Button();
-        tagButton.setText("Tag");
 
-        tagBox.setSpacing(5);
-        tagBox.getChildren().addAll(tagButton);
-
-        vbox.getChildren().addAll(overall, tagBox);
+        vbox.getChildren().addAll(overall);
 
 
         return vbox;
