@@ -34,7 +34,6 @@ public class DiscoverView extends BorderPane {
     public static List<Book> bookList = new LinkedList<>();
     private boolean loadingStatus;
     private TextField searchWidget;
-    private Label searchPlaceholder;
 
     public static List<Book> getBookList() {
         return bookList;
@@ -46,9 +45,7 @@ public class DiscoverView extends BorderPane {
 
     private void setLoadingStatus(boolean loadingStatus) throws NullPointerException {
         this.loadingStatus = loadingStatus;
-        // ugly af - better have some kind of loading widget
-        searchWidget.setVisible(!loadingStatus);
-        searchPlaceholder.setVisible(loadingStatus);
+
     }
 
     private boolean getLoadingStatus() {
@@ -105,7 +102,7 @@ public class DiscoverView extends BorderPane {
         //hbox for spacing
 
         HBox spaceBox = new HBox();
-        spaceBox.setHgrow(spaceBox,Priority.ALWAYS);
+        HBox.setHgrow(spaceBox,Priority.ALWAYS);
 
 
         hb.getChildren().addAll(vb,spaceBox,searchWidget);

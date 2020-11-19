@@ -64,7 +64,7 @@ public class BookListWidget extends ScrollPane {
 
         if (books == null || books.size() == 0) {
 
-            image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));
+            image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
             imageView = new ImageView(this.image);
             imageView.setFitHeight(250);
             imageView.setFitWidth(500);
@@ -75,10 +75,10 @@ public class BookListWidget extends ScrollPane {
             centerVBox.setAlignment(Pos.BASELINE_CENTER);
             setContent(centerVBox);
             try {
-                image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));
+                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
                 imageView.setImage(image);
             } catch (IllegalArgumentException | NullPointerException e) {
-                image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));
+                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
             }
 
         } else {
