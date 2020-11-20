@@ -116,10 +116,8 @@ public class BookListWidget extends ScrollPane {
                     // bookInfo should accept Book object, not just its parameters!
 
                     try {
-                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    } catch (ClassNotFoundException e) {
+                        BookInfoView.spawnWindow(book, b.getImage(), parentWidget);
+                    } catch (SQLException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -129,7 +127,8 @@ public class BookListWidget extends ScrollPane {
 
                 i++;
             }
-            // fill with whitespace - ugly hack, but it works ¯\_(ツ)_/¯
+
+            // fill with whitespace
             while (i != 0 && i < numColumns) {
                 BookWidget b = new BookWidget(null);
                 b.setVisible(false);
