@@ -7,9 +7,11 @@ import com.Bookworm.model.Bookshelf;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import com.Bookworm.ui.widgets.StarWidget;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -202,8 +204,7 @@ public class BookInfoView extends BorderPane {
                 if(newVal.getId() != ID_NO_BOOKSHELF) {
                     try {
                         dbManager.insertBook(book, newVal.getName());
-                        int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();
-                        book.setId(newId);
+                        updateBookId();
                         if (parent != null) {
                             List<BookWidget> books = parent.getBooks();
                             books.add(new BookWidget(book));
@@ -233,6 +234,11 @@ public class BookInfoView extends BorderPane {
         return hbox;
     }
 
+    private void updateBookId() throws SQLException, ClassNotFoundException {
+        int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();
+        book.setId(newId);
+    }
+
     public VBox addVBox() throws SQLException, ClassNotFoundException {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
@@ -254,29 +260,37 @@ public class BookInfoView extends BorderPane {
         //scroll for description textarea
 
         ScrollPane scrollPane = new ScrollPane(description);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.getStyleClass().add("scroll-description");
 
 
         //Review and rating Area
-        //generates starwidget calling the static method getStarWidget of Starwidget class
-        HBox starwidget = StarWidget.getStarWidget(this, book);
         TextArea review = new TextArea("review");
-        //in case the book is already in DB, retrives the already existing review
-        if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
+        //in case the book is already in DB, retreives the already existing review
+        if(dbManager.bookAlreadySaved(book)) {
             review.setEditable(true);
             review.setText(dbManager.getReview(book));
-        }
-        else{
+            // override remote rating with local rating if it exists
+            book.setRating(dbManager.getRating(book));
+            book.setReview(dbManager.getReview(book));
+        } else {
             review.setText("Add the book to your library to review it!");
-            review.setEditable(false);
-
-
         }
+        //generates starwidget calling the static method getStarWidget of Starwidget class
+        HBox starwidget = StarWidget.getStarWidget(this, book);
+
         //if review is changed, update/insert the new review in the database
         review.textProperty().addListener((observable, oldValue, newValue) -> {
             // this will run whenever text is changed
             try {
-                dbManager.insertReview(book, review.getText());
+                if(dbManager.bookAlreadySaved(book)) {
+                    updateBookId();
+                    dbManager.insertReview(book, review.getText());
+                } else {
+                    System.out.println("Book not saved, review has been ignored");
+                    Platform.runLater(() -> review.setText("Add the book to your library to review it!"));
+                }
             } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
             }
@@ -318,7 +332,7 @@ public class BookInfoView extends BorderPane {
         overall.setSpacing(20);
         overall.maxHeightProperty().bind(imageView.fitHeightProperty());
         HBox.setHgrow(reviewBox, Priority.NEVER);
-        overall.getChildren().addAll(imageView, left, reviewBox);
+        overall.getChildren().addAll(imageView, left, new Separator(Orientation.VERTICAL), reviewBox);
 
 
 
