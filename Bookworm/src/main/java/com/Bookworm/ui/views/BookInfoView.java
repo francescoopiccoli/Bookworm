@@ -100,10 +100,9 @@ public class BookInfoView extends BorderPane {
     }
 
     public static void spawnWindow(Book book, int w, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
-        // todo: does not work: it adds two times the same book
-        if (!App.hasOpenedBook(book, App.openedBooks)) {
+        if (!App.hasOpenedBook(book)) {
             App.openedBooks.add(book);
-            ImageView imageView = new ImageView(image);
+            //ImageView imageView = new ImageView(image);
             BookInfoView bookInfoView = new BookInfoView(book, parent);
             Stage stage = new Stage();
             stage.setTitle(book.getName());

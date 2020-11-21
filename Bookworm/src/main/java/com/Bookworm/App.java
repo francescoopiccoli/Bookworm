@@ -39,14 +39,18 @@ public class App extends Application {
 	private BorderPane mainPane;
 
     // array to keep track of all the book info views, to avoid opening two views of the same book
-    public static ArrayList<Book> openedBooks = new ArrayList<>();
+    public static ArrayList<Book> openedBooks = new ArrayList<Book>();
 
     // does not work idk why - TO TEST
-    public static boolean hasOpenedBook(Book book, ArrayList<Book> openedBooks) {
+    public static boolean hasOpenedBook(Book book) {
+        System.out.println("Checking if book was already opened...");
         for (int i = 0; i < openedBooks.size(); i++){
-            System.out.println(openedBooks.get(i).toString());
-            if (openedBooks.get(i).getName() == book.getName() && openedBooks.get(i).getAuthor() == book.getAuthor()) {
-                System.out.println("WAS PRESENT");
+            if (book.getId() > 0 && openedBooks.get(i).getId() == book.getId()) {
+                System.out.println("WAS PRESENT with id");
+                return true;
+            }
+            else if (openedBooks.get(i).getName() == book.getName() && openedBooks.get(i).getAuthor() == book.getAuthor()) {
+                System.out.println("WAS PRESENT with name and author");
                 return true;
             }
         }
