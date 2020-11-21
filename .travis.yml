@@ -4,4 +4,4 @@ jdk:
 script:
   - cd Bookworm
   - mvn clean install -X
-  - mvn test
+  - mvn test -B
