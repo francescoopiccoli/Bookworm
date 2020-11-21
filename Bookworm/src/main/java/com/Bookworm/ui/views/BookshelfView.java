@@ -225,7 +225,6 @@ public class BookshelfView extends BorderPane {
 
         return hBox;
     }
-    //Not used anymore
     public Node createCenter2() {
         List<Book> books = null;
         try {
