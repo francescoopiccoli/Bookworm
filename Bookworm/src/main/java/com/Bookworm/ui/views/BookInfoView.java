@@ -1,6 +1,7 @@
 package com.Bookworm.ui.views;
 
 
+import com.Bookworm.App;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
@@ -99,15 +100,22 @@ public class BookInfoView extends BorderPane {
     }
 
     public static void spawnWindow(Book book, int w, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
-        ImageView imageView = new ImageView(image);
-        BookInfoView bookInfoView = new BookInfoView(book, parent);
-
-        Stage stage = new Stage();
-        stage.setTitle(book.getName());
-        Scene scene = new Scene(bookInfoView);
-        stage.setScene(scene);
-        stage.setWidth(w);
-        stage.show();
+        // todo: does not work: it adds two times the same book
+        if (!App.hasOpenedBook(book, App.openedBooks)) {
+            App.openedBooks.add(book);
+            ImageView imageView = new ImageView(image);
+            BookInfoView bookInfoView = new BookInfoView(book, parent);
+            Stage stage = new Stage();
+            stage.setTitle(book.getName());
+            Scene scene = new Scene(bookInfoView);
+            stage.setScene(scene);
+            stage.setWidth(w);
+            stage.show();
+            // when the window is closed, book is removed from App.openedBooks
+            stage.setOnCloseRequest(e -> {
+                App.openedBooks.remove(book);
+            });
+        }
     }
 
     public HBox addHBoxTop() {
@@ -184,7 +192,7 @@ public class BookInfoView extends BorderPane {
             e.printStackTrace();
         }
 
-        // saving book: problem -> bookId is never assigned
+        // saving book in bookshelf: problem -> bookId is never assigned
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
             if(!oldVal.getName().equals(newVal.getName())) {
                 // delete first

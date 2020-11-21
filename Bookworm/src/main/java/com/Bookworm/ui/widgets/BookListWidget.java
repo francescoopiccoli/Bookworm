@@ -4,17 +4,11 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -116,7 +110,7 @@ public class BookListWidget extends ScrollPane {
                     // bookInfo should accept Book object, not just its parameters!
 
                     try {
-                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
+                        BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     } catch (ClassNotFoundException e) {

@@ -41,15 +41,17 @@ public class App extends Application {
     // array to keep track of all the book info views, to avoid opening two views of the same book
     public static ArrayList<Book> openedBooks = new ArrayList<>();
 
-    public static boolean hasOpenedBook(Book book) {
-        for (Book bookToCheck: openedBooks) {
-            if (bookToCheck.getName() == book.getName() && bookToCheck.getAuthor() == book.getAuthor()) {
+    // does not work idk why - TO TEST
+    public static boolean hasOpenedBook(Book book, ArrayList<Book> openedBooks) {
+        for (int i = 0; i < openedBooks.size(); i++){
+            System.out.println(openedBooks.get(i).toString());
+            if (openedBooks.get(i).getName() == book.getName() && openedBooks.get(i).getAuthor() == book.getAuthor()) {
+                System.out.println("WAS PRESENT");
                 return true;
             }
         }
         return false;
     }
-
 
     @Override
     public void start(Stage stage) {

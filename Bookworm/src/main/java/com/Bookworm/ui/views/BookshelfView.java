@@ -3,22 +3,19 @@ package com.Bookworm.ui.views;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.ui.widgets.BookListWidget;
-import com.Bookworm.ui.widgets.BookWidget;
-import com.Bookworm.ui.widgets.BookshelfWidget;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,6 +94,7 @@ public class BookshelfView extends BorderPane {
             root.getChildren().add(pane);
             test.setScene(new Scene(root, 450, 250));
             test.show();
+            System.out.println("TADAAaaaaaaaa");
         });
 
         Region region1 = new Region();

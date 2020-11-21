@@ -5,12 +5,13 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +49,6 @@ public class DiscoverView extends BorderPane {
         this.loadingStatus = loadingStatus;
 
     }
-
     private boolean getLoadingStatus() {
         return loadingStatus;
     }
