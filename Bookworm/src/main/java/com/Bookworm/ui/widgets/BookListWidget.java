@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,9 +22,13 @@ import java.util.List;
 
 public class BookListWidget extends ScrollPane {
     private List<BookWidget> books;
+    private Image image;
+    private ImageView imageView;
     private String currentFilter = "";
     // by default the spawned book list will update this window, but it can be changed
     private BookListWidget parentWidget = this;
+    public static final String PLACEHOLDER_IMAGE_URI = "/Images/owl_placeholder.png";
+
 
     public BookListWidget getParentWidget() {
         return parentWidget;
@@ -32,10 +38,10 @@ public class BookListWidget extends ScrollPane {
         this.parentWidget = parentWidget;
     }
 
-    public BookListWidget(List<Book> books) {
+    public BookListWidget(List<Book> books) throws NullPointerException {
         super();
         this.books = new ArrayList<>();
-        for(Book book : books) {
+        for (Book book : books) {
             // we could even maybe async-ize this thing as well?
             this.books.add(new BookWidget(book));
         }
@@ -43,20 +49,38 @@ public class BookListWidget extends ScrollPane {
         setFitToHeight(true);
         setFitToWidth(true);
 
-        widthProperty().addListener((e) ->  updateList(null) );
+        widthProperty().addListener((e) -> updateList(null));
         updateList();
 
     }
 
-    public void updateList() {
+    public void updateList() throws NullPointerException {
         updateList("");
     }
-    public void updateList(String filter) {
-        if(filter != null)
+
+    public void updateList(String filter) throws NullPointerException {
+        if (filter != null)
             currentFilter = filter;
 
         if (books == null || books.size() == 0) {
-            setContent(new Label("This list feels so empty :("));
+
+            image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
+            imageView = new ImageView(this.image);
+            imageView.setFitHeight(250);
+            imageView.setFitWidth(500);
+            VBox centerVBox = new VBox();
+            HBox hBox = new HBox();
+            centerVBox.getChildren().addAll(hBox, imageView);
+            centerVBox.setSpacing(50);
+            centerVBox.setAlignment(Pos.BASELINE_CENTER);
+            setContent(centerVBox);
+            try {
+                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
+                imageView.setImage(image);
+            } catch (IllegalArgumentException | NullPointerException e) {
+                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
+            }
+
         } else {
             VBox vb = new VBox();
             vb.setAlignment(Pos.CENTER);
@@ -81,9 +105,9 @@ public class BookListWidget extends ScrollPane {
                 if (filter != null
                         && !b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
                         && (
-                            b.getBook().getDescription() == null ||
-                            !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase())
-                        )
+                        b.getBook().getDescription() == null ||
+                                !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase())
+                )
                 )
                     continue;
 
@@ -92,10 +116,8 @@ public class BookListWidget extends ScrollPane {
                     // bookInfo should accept Book object, not just its parameters!
 
                     try {
-                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    } catch (ClassNotFoundException e) {
+                        BookInfoView.spawnWindow(book, b.getImage(), parentWidget);
+                    } catch (SQLException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }));
@@ -105,8 +127,9 @@ public class BookListWidget extends ScrollPane {
 
                 i++;
             }
-            // fill with whitespace - ugly hack, but it works ¯\_(ツ)_/¯
-            while(i != 0 && i < numColumns) {
+
+            // fill with whitespace
+            while (i != 0 && i < numColumns) {
                 BookWidget b = new BookWidget(null);
                 b.setVisible(false);
                 HBox.setMargin(b, new Insets(20));
@@ -125,11 +148,17 @@ public class BookListWidget extends ScrollPane {
     public List<BookWidget> getBooks() {
         return books;
     }
+
     public void setBooks(List<Book> books) {
         this.books = new ArrayList<>();
-        for(Book book : books) {
+        for (Book book : books) {
             // we could even maybe async-ize this thing as well?
             this.books.add(new BookWidget(book));
         }
     }
+
+    public Image getImage() {
+        return image;
+    }
+
 }

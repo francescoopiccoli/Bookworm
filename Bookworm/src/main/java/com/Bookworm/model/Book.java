@@ -8,7 +8,6 @@ public class Book implements Serializable {
 	private String name;
 	private String imageURL;
 	private String review;
-	private ArrayList<Tag> tags;
 	private String author;
 	private int rating;
 	private int id;
@@ -17,7 +16,6 @@ public class Book implements Serializable {
 		super();
 		this.description = description;
 		this.name = name;
-		this.tags = null;
 		this.author = author;
 		this.rating = 0;
 		this.imageURL = "";
@@ -41,13 +39,6 @@ public class Book implements Serializable {
 		this.name = name;
 	}
 
-	public ArrayList<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(ArrayList<Tag> tags) {
-		this.tags = tags;
-	}
 	public String getAuthor() {
 		return author;
 	}

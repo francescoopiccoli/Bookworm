@@ -7,6 +7,7 @@ import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import com.Bookworm.ui.widgets.BookshelfWidget;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,21 +34,31 @@ public class BookshelfView extends BorderPane {
 
     private Node createTop() {
 
-        Label title = new Label("Your Bookshelves");
-        title.getStyleClass().add("titleBookshelf");
-        Button addbutton = new Button("Create new Bookshelf");
+
+        //principal view
+        Label title = new Label();
+        title.setText("Your Bookshelves");
+        title.setStyle("-fx-font-size: 16;-fx-font-weight:bold");
+        Label descriptionText = new Label();
+        descriptionText.setText("Check out your customized bookshelves");
+        Button addbutton = new Button("+");
+        addbutton.setStyle("-fx-font-size: 16;-fx-font-weight:bold");
+
+        //event on add button
         addbutton.setOnMouseClicked(event -> {
+
+           // pop up view
             Stage test = new Stage();
             test.setTitle("My New Stage Title");
             VBox root = new VBox();
             root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
             root.setSpacing(5);
-            Label name = new Label("Bookshelf name");
+            Label name = new Label("Insert the name of your Bookshelf");
             TextField nameField = new TextField();
 
             root.getChildren().addAll(name, nameField);
-            Label Description = new Label("Description");
-            TextArea descfield = new TextArea();
+            Label Description = new Label("Insert a description for your bookshelf");
+            TextField descfield = new TextField();
 
             root.getChildren().addAll(Description, descfield);
             BorderPane pane = new BorderPane();
@@ -91,11 +102,14 @@ public class BookshelfView extends BorderPane {
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
 
-        Region region2 = new Region();
-        HBox.setHgrow(region2, Priority.ALWAYS);
 
-        HBox hBox = new HBox(region1, title, region2, addbutton);
-        hBox.getStyleClass().add("hbTopBookshelf");
+
+        VBox vb = new VBox();
+        vb.getChildren().addAll(title,descriptionText);
+        vb.setSpacing(1);
+        vb.setAlignment(Pos.TOP_LEFT);
+        HBox hBox = new HBox(vb, region1, addbutton);
+        hBox.setPadding(new Insets(15, 12, 15, 12));
 
 
         return hBox;
@@ -145,17 +159,21 @@ public class BookshelfView extends BorderPane {
     }
 
     private Node createTop2(String description) {
-        Button back = new Button("Return - Go back");
+        Button back = new Button("Go Back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             setCenter(createCenter());
         });
         Text t = new Text(description);
 
+        BorderPane borderPane = new BorderPane();
+        borderPane.setRight(back);
+        borderPane.setLeft(t);
+        HBox.setHgrow(borderPane,Priority.ALWAYS);
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(borderPane);
+        hBox.setPadding(new Insets(15, 12, 15, 12));
 
-        HBox hBox = new HBox(back,t);
-        hBox.setSpacing(50.0);
-        hBox.getStyleClass().add("hbTopBookshelf");
         return hBox;
     }
 
@@ -163,15 +181,18 @@ public class BookshelfView extends BorderPane {
     public Node createTop2() {
 
 
-        Button back = new Button("Return - Go back");
+        Button back = new Button("Go Back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             setCenter(createCenter());
         });
 
+        BorderPane borderPane = new BorderPane();
+        borderPane.setRight(back);
+        HBox.setHgrow(borderPane,Priority.ALWAYS);
+        HBox hBox = new HBox(borderPane);
+        hBox.setPadding(new Insets(15, 12, 15, 12));
 
-        HBox hBox = new HBox(back);
-        hBox.getStyleClass().add("hbTopBookshelf");
         return hBox;
     }
 

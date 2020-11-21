@@ -4,15 +4,14 @@ package com.Bookworm.ui.views;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.model.Tag;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import com.Bookworm.ui.widgets.StarWidget;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -32,10 +31,11 @@ public class BookInfoView extends BorderPane {
 
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 350;
-    private static final String LABEL_NO_BOOKSHELF = "Save to bookshelf...";
+    private static final String LABEL_NO_BOOKSHELF = "[No Bookshelf]";
     private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
+    private static final int ID_NO_BOOKSHELF = -5;
+    private static final int ID_DEFAULT_BOOKSHELF = -6;
 
-    ArrayList<Tag> tags;
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookWidget> books;
@@ -86,33 +86,33 @@ public class BookInfoView extends BorderPane {
     }
 
     public static void spawnWindow(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
-        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, parent);
+        spawnWindow(book, DEFAULT_WIDTH, parent);
     }
 
     public static void spawnWindow(Book book, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
-        spawnWindow(book, DEFAULT_WIDTH, DEFAULT_HEIGHT, image, parent);
+        spawnWindow(book, DEFAULT_WIDTH, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, int w, BookListWidget parent) throws SQLException, ClassNotFoundException {
         Image image = new Image(book.getImageURL());
-        spawnWindow(book, w, h, image, parent);
+        spawnWindow(book, w, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, int h, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
         ImageView imageView = new ImageView(image);
         BookInfoView bookInfoView = new BookInfoView(book, parent);
 
         Stage stage = new Stage();
         stage.setTitle(book.getName());
-        Scene scene = new Scene(bookInfoView, w, h);
+        Scene scene = new Scene(bookInfoView);
         stage.setScene(scene);
+        stage.setWidth(w);
         stage.show();
     }
 
     public HBox addHBoxTop() {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(40);
 
         //book title
 
@@ -131,18 +131,19 @@ public class BookInfoView extends BorderPane {
 
 
         //bookshelf
-        HBox bookshelfBox = new HBox();
-        ComboBox bookshelfCombo = new ComboBox();
-        HBox.setHgrow(bookshelfCombo, Priority.ALWAYS);
-        ComboBox<Bookshelf> comboBookshelf = new ComboBox<Bookshelf>();
+        BorderPane bookshelfBox = new BorderPane();
+        ComboBox<Bookshelf> comboBookshelf = new ComboBox<>();
         comboBookshelf.setPlaceholder(new Label("None"));
-      //  System.out.println(bookList.toString());
-      //  System.out.println(bookShelf.toString());
         //list stays empty need to check later
 
+        Bookshelf noBookshelf = new Bookshelf(LABEL_NO_BOOKSHELF, "", null);
+        noBookshelf.setId(ID_NO_BOOKSHELF);
+        Bookshelf defaultBookshelf = new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null);
+        defaultBookshelf.setId(ID_DEFAULT_BOOKSHELF);
+
         ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
-        list.add(0, new Bookshelf(LABEL_NO_BOOKSHELF, "", null));
-        list.add(1, new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null));
+        list.add(0, noBookshelf);
+        list.add(1, defaultBookshelf);
 
         try {
             LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
@@ -150,19 +151,17 @@ public class BookInfoView extends BorderPane {
                 list.add(bookshelf.getId(), bookshelf);
             }
 
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         comboBookshelf.setItems(list);
         comboBookshelf.getSelectionModel().select(0);
-        comboBookshelf.setConverter(new StringConverter<Bookshelf>() {
+        comboBookshelf.setConverter(new StringConverter<>() {
 
             @Override
             public String toString(Bookshelf bookshelf) {
-                if(bookshelf != null)
+                if (bookshelf != null)
                     return bookshelf.getName();
                 else
                     return null;
@@ -174,52 +173,46 @@ public class BookInfoView extends BorderPane {
             }
         });
 
+        try {
+            if(dbManager.bookAlreadySaved(book)) {
+                // needs getBookshelfByBook(Book book)!
+                comboBookshelf.setValue(defaultBookshelf);
+            } else {
+                comboBookshelf.setValue(noBookshelf);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // saving book: problem -> bookId is never assigned
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
             if(!oldVal.getName().equals(newVal.getName())) {
-                System.out.println(oldVal+" "+newVal);
-                if(oldVal.getName().equals(LABEL_NO_BOOKSHELF)) {
-                    // todo: insert book only if it really exists
+                // delete first
+                try {
+                    dbManager.deleteBook(book);
+                    if(parent != null) {
+                        List<BookWidget> books = parent.getBooks();
+
+                        books.removeIf(widget -> widget.getBook().getId() == book.getId());
+                        parent.updateList(null);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // then reinsert if needed
+
+                if(newVal.getId() != ID_NO_BOOKSHELF) {
                     try {
-                        if(dbManager.getBook(book.getName(), book.getAuthor()) == null){
-                            dbManager.insertBook(book, newVal.getName());
-                            if(parent != null) {
-                                List<BookWidget> books = parent.getBooks();
-                                books.add(new BookWidget(book));
-                                parent.updateList(null);
-                            }
-                            System.out.println("Saved book "+book.getName());
+                        dbManager.insertBook(book, newVal.getName());
+                        updateBookId();
+                        if (parent != null) {
+                            List<BookWidget> books = parent.getBooks();
+                            books.add(new BookWidget(book));
+                            parent.updateList(null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else if(newVal.getName().equals(LABEL_NO_BOOKSHELF)) {
-                    try {
-                        if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
-                            dbManager.deleteBook(book);
-                            if(parent != null) {
-                                List<BookWidget> books = parent.getBooks();
-                                Iterator<BookWidget> iter = books.iterator();
-
-                                while (iter.hasNext()) {
-                                    BookWidget widget = iter.next();
-
-                                    if (widget.getBook().getId() == book.getId()) {
-                                       iter.remove();
-                                    }
-                                }
-                                parent.updateList(null);
-                            }
-                            System.out.println("Deleted book "+book.getName());
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    //if(newVal.equals(LABEL_DEFAULT_BOOKSHELF))
-                        // setBookshelf(book, getIdFromName(name))
-                    //else
-                        // setBookshelf(book, null)
                 }
             }
         });
@@ -227,23 +220,23 @@ public class BookInfoView extends BorderPane {
 
 
 
-        bookshelfBox.setSpacing(20);
-        bookshelfBox.getChildren().addAll(comboBookshelf);
+        bookshelfBox.setRight(comboBookshelf);
 
         //Vbox for left elements
         VBox vBox = new VBox();
         vBox.setSpacing(8);
         vBox.getChildren().addAll(displayTitle, displayAuthor);
+        bookshelfBox.setLeft(vBox);
 
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(comboBookshelf);
-        hBox.setSpacing(30);
-
-
-
-        hbox.getChildren().addAll(vBox, hBox);
+        HBox.setHgrow(bookshelfBox, Priority.ALWAYS);
+        hbox.getChildren().addAll(bookshelfBox);
 
         return hbox;
+    }
+
+    private void updateBookId() throws SQLException, ClassNotFoundException {
+        int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();
+        book.setId(newId);
     }
 
     public VBox addVBox() throws SQLException, ClassNotFoundException {
@@ -255,49 +248,51 @@ public class BookInfoView extends BorderPane {
 
         //description
 
-        TextArea description = new TextArea("Short Description");
-        description.setText(book.getDescription());
+        Label description = new Label("Short Description");
+        if(book.getDescription() != null)
+            description.setText(book.getDescription());
         description.setWrapText(true);
-        //description.setPrefColumnCount(15);
         description.setFont(Font.font(null, FontWeight.NORMAL, 12));
-        description.setEditable(false);
-
+        description.getStyleClass().add("description");
+        description.setPadding(new Insets(10));
+        HBox.setHgrow(description, Priority.ALWAYS);
 
         //scroll for description textarea
 
         ScrollPane scrollPane = new ScrollPane(description);
-        scrollPane.getStyleClass().add("scrollDescription");
-        //scrollPane.setPrefSize(200,200);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.getStyleClass().add("scroll-description");
 
 
-        //Review Area
-        Label reviewLabel = new Label();
-        HBox starwidget = StarWidget.getStarWidget(this, book);
+        //Review and rating Area
         TextArea review = new TextArea("review");
-        if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
+        //in case the book is already in DB, retreives the already existing review
+        if(dbManager.bookAlreadySaved(book)) {
             review.setEditable(true);
             review.setText(dbManager.getReview(book));
-        }
-        else{
+            // override remote rating with local rating if it exists
+            book.setRating(dbManager.getRating(book));
+            book.setReview(dbManager.getReview(book));
+        } else {
             review.setText("Add the book to your library to review it!");
-            review.setEditable(false);
-
-
         }
+        //generates starwidget calling the static method getStarWidget of Starwidget class
+        HBox starwidget = StarWidget.getStarWidget(this, book);
 
-        review.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-                // this will run whenever text is changed
-                try {
+        //if review is changed, update/insert the new review in the database
+        review.textProperty().addListener((observable, oldValue, newValue) -> {
+            // this will run whenever text is changed
+            try {
+                if(dbManager.bookAlreadySaved(book)) {
+                    updateBookId();
                     dbManager.insertReview(book, review.getText());
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                } else {
+                    System.out.println("Book not saved, review has been ignored");
+                    Platform.runLater(() -> review.setText("Add the book to your library to review it!"));
                 }
+            } catch (SQLException | ClassNotFoundException throwables) {
+                throwables.printStackTrace();
             }
         });
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
@@ -324,34 +319,30 @@ public class BookInfoView extends BorderPane {
         left.getChildren().addAll(scrollPane);
 
         //image
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(220);
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(280);
         imageView.setPreserveRatio(false);
         HBox.setHgrow(imageView, Priority.ALWAYS);
         VBox.setVgrow(imageView, Priority.ALWAYS);
 
         //overall view
         HBox overall = new HBox();
+        VBox.setVgrow(overall, Priority.NEVER);
 
-        overall.setSpacing(50);
-        overall.getChildren().addAll(imageView, left, reviewBox);
+        overall.setSpacing(20);
+        overall.maxHeightProperty().bind(imageView.fitHeightProperty());
+        HBox.setHgrow(reviewBox, Priority.NEVER);
+        overall.getChildren().addAll(imageView, left, new Separator(Orientation.VERTICAL), reviewBox);
 
 
-        //tags
-        HBox tagBox = new HBox();
-        Button tagButton = new Button();
-        tagButton.setText("Tag");
 
-        tagBox.setSpacing(5);
-        tagBox.getChildren().addAll(tagButton);
-
-        vbox.getChildren().addAll(overall, tagBox);
+        vbox.getChildren().addAll(overall);
 
 
         return vbox;
     }
 
-
+//method called in StarWidget class to refresh the bookinfo window once a new rating has been inserted
     public void refresh() throws SQLException, ClassNotFoundException {
         setCenter(addVBox());
     }

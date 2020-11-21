@@ -3,7 +3,6 @@ package com.Bookworm.controller;
 import com.Bookworm.model.*;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 // implements StorageManager
@@ -20,15 +19,10 @@ public class FileManager {
         return null;
     }
 
-    //@Override
-    public ArrayList<Book> getBooksByTag(String tag) {
-        return null;
-    }
-
     //saves book in the files directory, both in default bookshelf and in the selected bookshelf, if specified
     //@Override
     public void insertBook(Book book, String bookshelf) {
-        if (bookshelf == "") {
+        if (bookshelf.equals("")) {
             Serializer.serializeBook(book, "default", 1);
         } else {
             Serializer.serializeBook(book, bookshelf, 1);
@@ -40,14 +34,14 @@ public class FileManager {
     //@Override
     public ArrayList<Bookshelf> loadBookshelves() {
         String[] bookshelvesNames = getBookshelves();
-        ArrayList<Bookshelf> bookshelves = new ArrayList();
-        for (int i = 0; i < bookshelvesNames.length; i++) {
-            Bookshelf newBookshelf = new Bookshelf(bookshelvesNames[i], "", new ArrayList<Book>());
+        ArrayList<Bookshelf> bookshelves = new ArrayList<>();
+        for (String bookshelvesName : bookshelvesNames) {
+            Bookshelf newBookshelf = new Bookshelf(bookshelvesName, "", new ArrayList<>());
             newBookshelf.setBooks(readBookshelfBooks(newBookshelf.getName()));
             bookshelves.add(newBookshelf);
             System.out.println();
             System.out.println(newBookshelf.getName() + ":");
-            for (Book book:newBookshelf.getBooks()) {
+            for (Book book : newBookshelf.getBooks()) {
                 System.out.println("\t" + book.getName());
             }
         }
@@ -62,21 +56,13 @@ public class FileManager {
         resetSystem(fileToDelete2);
         reload();
     }
-
-    //@Override
-    public void addTag(Book book, String bookshelf, String newTag) {
-        ArrayList<Tag> tags = book.getTags();
-        tags.add(new Tag(newTag));
-        book.setTags(tags);
-    }
-
     //deletes all bookshelves directories and serialized books
     //@Override
     public boolean resetSystem(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = resetSystem(new File(dir, children[i]));
+            for (String child : children) {
+                boolean success = resetSystem(new File(dir, child));
 
                 if (!success) {
                     return false;
@@ -90,23 +76,18 @@ public class FileManager {
     // gets all bookshelves names in files directory
     private static String[] getBookshelves() {
         File file = new File(pathToFilesDirectory);
-        String[] directories = file.list(new FilenameFilter() {
-            public boolean accept(File current, String name) {
-                return new File(current, name).isDirectory();
-            }
-        });
-        return directories;
+        return file.list((current, name) -> new File(current, name).isDirectory());
     }
 
     // reads all files inside of a bookshelf and deserializes Book objects
     private static ArrayList<Book> readBookshelfBooks(String bookshelfName) {
         File directoryPath = new File(pathToFilesDirectory + bookshelfName);
         //List of all files and directories
-        String contents[] = directoryPath.list();
+        String[] contents = directoryPath.list();
         ArrayList<Book> books = new ArrayList<>();
 
-        for(int i=0; i<contents.length; i++) {
-            books.add(Serializer.deserializeBook(contents[i], bookshelfName));
+        for (String content : contents) {
+            books.add(Serializer.deserializeBook(content, bookshelfName));
         }
         return books;
     }
