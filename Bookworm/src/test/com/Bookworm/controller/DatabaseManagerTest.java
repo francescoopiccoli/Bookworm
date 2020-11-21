@@ -132,15 +132,15 @@ class DatabaseManagerTest {
     // does not really test anything
     @Test
     void insertBookshelf() throws SQLException, ClassNotFoundException {
-            dbtest.insertBookshelf(bookshelf1);
-            dbtest.insertBookshelf(bookshelf2);
+        dbtest.insertBookshelf(bookshelf1);
     }
 
     // not working
     @Test
     void getBookshelfID() throws SQLException, ClassNotFoundException {
+        dbtest.insertBookshelf(bookshelf2);
         int a = dbtest.getBookshelfID("bookshelf2");
-        assertEquals(1, a);
+        assertEquals(2, a);
     }
 
     @Test

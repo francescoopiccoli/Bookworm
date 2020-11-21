@@ -5,21 +5,28 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookListView;
 import com.Bookworm.ui.views.BookshelfView;
 import com.Bookworm.ui.views.DiscoverView;
-import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.NavToggleButton;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -31,12 +38,24 @@ public class App extends Application {
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
 
-	
+    // array to keep track of all the book info views, to avoid opening two views of the same book
+    public static ArrayList<Book> openedBooks = new ArrayList<>();
+
+    public static boolean hasOpenedBook(Book book) {
+        for (Book bookToCheck: openedBooks) {
+            if (bookToCheck.getName() == book.getName() && bookToCheck.getAuthor() == book.getAuthor()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Override
     public void start(Stage stage) {
         //views.put("Home", new Label("implement me"));
         DiscoverView discoverView = new DiscoverView();
-        BookListWidget readingListWidget;
+        //BookListWidget readingListWidget;
         views.put("Discover", discoverView);
         try {
             BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
@@ -58,7 +77,14 @@ public class App extends Application {
         scene.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
+        // when you close the main app you close also all the other books
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
+
+
     
     private VBox _generateTopBar() {
 		VBox vBox = new VBox();
