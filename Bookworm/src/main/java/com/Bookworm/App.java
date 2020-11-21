@@ -2,6 +2,7 @@ package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
 import com.Bookworm.ui.views.BookListView;
 import com.Bookworm.ui.views.BookshelfView;
 import com.Bookworm.ui.views.DiscoverView;
@@ -30,7 +31,6 @@ public class App extends Application {
 	private Region currentView = new DiscoverView();
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
-
 	
     @Override
     public void start(Stage stage) {
