@@ -84,6 +84,8 @@ public class BookInfoView extends BorderPane {
         setTop(addHBoxTop());
         setCenter(addVBox());
 
+        // finally, set stylesheet of this whole window
+        getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
     }
 
     public static void spawnWindow(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
@@ -119,6 +121,7 @@ public class BookInfoView extends BorderPane {
 
     public HBox addHBoxTop() {
         HBox hbox = new HBox();
+        hbox.getStyleClass().add("book-info-banner");
         hbox.setPadding(new Insets(15, 12, 15, 12));
 
         //book title
@@ -224,9 +227,7 @@ public class BookInfoView extends BorderPane {
             }
         });
 
-
-
-
+        BorderPane.setAlignment(comboBookshelf, Pos.CENTER);
         bookshelfBox.setRight(comboBookshelf);
 
         //Vbox for left elements
