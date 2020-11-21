@@ -1,15 +1,20 @@
 package com.Bookworm.ui.widgets;
 
-import com.Bookworm.App;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +28,6 @@ public class BookListWidget extends ScrollPane {
     // by default the spawned book list will update this window, but it can be changed
     private BookListWidget parentWidget = this;
     public static final String PLACEHOLDER_IMAGE_URI = "/Images/owl_placeholder.png";
-
 
 
     public BookListWidget getParentWidget() {
@@ -107,15 +111,12 @@ public class BookListWidget extends ScrollPane {
                 )
                     continue;
 
-                // opens a window with the book - todo: One window per book!
                 b.setOnMouseClicked((event -> {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
+
                     try {
-                        if (!App.hasOpenedBook(book)) {
-                            BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
-                            App.openedBooks.add(book);
-                        }
+                        BookInfoView.spawnWindow(book, 600, 300, b.getImage(), parentWidget);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     } catch (ClassNotFoundException e) {

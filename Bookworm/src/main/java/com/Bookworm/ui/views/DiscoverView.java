@@ -4,6 +4,7 @@ import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -34,7 +35,6 @@ public class DiscoverView extends BorderPane {
     public static List<Book> bookList = new LinkedList<>();
     private boolean loadingStatus;
     private TextField searchWidget;
-    private Label searchPlaceholder;
 
     public static List<Book> getBookList() {
         return bookList;
@@ -46,9 +46,7 @@ public class DiscoverView extends BorderPane {
 
     private void setLoadingStatus(boolean loadingStatus) throws NullPointerException {
         this.loadingStatus = loadingStatus;
-        // ugly af - better have some kind of loading widget
-        searchWidget.setVisible(!loadingStatus);
-        searchPlaceholder.setVisible(loadingStatus);
+
     }
 
     private boolean getLoadingStatus() {
@@ -79,8 +77,9 @@ public class DiscoverView extends BorderPane {
     public Node createTopDisc() {
         VBox vb = new VBox();
         HBox hb = new HBox();
+        hb.setPadding(new Insets(15, 12, 15, 12));
 
-        //create group labels for text
+        //create  labels for text
 
         Label title = new Label();
         title.setText("Discover new books");
@@ -89,12 +88,11 @@ public class DiscoverView extends BorderPane {
         descriptionText.setText("Search for books and add them to your libraries");
         vb.getChildren().addAll(title,descriptionText);
         vb.setSpacing(1);
-        vb.setAlignment(Pos.TOP_LEFT);
+
         //search box
 
         searchWidget = new TextField();
         searchWidget.setEditable(true);
-        searchWidget.setPrefColumnCount(10);
         searchWidget.setOnAction(event -> {
             if (!searchWidget.getText().equals("")) {
                 RefreshThread thread = new RefreshThread(this, searchWidget.getText());
@@ -102,14 +100,13 @@ public class DiscoverView extends BorderPane {
             }
         });
 
-        //hbox for spacing
-
-        HBox spaceBox = new HBox();
-        spaceBox.setHgrow(spaceBox,Priority.ALWAYS);
-
-
-        hb.getChildren().addAll(vb,spaceBox,searchWidget);
-
+        //layout
+        BorderPane borderPane = new BorderPane();
+        borderPane.setLeft(vb);
+        borderPane.setRight(searchWidget);
+        HBox.setHgrow(borderPane,Priority.ALWAYS);
+        hb.getChildren().addAll(borderPane);
+       // hb.setStyle("-fx-background-color: #A9A9A9;");
 
         return hb;
     }

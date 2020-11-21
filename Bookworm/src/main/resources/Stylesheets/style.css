@@ -34,27 +34,23 @@
 
     -fx-padding: 25 0 0 5;
 }
-.scrollpane{
-
-
+.description{
+    -fx-border-width: 0;
 }
 
-.scrollDescription{
-        -fx-focus-color: transparent;
-        -fx-padding: 2.25;
-        -fx-pref-width:16.5;
-        -fx-vbar-policy:always;
-        -fx-hbar-policy: never;
-
-
-
+.scroll-description{
+    -fx-focus-color: transparent;
+    -fx-padding: 2.25;
+    -fx-pref-width:16.5;
+    -fx-vbar-policy:always;
+    -fx-hbar-policy: never;
 }
 .scrollReview {
-        -fx-focus-color: transparent;
-        -fx-padding: 2.25;
-        -fx-pref-width:16.5;
-        -fx-vbar-policy:always;
-        -fx-hbar-policy:never;
+    -fx-focus-color: transparent;
+    -fx-padding: 2.25;
+    -fx-pref-width:16.5;
+    -fx-vbar-policy:always;
+    -fx-hbar-policy:never;
 }
 .display {
     -fx-font-family: "Helvetica";

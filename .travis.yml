@@ -1,9 +1,7 @@
 language: Java
 jdk: 
   - openjdk13
-sudo: false # faster builds
 script:
   - cd Bookworm
-  - mvn clean install
-notifications: 
-  email: xfrancescopiccolix@gmail.com
+  - mvn clean install -X
+  - mvn test -B
