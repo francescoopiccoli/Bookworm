@@ -17,7 +17,7 @@ public class GUItests {
     static Book book5 = new Book("history5", "peppa5", "null4");
 
     @BeforeAll
-    static void setUp() {
+    public static void setUp() {
         App.openedBooks.add(book);
         App.openedBooks.add(book2);
         book3.setId(2);
@@ -27,24 +27,24 @@ public class GUItests {
     }
 
     @Test
-    void hasOpenedBookWithoutId() {
+    public void hasOpenedBookWithoutId() {
         assertTrue(App.hasOpenedBook(book2));
     }
 
     @Test
-    void hasOpenedBookWithoutId2() {
+    public void hasOpenedBookWithoutId2() {
         assertFalse(App.hasOpenedBook(book5));
     }
 
 
     @Test
-    void hasOpenedBookWithId() {
+    public void hasOpenedBookWithId() {
         assertTrue(App.hasOpenedBook(book3));
     }
 
 
     @AfterAll
-    static void tearDown() {
+    public static void tearDown() {
         App.openedBooks.remove(book);
         App.openedBooks.remove(book2);
         App.openedBooks.remove(book3);

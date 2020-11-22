@@ -5,15 +5,15 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.testing.json.GoogleJsonResponseExceptionFactoryTesting;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.books.Books;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class GoogleBooksClientUnitTest {
+public class GoogleBooksClientUnitTest {
 
     private static final JsonFactory JSON_FACTORY = new JacksonFactory().getDefaultInstance();
     private static final int HTTP_CODE_NOT_FOUND = 404;
@@ -25,7 +25,7 @@ class GoogleBooksClientUnitTest {
     private static final String query="book";
 
     @Test
-    void connectToAPI() throws IOException {
+    public void connectToAPI() throws IOException {
         //check json factory object is not null
         assertNotNull(JSON_FACTORY);
 
@@ -38,14 +38,14 @@ class GoogleBooksClientUnitTest {
     }
 
     @Test
-    void getFoundBooks() throws Exception {
+    public void getFoundBooks() throws Exception {
         testFoundBook = googleBooksClient.getFoundBooks(JSON_FACTORY, query);
         assertNotNull(testFoundBook);
     }
 
     @Test
 
-    void searchBooks() throws Exception {
+    public void searchBooks() throws Exception {
         testSearchBook = googleBooksClient.searchBooks(query);
         assertNotNull(testSearchBook);
     }

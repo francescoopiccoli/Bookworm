@@ -2,6 +2,9 @@ package com.Bookworm.controller;
 
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -10,63 +13,63 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class DatabaseManagerTest {
+public class DatabaseManagerTest {
     // copy and paste DatabaseManager in DatabaseManagerTest and change name to the database to create
     // a new database only for tests
     // use methods of DatabaseManagerTest
     // i think insertBook is not working
-    DatabaseManager dbtest = DatabaseManager.getInstance();
-    Book book1 = new Book("The Great Gatsby", "Francis Scott Fitzgerald", "");
-    Book book2 = new Book("War and Peace", "A thicc big book", "Lev Tolstoj");
-    Book book3 = new Book("The Lord of the Rings", "J. R. R. Tolkien", "A damn epic book");
-    Book book4 = new Book("The Greeeeeat Gatsby", "Non esiste, non inserirmi", "");
-    Bookshelf bookshelf1 = new Bookshelf("bookshelf1", "test");
-    Bookshelf bookshelf2 = new Bookshelf("bookshelf2", "test2");
+    static DatabaseManager dbtest = DatabaseManager.getInstance();
+    static Book book1 = new Book("The Great Gatsby", "Francis Scott Fitzgerald", "");
+    static Book book2 = new Book("War and Peace", "A thicc big book", "Lev Tolstoj");
+    static Book book3 = new Book("The Lord of the Rings", "J. R. R. Tolkien", "A damn epic book");
+    static Book book4 = new Book("The Greeeeeat Gatsby", "Non esiste, non inserirmi", "");
+    static Bookshelf bookshelf1 = new Bookshelf("bookshelf1", "test");
+    static Bookshelf bookshelf2 = new Bookshelf("bookshelf2", "test2");
 
-    @Test
-    void setUp() throws SQLException, ClassNotFoundException {
+    @BeforeAll
+    public static void setUp() throws SQLException, ClassNotFoundException {
         dbtest.insertBook(book1, "FirstBookshelf");
         dbtest.insertBook(book2, "FirstBookshelf");
         dbtest.insertBook(book3, "FirstBookshelf");
     }
 
     @Test
-    void getBook() throws SQLException, ClassNotFoundException {
+    public void getBook() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getBook("The Great Gatsby", "Francis Scott Fitzgerald"), "Book has been inserted in setUp");
     }
     @Test
-    void getBook2() throws SQLException, ClassNotFoundException {
+    public void getBook2() throws SQLException, ClassNotFoundException {
         assertNull(dbtest.getBook("does not exist", "Francis Scott Fitzgerald"));
     }
 
     @Test
-    void getBooks() throws SQLException, ClassNotFoundException {
+    public void getBooks() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getBooks(), "List of book cannot be null ");
     }
 
 
     @Test
-   void getRewiew() throws SQLException, ClassNotFoundException {
+    public void getRewiew() throws SQLException, ClassNotFoundException {
         assertNull(dbtest.getReview(null));
    }
 
    @Test
-   void getRewiew2() throws SQLException, ClassNotFoundException {
+   public void getRewiew2() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getReview(book1));
     }
 
     @Test
-    void getRating() throws SQLException, ClassNotFoundException {
+    public void getRating() throws SQLException, ClassNotFoundException {
         assertEquals(0, dbtest.getRating(book1));
     }
 
     @Test
-    void getRatingNull() throws SQLException, ClassNotFoundException {
+    public void getRatingNull() throws SQLException, ClassNotFoundException {
         assertEquals(-1, dbtest.getRating(null));
     }
 
     @Test
-    void getAuthors() throws SQLException, ClassNotFoundException {
+    public void getAuthors() throws SQLException, ClassNotFoundException {
         List<String> authorList = dbtest.getAuthors();
         if (authorList == null || authorList.isEmpty()) {
             fail("Author List cannot be neither null nor empty, since books have been inserted");
@@ -74,17 +77,17 @@ class DatabaseManagerTest {
     }
 
     @Test
-    void getBookshelves() throws SQLException, ClassNotFoundException {
+    public void getBookshelves() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getBookShelves(), "The list of bookshelf cannot be null");
     }
 
     @Test
-    void bookAlreadySaved() throws SQLException, ClassNotFoundException {
+    public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
         assertTrue(dbtest.bookAlreadySaved(book1));
     }
 
     @Test
-    void bookAlreadySaved2() throws SQLException, ClassNotFoundException {
+    public void bookAlreadySaved2() throws SQLException, ClassNotFoundException {
         assertFalse(dbtest.bookAlreadySaved(book4));
     }
 
@@ -95,8 +98,8 @@ class DatabaseManagerTest {
     //       fail("The list of tags cannot be null");
     //   }
     //}
-    @Test
-    void insertBookNullPointerException() throws SQLException, ClassNotFoundException {
+    @Disabled
+    public void insertBookNullPointerException() throws SQLException, ClassNotFoundException {
         try {
             dbtest.insertBook(null, "");
             dbtest.insertBook(book1, null);
@@ -107,7 +110,7 @@ class DatabaseManagerTest {
 
     // issues with book.getId, ALWAYS call getBook(book) before referencing to its ID
     @Test
-    void insertRating() throws SQLException, ClassNotFoundException {
+    public void insertRating() throws SQLException, ClassNotFoundException {
         Book book12 = dbtest.getBook("The Great Gatsby", "Francis Scott Fitzgerald");
         dbtest.insertRating(book12, 5);
         System.out.println(dbtest.getRating(book12));
@@ -116,12 +119,12 @@ class DatabaseManagerTest {
 
     //a response is shown in the console, but no error is thrown
     @Test
-    void insertRating2() throws SQLException, ClassNotFoundException {
+    public void insertRating2() throws SQLException, ClassNotFoundException {
         dbtest.insertRating(null, 5);
     }
 
     @Test
-    void insertBookshelfNullPointerException() throws SQLException, ClassNotFoundException {
+    public void insertBookshelfNullPointerException() throws SQLException, ClassNotFoundException {
         try {
            dbtest.insertBookshelf(null);
         } catch (NullPointerException e) {
@@ -131,25 +134,25 @@ class DatabaseManagerTest {
 
     // does not really test anything
     @Test
-    void insertBookshelf() throws SQLException, ClassNotFoundException {
+    public void insertBookshelf() throws SQLException, ClassNotFoundException {
         dbtest.insertBookshelf(bookshelf1);
     }
 
     // not working
     @Test
-    void getBookshelfID() throws SQLException, ClassNotFoundException {
+    public void getBookshelfID() throws SQLException, ClassNotFoundException {
         dbtest.insertBookshelf(bookshelf2);
         int a = dbtest.getBookshelfID("bookshelf2");
         assertEquals(2, a);
     }
 
     @Test
-    void insertReview() throws SQLException, ClassNotFoundException {
+    public void insertReview() throws SQLException, ClassNotFoundException {
             dbtest.insertReview(book1, "Made me cry");
     }
 
-    @Test
-    void tearDown() throws SQLException, ClassNotFoundException {
+    @AfterAll
+    public static void tearDown() throws SQLException, ClassNotFoundException {
         Book book12 = dbtest.getBook("The Great Gatsby", "Francis Scott Fitzgerald");
         Book book22 = dbtest.getBook("War and Peace", "A thicc big book");
         Book book32 = dbtest.getBook("The Lord of the Rings", "J. R. R. Tolkien");
