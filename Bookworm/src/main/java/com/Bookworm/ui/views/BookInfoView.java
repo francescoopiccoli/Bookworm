@@ -178,9 +178,14 @@ public class BookInfoView extends BorderPane {
         });
 
         try {
+            updateBookId();
             if(dbManager.bookAlreadySaved(book)) {
-                // needs getBookshelfByBook(Book book)!
+                int id = dbManager.getBookshelfIdByBook(book);
                 comboBookshelf.setValue(defaultBookshelf);
+                for(Bookshelf bs : comboBookshelf.getItems()) {
+                    if(bs.getId() == id)
+                        comboBookshelf.setValue(bs);
+                }
             } else {
                 comboBookshelf.setValue(noBookshelf);
             }

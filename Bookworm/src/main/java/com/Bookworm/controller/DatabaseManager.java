@@ -238,6 +238,36 @@ public class DatabaseManager implements BookStorage {
         }
     }
 
+    public int getBookshelfIdByBook(Book b) throws SQLException, ClassNotFoundException {
+        try {
+            if (con == null || con.isClosed()) {
+                getConnection();
+            }
+            ps = con.prepareStatement("SELECT bookshelfID FROM Book WHERE id = ?;");
+            ps.setInt(1, b.getId());
+            res = ps.executeQuery();
+            //res.isClosed == nothing found
+            if (res.isClosed()) {
+                return -1;
+            }
+            if(res.getBoolean(1)) // not null
+                return res.getInt(1);
+            else
+                return -1;
+        } catch(NullPointerException e) {
+            return -1;
+        } finally {
+            if (ps != null) {
+                ps.close();
+            }
+            if (res != null) {
+                res.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
 
     //retrieves the rating of the specified book
     public int getRating(Book b) throws SQLException, ClassNotFoundException {
@@ -370,9 +400,7 @@ public class DatabaseManager implements BookStorage {
     }
 
     public boolean bookAlreadySaved(Book book) throws SQLException, ClassNotFoundException {
-        if (getBook(book.getName(), book.getAuthor()) != null)
-            return true;
-        return false;
+        return (getBook(book.getName(), book.getAuthor()) != null);
     }
 
     //since bookshelf is not an attribute of Book, it has to be passed as parameter
