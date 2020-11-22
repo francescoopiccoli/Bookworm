@@ -31,7 +31,6 @@ public class BookInfoView extends BorderPane {
 
 
     private static final int DEFAULT_WIDTH = 600;
-    private static final int DEFAULT_HEIGHT = 350;
     private static final String LABEL_NO_BOOKSHELF = "[No Bookshelf]";
     private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
     private static final int ID_NO_BOOKSHELF = -5;
@@ -40,8 +39,8 @@ public class BookInfoView extends BorderPane {
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookWidget> books;
-    private Book book;
-    private BookListWidget parent;
+    private final Book book;
+    private final BookListWidget parent;
     ImageView imageView;
     public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
 
@@ -107,33 +106,28 @@ public class BookInfoView extends BorderPane {
             //ImageView imageView = new ImageView(image);
             BookInfoView bookInfoView = new BookInfoView(book, parent);
             Stage stage = new Stage();
-            stage.setTitle(book.getName());
+            stage.setTitle(book.getAuthor() + " - " + book.getName());
             Scene scene = new Scene(bookInfoView);
             stage.setScene(scene);
             stage.setWidth(w);
             stage.show();
             // when the window is closed, book is removed from App.openedBooks
-            stage.setOnCloseRequest(e -> {
-                App.openedBooks.remove(book);
-            });
+            stage.setOnCloseRequest(e -> App.openedBooks.remove(book));
         }
     }
 
     public HBox addHBoxTop() {
         HBox hbox = new HBox();
         hbox.getStyleClass().add("book-info-banner");
-        hbox.setPadding(new Insets(15, 12, 15, 12));
+        hbox.setPadding(new Insets(20));
 
         //book title
-
         Label displayTitle = new Label();
         displayTitle.setText(book.getName());
         displayTitle.getStyleClass().add("display");
         displayTitle.setFont(Font.font("Cantarell", FontWeight.BOLD, 18));
 
-
         //book author
-
         Label displayAuthor = new Label();
         displayAuthor.setText(book.getAuthor());
         displayAuthor.getStyleClass().add("display");
