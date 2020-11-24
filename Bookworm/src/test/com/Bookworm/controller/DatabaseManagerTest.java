@@ -36,9 +36,6 @@ public class DatabaseManagerTest {
     @Test
     public void getBook() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getBook("The Great Gatsby", "Francis Scott Fitzgerald"), "Book has been inserted in setUp");
-    }
-    @Test
-    public void getBook2() throws SQLException, ClassNotFoundException {
         assertNull(dbtest.getBook("does not exist", "Francis Scott Fitzgerald"));
     }
 
@@ -51,20 +48,12 @@ public class DatabaseManagerTest {
     @Test
     public void getRewiew() throws SQLException, ClassNotFoundException {
         assertNull(dbtest.getReview(null));
-   }
-
-   @Test
-   public void getRewiew2() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getReview(book1));
-    }
+   }
 
     @Test
     public void getRating() throws SQLException, ClassNotFoundException {
         assertEquals(0, dbtest.getRating(book1));
-    }
-
-    @Test
-    public void getRatingNull() throws SQLException, ClassNotFoundException {
         assertEquals(-1, dbtest.getRating(null));
     }
 
@@ -84,20 +73,9 @@ public class DatabaseManagerTest {
     @Test
     public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
         assertTrue(dbtest.bookAlreadySaved(book1));
-    }
-
-    @Test
-    public void bookAlreadySaved2() throws SQLException, ClassNotFoundException {
         assertFalse(dbtest.bookAlreadySaved(book4));
     }
 
-    //@Test
-    //void makeTags() throws SQLException {
-    //    List<Tag> tagList = dbtest.getTags();
-    //   if (tagList == null) {
-    //       fail("The list of tags cannot be null");
-    //   }
-    //}
     @Disabled
     public void insertBookNullPointerException() throws SQLException, ClassNotFoundException {
         try {
@@ -115,35 +93,22 @@ public class DatabaseManagerTest {
         dbtest.insertRating(book12, 5);
         System.out.println(dbtest.getRating(book12));
         assertEquals(5, dbtest.getRating(book12));
-    }
-
-    //a response is shown in the console, but no error is thrown
-    @Test
-    public void insertRating2() throws SQLException, ClassNotFoundException {
+        //a response is shown in the console, but no error is thrown
         dbtest.insertRating(null, 5);
-    }
-
-    @Test
-    public void insertBookshelfNullPointerException() throws SQLException, ClassNotFoundException {
-        try {
-           dbtest.insertBookshelf(null);
-        } catch (NullPointerException e) {
-            fail("No exception should be thrown");
-        }
-    }
-
-    // does not really test anything
-    @Test
-    public void insertBookshelf() throws SQLException, ClassNotFoundException {
-        dbtest.insertBookshelf(bookshelf1);
     }
 
     // not working
     @Disabled
     public void getBookshelfID() throws SQLException, ClassNotFoundException {
+        dbtest.insertBookshelf(bookshelf1);
         dbtest.insertBookshelf(bookshelf2);
         int a = dbtest.getBookshelfID("bookshelf2");
         assertEquals(2, a);
+        try {
+            dbtest.insertBookshelf(null);
+        } catch (NullPointerException e) {
+            fail("No exception should be thrown");
+        }
     }
 
     @Test
