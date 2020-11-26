@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
@@ -37,19 +38,19 @@ public class App extends Application {
 	private Region currentView = new DiscoverView();
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
+	private ToggleGroup toggleGroup;
 
     // array to keep track of all the book info views, to avoid opening two views of the same book
-    public static ArrayList<Book> openedBooks = new ArrayList<Book>();
+    public static ArrayList<Book> openedBooks = new ArrayList<>();
 
     // does not work idk why - TO TEST
     public static boolean hasOpenedBook(Book book) {
         System.out.println("Checking if book was already opened...");
-        for (int i = 0; i < openedBooks.size(); i++){
-            if (book.getId() > 0 && openedBooks.get(i).getId() == book.getId()) {
+        for (Book openedBook : openedBooks) {
+            if (book.getId() > 0 && openedBook.getId() == book.getId()) {
                 System.out.println("WAS PRESENT with id");
                 return true;
-            }
-            else if (openedBooks.get(i).getName() == book.getName() && openedBooks.get(i).getAuthor() == book.getAuthor()) {
+            } else if (openedBook.getName().equals(book.getName()) && openedBook.getAuthor().equals(book.getAuthor())) {
                 System.out.println("WAS PRESENT with name and author");
                 return true;
             }
@@ -67,18 +68,15 @@ public class App extends Application {
             BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
             views.put("My Books", readingListView);
             discoverView.setMyBooksWidget(readingListView.getListWidget());
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         views.put("Bookshelves", new BookshelfView());
-        //views.put("Settings", new DiscoverView()); -> reset library ; about / info ; ...?
 
         mainPane = new BorderPane();
         mainPane.setTop(_generateTopBar());
-        mainPane.setCenter(_generateContent(""));
         mainPane.setBottom(_generateSidebar());
+        mainPane.setCenter(_generateContent("Discover"));
         var scene = new Scene(mainPane, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
         stage.setScene(scene);
@@ -106,11 +104,22 @@ public class App extends Application {
     private Region _generateContent(String name) {
         for (Map.Entry<String, Region> entry : views.entrySet()) {
             if (entry.getKey().equals(name)) {
+                _selectButton(name);
                 return entry.getValue();
             }
         }
         // default
-        return new Label("Hi! Select a view to start");
+        return new Label("View not found");
+    }
+
+    private void _selectButton(String name) {
+        if(toggleGroup != null) {
+            for (Toggle toggle : toggleGroup.getToggles()) {
+                ToggleButton button = (ToggleButton) toggle; // we assume all to be buttons
+                if (button.getText().equals(name) && !button.isSelected())
+                    button.setSelected(true);
+            }
+        }
     }
 	
 	private HBox _generateSidebar() {
@@ -119,7 +128,7 @@ public class App extends Application {
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(8);
 
-        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
 
 
         for (Map.Entry<String, Region> entry : views.entrySet()) {
