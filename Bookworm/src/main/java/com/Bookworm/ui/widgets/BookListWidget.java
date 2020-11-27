@@ -25,6 +25,7 @@ public class BookListWidget extends ScrollPane {
     public static final String PLACEHOLDER_IMAGE_URI = "/Images/owl_placeholder.png";
 
 
+
     public BookListWidget getParentWidget() {
         return parentWidget;
     }
