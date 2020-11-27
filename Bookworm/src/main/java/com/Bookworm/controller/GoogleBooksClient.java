@@ -26,7 +26,6 @@ import com.google.api.services.books.model.Volumes;
 import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.text.NumberFormat;
 
 public class GoogleBooksClient {
@@ -39,7 +38,7 @@ public class GoogleBooksClient {
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
   public static LinkedList<Book> foundBooks;
 
-  public static Books connectToAPI(JsonFactory jsonFactory) {
+  public static Books connectToAPI(JsonFactory jsonFactory){
     try {
       return new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
               .setApplicationName(APPLICATION_NAME)
@@ -57,7 +56,7 @@ public class GoogleBooksClient {
 
 
   //method called by searchBooks to find all books given the  query written in a formal way
-  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
+  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception, NullPointerException {
 
     final Books books = connectToAPI(jsonFactory);
 

@@ -41,7 +41,7 @@ public class App extends Application {
 	private ToggleGroup toggleGroup;
 
     // array to keep track of all the book info views, to avoid opening two views of the same book
-    public static ArrayList<Book> openedBooks = new ArrayList<>();
+    public static final ArrayList<Book> openedBooks = new ArrayList<>();
 
     // does not work idk why - TO TEST
     public static boolean hasOpenedBook(Book book) {
