@@ -105,7 +105,7 @@ public class App extends Application {
     private Region _generateContent(String name) {
         for (Map.Entry<String, Region> entry : views.entrySet()) {
             if (entry.getKey().equals(name)) {
-                select_Button(name);
+                selectButton(name);
                 return entry.getValue();
             }
         }
@@ -113,7 +113,7 @@ public class App extends Application {
         return new Label("View not found");
     }
 
-    private void select_Button(String name) {
+    private void selectButton(String name) {
         if(toggleGroup != null) {
             for (Toggle toggle : toggleGroup.getToggles()) {
                 ToggleButton button = (ToggleButton) toggle; // we assume all to be buttons

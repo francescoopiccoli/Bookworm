@@ -37,8 +37,9 @@ public class GoogleBooksClient {
   private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
   public static LinkedList<Book> foundBooks;
+  
 
-  public static Books connectToAPI(JsonFactory jsonFactory){
+  public static Books connectToAPI(JsonFactory jsonFactory) {
     try {
       return new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
               .setApplicationName(APPLICATION_NAME)
@@ -56,7 +57,7 @@ public class GoogleBooksClient {
 
 
   //method called by searchBooks to find all books given the  query written in a formal way
-  public static List<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws  IOException {
+  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception {
 
     final Books books = connectToAPI(jsonFactory);
 

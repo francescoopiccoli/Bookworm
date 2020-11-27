@@ -38,7 +38,7 @@ public class GoogleBooksClientUnitTest {
     }
 
     @Test
-    public void getFoundBooks() throws NullPointerException, IOException  {
+    public void getFoundBooks() throws NullPointerException, IOException, Exception  {
         testFoundBook = googleBooksClient.getFoundBooks(JSON_FACTORY, query);
         assertNotNull(testFoundBook);
     }
