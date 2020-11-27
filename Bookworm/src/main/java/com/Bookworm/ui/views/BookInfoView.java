@@ -152,7 +152,7 @@ public class BookInfoView extends BorderPane {
         deleteButton.setOnMouseClicked(event -> {
             try {
                 dbManager.deleteBook(book);
-                book.setId(-1);
+                //book.setId(-1);
                 if(parent != null) {
                     List<BookWidget> books = parent.getBooks();
                     books.removeIf(widget -> widget.getBook().getId() == book.getId());
@@ -162,10 +162,35 @@ public class BookInfoView extends BorderPane {
                 throwables.printStackTrace();
             }
         });
+        Label spaceNeededLabel = new Label();
         //no margin or float in javafx, only way to align on the right the delete button :-)
-        Label emptyLabel = new Label("                            ");
+        try {
+            LinkedList<Bookshelf> bookshelves = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+            LinkedList<String> bookshelfNamesString = new LinkedList<>();
+            for(Bookshelf b : bookshelves){
+                bookshelfNamesString.add(b.getName());
+            }
+            int largestString = bookshelfNamesString.get(0).length();
+            int index = 0;
+
+            for(int i = 0; i < bookshelfNamesString.size(); i++)
+            {
+                if(bookshelfNamesString.get(i).length() > largestString)
+                {
+                    largestString = bookshelfNamesString.get(i).length();
+                    index = i;
+                }
+            }
+            spaceNeededLabel = new Label(bookshelfNamesString.get(index).substring(1));
+            spaceNeededLabel.setVisible(false);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         HBox deleteButtonWorkaround = new HBox();
-        deleteButtonWorkaround.getChildren().addAll(emptyLabel, deleteButton);
+        deleteButtonWorkaround.getChildren().addAll(spaceNeededLabel, deleteButton);
 
         ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
 
@@ -183,8 +208,23 @@ public class BookInfoView extends BorderPane {
             throwables.printStackTrace();
         }
 
-        comboBookshelf.setItems(list);
-        comboBookshelf.getSelectionModel().select(0);
+        try {
+            if(dbManager.getBook(book.getName(), book.getAuthor()) == null){
+                comboBookshelf.setItems(list);
+                comboBookshelf.getSelectionModel().select(0);
+            }
+            else{
+
+                list.remove(0);
+                comboBookshelf.setItems(list);
+                comboBookshelf.getSelectionModel().select(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         comboBookshelf.setConverter(new StringConverter<>() {
 
             @Override
