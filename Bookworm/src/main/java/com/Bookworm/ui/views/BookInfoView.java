@@ -39,7 +39,7 @@ public class BookInfoView extends BorderPane {
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
     private  List<BookWidget> books;
-    private final Book book;
+    private Book book;
     private final BookListWidget parent;
     ImageView imageView;
     public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)
@@ -152,15 +152,14 @@ public class BookInfoView extends BorderPane {
         deleteButton.setOnMouseClicked(event -> {
             try {
                 dbManager.deleteBook(book);
+                book.setId(-1);
                 if(parent != null) {
                     List<BookWidget> books = parent.getBooks();
                     books.removeIf(widget -> widget.getBook().getId() == book.getId());
                     parent.updateList(null);
                 }
-            } catch (SQLException throwables) {
+            } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
         });
         //no margin or float in javafx, only way to align on the right the delete button :-)
@@ -230,6 +229,7 @@ public class BookInfoView extends BorderPane {
                         books.removeIf(widget -> widget.getBook().getId() == book.getId());
                         parent.updateList(null);
                     }
+                    book.setId(-1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -260,10 +260,8 @@ public class BookInfoView extends BorderPane {
             else{
                 rightElements.getChildren().addAll(comboBookshelf);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         bookshelfBox.setRight(rightElements);
 
@@ -281,8 +279,10 @@ public class BookInfoView extends BorderPane {
     }
 
     private void updateBookId() throws SQLException, ClassNotFoundException {
-        int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();
-        book.setId(newId);
+        int newId = -1;
+        Book localBook = dbManager.getBook(book.getName(), book.getAuthor());
+        if(localBook != null)
+            book = localBook;
     }
 
     public VBox addVBox() throws SQLException, ClassNotFoundException {
