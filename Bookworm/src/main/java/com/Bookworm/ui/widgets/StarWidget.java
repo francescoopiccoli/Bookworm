@@ -28,13 +28,19 @@ public class StarWidget {
     private static BookInfoView parent;
 
     //generate the correct widget: according to the rating, draw the correct number of filled / empty stars
-    private static HBox generateWidget() throws SQLException, ClassNotFoundException {
+    private static HBox generateWidget(){
 
-        if(db.getBook(book.getName(), book.getAuthor()) != null){
-            rating = db.getBook(book.getName(), book.getAuthor()).getRating();
-        }
-        else{
-            rating = book.getRating();
+        try {
+            if(db.getBook(book.getName(), book.getAuthor()) != null){
+                rating = db.getBook(book.getName(), book.getAuthor()).getRating();
+            }
+            else{
+                rating = book.getRating();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         for(int i = 0; i < 5; i++){
@@ -76,15 +82,21 @@ public class StarWidget {
 
 
     //updates bookinfo by inserting new rating value in the database and refreshing the bookinfo window
-    private static void updateWidget(int newRating) throws SQLException, ClassNotFoundException {
-        db.insertRating(book, newRating);
+    private static void updateWidget(int newRating){
+        try {
+            db.insertRating(book, newRating);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         rating = newRating;
         parent.refresh();
     }
 
 
     //method called in bookinfo to create the initial starwidget
-    public static HBox getStarWidget(BookInfoView parentView, Book b) throws SQLException, ClassNotFoundException {
+    public static HBox getStarWidget(BookInfoView parentView, Book b){
         book = b;
         parent = parentView;
         starWidgetBox = new HBox();

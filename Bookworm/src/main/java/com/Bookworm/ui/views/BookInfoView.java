@@ -69,7 +69,7 @@ public class BookInfoView extends BorderPane {
     }
 
 
-    public BookInfoView(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public BookInfoView(Book book, BookListWidget parent){
         this.book = book;
         this.parent = parent;
         Image image;
@@ -87,20 +87,20 @@ public class BookInfoView extends BorderPane {
         getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
     }
 
-    public static void spawnWindow(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, BookListWidget parent){
         spawnWindow(book, DEFAULT_WIDTH, parent);
     }
 
-    public static void spawnWindow(Book book, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, Image image, BookListWidget parent){
         spawnWindow(book, DEFAULT_WIDTH, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, int w, BookListWidget parent){
         Image image = new Image(book.getImageURL());
         spawnWindow(book, w, image, parent);
     }
 
-    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
+    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent){
         if (!App.hasOpenedBook(book)) {
             App.openedBooks.add(book);
             //ImageView imageView = new ImageView(image);
@@ -278,14 +278,21 @@ public class BookInfoView extends BorderPane {
         return hbox;
     }
 
-    private void updateBookId() throws SQLException, ClassNotFoundException {
+    private void updateBookId(){
         int newId = -1;
-        Book localBook = dbManager.getBook(book.getName(), book.getAuthor());
+        Book localBook = null;
+        try {
+            localBook = dbManager.getBook(book.getName(), book.getAuthor());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if(localBook != null)
             book = localBook;
     }
 
-    public VBox addVBox() throws SQLException, ClassNotFoundException {
+    public VBox addVBox(){
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(5);
@@ -314,17 +321,24 @@ public class BookInfoView extends BorderPane {
         //Review and rating Area
         TextArea review = new TextArea("review");
         //in case the book is already in DB, retreives the already existing review
-        if(dbManager.bookAlreadySaved(book)) {
-            review.setEditable(true);
-            review.setText(dbManager.getReview(book));
-            // override remote rating with local rating if it exists
-            book.setRating(dbManager.getRating(book));
-            book.setReview(dbManager.getReview(book));
-        } else {
-            review.setText("Add the book to your library to review it!");
+        try {
+            if(dbManager.bookAlreadySaved(book)) {
+                review.setEditable(true);
+                review.setText(dbManager.getReview(book));
+                // override remote rating with local rating if it exists
+                book.setRating(dbManager.getRating(book));
+                book.setReview(dbManager.getReview(book));
+            } else {
+                review.setText("Add the book to your library to review it!");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         //generates starwidget calling the static method getStarWidget of Starwidget class
-        HBox starwidget = StarWidget.getStarWidget(this, book);
+        HBox starwidget = null;
+        starwidget = StarWidget.getStarWidget(this, book);
 
         //if review is changed, update/insert the new review in the database
         review.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -389,7 +403,7 @@ public class BookInfoView extends BorderPane {
     }
 
 //method called in StarWidget class to refresh the bookinfo window once a new rating has been inserted
-    public void refresh() throws SQLException, ClassNotFoundException {
+    public void refresh(){
         setCenter(addVBox());
     }
 }

@@ -112,13 +112,7 @@ public class BookListWidget extends ScrollPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    try {
-                        BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
                 }));
 
                 HBox.setMargin(b, new Insets(20));
