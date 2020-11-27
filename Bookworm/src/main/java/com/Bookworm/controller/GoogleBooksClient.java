@@ -56,7 +56,7 @@ public class GoogleBooksClient {
 
 
   //method called by searchBooks to find all books given the  query written in a formal way
-  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception, NullPointerException {
+  public static List<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws  IOException {
 
     final Books books = connectToAPI(jsonFactory);
 
