@@ -4,6 +4,7 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,11 +61,12 @@ public class BookListWidget extends ScrollPane {
 
             image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));
             imageView = new ImageView(this.image);
-            imageView.setFitHeight(250);
-            imageView.setFitWidth(500);
+            imageView.setFitHeight(105);
+            imageView.setFitWidth(120);
+            Label l = new Label("Add a book to start!");
             VBox centerVBox = new VBox();
             HBox hBox = new HBox();
-            centerVBox.getChildren().addAll(hBox, imageView);
+            centerVBox.getChildren().addAll(hBox, imageView, l);
             centerVBox.setSpacing(50);
             centerVBox.setAlignment(Pos.BASELINE_CENTER);
             setContent(centerVBox);
