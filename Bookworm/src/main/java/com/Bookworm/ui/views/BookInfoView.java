@@ -145,7 +145,32 @@ public class BookInfoView extends BorderPane {
         Bookshelf defaultBookshelf = new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null);
         defaultBookshelf.setId(ID_DEFAULT_BOOKSHELF);
 
+        VBox rightElements = new VBox();
+        Button deleteButton = new Button("Delete");
+        deleteButton.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
+        deleteButton.getStyleClass().add("deleteButton");
+        deleteButton.setOnMouseClicked(event -> {
+            try {
+                dbManager.deleteBook(book);
+                if(parent != null) {
+                    List<BookWidget> books = parent.getBooks();
+                    books.removeIf(widget -> widget.getBook().getId() == book.getId());
+                    parent.updateList(null);
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+        //no margin or float in javafx, only way to align on the right the delete button :-)
+        Label emptyLabel = new Label("                            ");
+        HBox deleteButtonWorkaround = new HBox();
+        deleteButtonWorkaround.getChildren().addAll(emptyLabel, deleteButton);
+
         ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
+
+
         list.add(0, noBookshelf);
         list.add(1, defaultBookshelf);
 
@@ -227,7 +252,21 @@ public class BookInfoView extends BorderPane {
         });
 
         BorderPane.setAlignment(comboBookshelf, Pos.CENTER);
-        bookshelfBox.setRight(comboBookshelf);
+        //show delete button only if book exists in database
+        try {
+            if(dbManager.getBook(book.getName(), book.getAuthor()) != null){
+                rightElements.getChildren().addAll(comboBookshelf, deleteButtonWorkaround);
+            }
+            else{
+                rightElements.getChildren().addAll(comboBookshelf);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        bookshelfBox.setRight(rightElements);
+
 
         //Vbox for left elements
         VBox vBox = new VBox();
