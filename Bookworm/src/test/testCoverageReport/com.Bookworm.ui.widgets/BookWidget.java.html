@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookWidget.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.widgets</a> &gt; <span class="el_source">BookWidget.java</span></div><h1>BookWidget.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.widgets;
+
+import com.Bookworm.model.Book;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
+public class BookWidget extends BorderPane {
+    public static final String PLACEHOLDER_IMAGE_URI = &quot;/Images/placeholder.png&quot;;
+
+    Book book;
+    private Image image;
+    private ImageView imageView;
+
+<span class="nc" id="L20">    public BookWidget(Book book) {</span>
+<span class="nc" id="L21">        this.book = book;</span>
+
+<span class="nc" id="L23">        image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L24">        imageView = new ImageView(this.image);</span>
+<span class="nc" id="L25">        imageView.setFitHeight(250);</span>
+<span class="nc" id="L26">        imageView.setFitWidth(180);</span>
+<span class="nc" id="L27">        setCenter(imageView);</span>
+
+        // is this responsible for the weird NullPointerException stuff?
+
+        try {
+<span class="nc" id="L32">            image = new Image(book.getImageURL(), true);</span>
+<span class="nc" id="L33">            imageView.setImage(image);</span>
+<span class="nc" id="L34">        } catch (IllegalArgumentException | NullPointerException e) {</span>
+<span class="nc" id="L35">            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L36">        }</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(book != null) {</span>
+<span class="nc" id="L39">            String title = book.getName();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (title.length() &gt; 20) {</span>
+<span class="nc" id="L41">                title = title.substring(0, 19) + &quot;\u2026&quot;;</span>
+            }
+<span class="nc" id="L43">            Text t = new Text(title);</span>
+<span class="nc" id="L44">            t.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 14));</span>
+<span class="nc" id="L45">            setMargin(t, new Insets(20));</span>
+<span class="nc" id="L46">            setAlignment(t, Pos.BOTTOM_CENTER);</span>
+<span class="nc" id="L47">            setBottom(t);</span>
+        }
+        //setPadding(new Insets(10));
+<span class="nc" id="L50">        setStyle(&quot;-fx-background-color: linear-gradient(to top, #ccc, #fff); -fx-border-color: #999;&quot;);</span>
+<span class="nc" id="L51">    }</span>
+
+    public Book getBook() {
+<span class="nc" id="L54">        return book;</span>
+    }
+
+    public Image getImage() {
+<span class="nc" id="L58">        return image;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

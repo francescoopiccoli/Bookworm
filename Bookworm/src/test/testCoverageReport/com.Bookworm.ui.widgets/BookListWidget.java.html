@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookListWidget.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.widgets</a> &gt; <span class="el_source">BookListWidget.java</span></div><h1>BookListWidget.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.widgets;
+
+import com.Bookworm.model.Book;
+import com.Bookworm.ui.views.BookInfoView;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookListWidget extends ScrollPane {
+    private List&lt;BookWidget&gt; books;
+    private Image image;
+    private ImageView imageView;
+<span class="nc" id="L21">    private String currentFilter = &quot;&quot;;</span>
+    // by default the spawned book list will update this window, but it can be changed
+<span class="nc" id="L23">    private BookListWidget parentWidget = this;</span>
+    public static final String PLACEHOLDER_IMAGE_URI = &quot;/Images/owl_placeholder.png&quot;;
+
+
+    public BookListWidget getParentWidget() {
+<span class="nc" id="L28">        return parentWidget;</span>
+    }
+
+    public void setParentWidget(BookListWidget parentWidget) {
+<span class="nc" id="L32">        this.parentWidget = parentWidget;</span>
+<span class="nc" id="L33">    }</span>
+
+    public BookListWidget(List&lt;Book&gt; books) throws NullPointerException {
+<span class="nc" id="L36">        super();</span>
+<span class="nc" id="L37">        this.books = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (Book book : books) {</span>
+            // we could even maybe async-ize this thing as well?
+<span class="nc" id="L40">            this.books.add(new BookWidget(book));</span>
+<span class="nc" id="L41">        }</span>
+
+<span class="nc" id="L43">        setFitToHeight(true);</span>
+<span class="nc" id="L44">        setFitToWidth(true);</span>
+
+<span class="nc" id="L46">        widthProperty().addListener((e) -&gt; updateList(null));</span>
+<span class="nc" id="L47">        updateList();</span>
+
+<span class="nc" id="L49">    }</span>
+
+    public void updateList() throws NullPointerException {
+<span class="nc" id="L52">        updateList(&quot;&quot;);</span>
+<span class="nc" id="L53">    }</span>
+
+    public void updateList(String filter) throws NullPointerException {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (filter != null)</span>
+<span class="nc" id="L57">            currentFilter = filter;</span>
+
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if (books == null || books.size() == 0) {</span>
+
+<span class="nc" id="L61">            image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L62">            imageView = new ImageView(this.image);</span>
+<span class="nc" id="L63">            imageView.setFitHeight(250);</span>
+<span class="nc" id="L64">            imageView.setFitWidth(500);</span>
+<span class="nc" id="L65">            VBox centerVBox = new VBox();</span>
+<span class="nc" id="L66">            HBox hBox = new HBox();</span>
+<span class="nc" id="L67">            centerVBox.getChildren().addAll(hBox, imageView);</span>
+<span class="nc" id="L68">            centerVBox.setSpacing(50);</span>
+<span class="nc" id="L69">            centerVBox.setAlignment(Pos.BASELINE_CENTER);</span>
+<span class="nc" id="L70">            setContent(centerVBox);</span>
+            try {
+<span class="nc" id="L72">                image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L73">                imageView.setImage(image);</span>
+<span class="nc" id="L74">            } catch (IllegalArgumentException | NullPointerException e) {</span>
+<span class="nc" id="L75">                image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L76">            }</span>
+
+<span class="nc" id="L78">        } else {</span>
+<span class="nc" id="L79">            VBox vb = new VBox();</span>
+<span class="nc" id="L80">            vb.setAlignment(Pos.CENTER);</span>
+
+<span class="nc" id="L82">            int width = (int) getWidth();</span>
+<span class="nc" id="L83">            int numColumns = getMaxColumns(width);</span>
+
+<span class="nc" id="L85">            int i = 0;</span>
+<span class="nc" id="L86">            HBox hb = new HBox();</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            for (BookWidget b : books) {</span>
+<span class="nc" id="L88">                System.out.println(b.book.getName());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                if (i &gt;= numColumns) {</span>
+<span class="nc" id="L90">                    i = 0;</span>
+                }
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if (i == 0) {</span>
+<span class="nc" id="L93">                    hb = new HBox();</span>
+<span class="nc" id="L94">                    hb.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L95">                    vb.getChildren().add(hb);</span>
+                }
+
+                // filtering
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                if (filter != null</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                        &amp;&amp; !b.getBook().getName().toLowerCase().contains(filter.toLowerCase())</span>
+                        &amp;&amp; (
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                        b.getBook().getDescription() == null ||</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                                !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase())</span>
+                )
+                )
+<span class="nc" id="L106">                    continue;</span>
+
+<span class="nc" id="L108">                b.setOnMouseClicked((event -&gt; {</span>
+<span class="nc" id="L109">                    Book book = b.getBook();</span>
+                    // bookInfo should accept Book object, not just its parameters!
+
+                    try {
+<span class="nc" id="L113">                        BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);</span>
+<span class="nc" id="L114">                    } catch (SQLException throwables) {</span>
+<span class="nc" id="L115">                        throwables.printStackTrace();</span>
+<span class="nc" id="L116">                    } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L117">                        e.printStackTrace();</span>
+<span class="nc" id="L118">                    }</span>
+<span class="nc" id="L119">                }));</span>
+
+<span class="nc" id="L121">                HBox.setMargin(b, new Insets(20));</span>
+<span class="nc" id="L122">                hb.getChildren().add(b);</span>
+
+<span class="nc" id="L124">                i++;</span>
+<span class="nc" id="L125">            }</span>
+            // fill with whitespace - ugly hack, but it works ¯\_(ツ)_/¯
+<span class="nc bnc" id="L127" title="All 4 branches missed.">            while (i != 0 &amp;&amp; i &lt; numColumns) {</span>
+<span class="nc" id="L128">                BookWidget b = new BookWidget(null);</span>
+<span class="nc" id="L129">                b.setVisible(false);</span>
+<span class="nc" id="L130">                HBox.setMargin(b, new Insets(20));</span>
+<span class="nc" id="L131">                hb.getChildren().add(b);</span>
+<span class="nc" id="L132">                i++;</span>
+<span class="nc" id="L133">            }</span>
+
+<span class="nc" id="L135">            setContent(vb);</span>
+        }
+<span class="nc" id="L137">    }</span>
+
+    private int getMaxColumns(int width) {
+<span class="nc" id="L140">        return width / 230; // width + margin</span>
+    }
+
+    public List&lt;BookWidget&gt; getBooks() {
+<span class="nc" id="L144">        return books;</span>
+    }
+
+    public void setBooks(List&lt;Book&gt; books) {
+<span class="nc" id="L148">        this.books = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (Book book : books) {</span>
+            // we could even maybe async-ize this thing as well?
+<span class="nc" id="L151">            this.books.add(new BookWidget(book));</span>
+<span class="nc" id="L152">        }</span>
+<span class="nc" id="L153">    }</span>
+
+    public Image getImage() {
+<span class="nc" id="L156">        return image;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

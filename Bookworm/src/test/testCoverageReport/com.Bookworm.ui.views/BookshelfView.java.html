@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookshelfView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.views</a> &gt; <span class="el_source">BookshelfView.java</span></div><h1>BookshelfView.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.views;
+
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
+import com.Bookworm.ui.widgets.BookListWidget;
+import com.Bookworm.ui.widgets.BookWidget;
+
+import com.Bookworm.ui.widgets.BookshelfWidget;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class BookshelfView extends BorderPane {
+<span class="nc" id="L29">    private DatabaseManager db = BookInfoView.dbManager;</span>
+<span class="nc" id="L30">    boolean flagExist = false;</span>
+    private List&lt;Bookshelf&gt; bookshelves;
+<span class="nc" id="L32">    private List&lt;ImageView&gt; covers = new ArrayList&lt;&gt;();</span>
+    private Image image;
+<span class="nc" id="L34">    public BookshelfView() {</span>
+        //Create an instance of Discover to fill the borderpane with its functions
+<span class="nc" id="L36">        setTop(createTop());</span>
+        try {
+<span class="nc" id="L38">            List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
+<span class="nc" id="L39">            ArrayList&lt;Book&gt; allbooks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            for(Book b : db.getBooks()){</span>
+<span class="nc" id="L41">                allbooks.add(b);</span>
+<span class="nc" id="L42">            }</span>
+
+<span class="nc" id="L44">            Bookshelf def = new Bookshelf(&quot;Default&quot;,&quot;Default Bookshelf&quot;, allbooks);</span>
+<span class="nc" id="L45">            bookshelveswithdefault.add(0,def);</span>
+<span class="nc" id="L46">            setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
+<span class="nc" id="L47">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L48">            throwables.printStackTrace();</span>
+<span class="nc" id="L49">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L50">            e.printStackTrace();</span>
+<span class="nc" id="L51">        }</span>
+        //setCenter(createCenter());
+
+<span class="nc" id="L54">    }</span>
+
+
+    private Node createTop() {
+
+
+        //principal view
+<span class="nc" id="L61">        Label title = new Label();</span>
+<span class="nc" id="L62">        title.setText(&quot;Your Bookshelves&quot;);</span>
+<span class="nc" id="L63">        title.setStyle(&quot;-fx-font-size: 16;-fx-font-weight:bold&quot;);</span>
+<span class="nc" id="L64">        Label descriptionText = new Label();</span>
+<span class="nc" id="L65">        descriptionText.setText(&quot;Check out your customized bookshelves&quot;);</span>
+<span class="nc" id="L66">        Button addbutton = new Button(&quot;+&quot;);</span>
+<span class="nc" id="L67">        addbutton.setStyle(&quot;-fx-font-size: 16;-fx-font-weight:bold&quot;);</span>
+
+        //event on add button
+<span class="nc" id="L70">        addbutton.setOnMouseClicked(event -&gt; {</span>
+
+           // pop up view
+<span class="nc" id="L73">            Stage test = new Stage();</span>
+<span class="nc" id="L74">            test.setTitle(&quot;Add Bookshelf&quot;);</span>
+<span class="nc" id="L75">            VBox root = new VBox();</span>
+<span class="nc" id="L76">            root.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L77">            root.setSpacing(5);</span>
+<span class="nc" id="L78">            Label name = new Label(&quot;Insert the name of your Bookshelf&quot;);</span>
+<span class="nc" id="L79">            TextField nameField = new TextField();</span>
+
+<span class="nc" id="L81">            root.getChildren().addAll(name, nameField);</span>
+<span class="nc" id="L82">            Label Description = new Label(&quot;Insert a description for your bookshelf&quot;);</span>
+<span class="nc" id="L83">            TextField descfield = new TextField();</span>
+
+<span class="nc" id="L85">            root.getChildren().addAll(Description, descfield);</span>
+<span class="nc" id="L86">            BorderPane pane = new BorderPane();</span>
+<span class="nc" id="L87">            Button commit = new Button(&quot;Create the new Bookshelf&quot;);</span>
+<span class="nc" id="L88">            commit.getStyleClass().add(&quot;commitBookshelfButton&quot;);</span>
+<span class="nc" id="L89">            flagExist = false;</span>
+<span class="nc" id="L90">            commit.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L91">                Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());</span>
+                try {
+                    //int bookshelfID = db.getBookshelfID(nameField.getText());
+<span class="nc" id="L94">                    List&lt;Bookshelf&gt; allBookshelves = db.getBookShelves();</span>
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                    for (Bookshelf b : allBookshelves) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                        if(b.getName().contentEquals(list.getName())){</span>
+<span class="nc" id="L98">                            flagExist=true;</span>
+<span class="nc" id="L99">                            System.out.println(&quot;Bookshelf already exists&quot;);</span>
+                        }
+<span class="nc" id="L101">                    }</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                    if(flagExist==false){</span>
+<span class="nc" id="L103">                        System.out.println(&quot;Bookshelf inserted!&quot;);</span>
+<span class="nc" id="L104">                        db.insertBookshelf(list);</span>
+                    }
+<span class="nc" id="L106">                } catch (ClassNotFoundException e1) {</span>
+<span class="nc" id="L107">                    e1.printStackTrace();</span>
+<span class="nc" id="L108">                } catch (SQLException e1) {</span>
+<span class="nc" id="L109">                    e1.printStackTrace();</span>
+<span class="nc" id="L110">                }</span>
+                //ADD code that creates new List
+<span class="nc" id="L112">                test.hide();</span>
+
+                //Reload central part with lists
+                try {
+<span class="nc" id="L116">                    List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
+<span class="nc" id="L117">                    ArrayList&lt;Book&gt; allbooks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                    for(Book b : db.getBooks()){</span>
+<span class="nc" id="L119">                        allbooks.add(b);</span>
+<span class="nc" id="L120">                    }</span>
+
+<span class="nc" id="L122">                    Bookshelf def = new Bookshelf(&quot;Default&quot;,&quot;Default Bookshelf&quot;, allbooks);</span>
+<span class="nc" id="L123">                    bookshelveswithdefault.add(0,def);</span>
+<span class="nc" id="L124">                    setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
+<span class="nc" id="L125">                } catch (SQLException throwables) {</span>
+<span class="nc" id="L126">                    throwables.printStackTrace();</span>
+<span class="nc" id="L127">                } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L128">                    ex.printStackTrace();</span>
+<span class="nc" id="L129">                }</span>
+
+<span class="nc" id="L131">            });</span>
+<span class="nc" id="L132">            pane.setCenter(commit);</span>
+<span class="nc" id="L133">            root.getChildren().add(pane);</span>
+<span class="nc" id="L134">            test.setScene(new Scene(root, 450, 250));</span>
+<span class="nc" id="L135">            test.show();</span>
+<span class="nc" id="L136">        });</span>
+
+<span class="nc" id="L138">        Region region1 = new Region();</span>
+<span class="nc" id="L139">        HBox.setHgrow(region1, Priority.ALWAYS);</span>
+
+
+
+<span class="nc" id="L143">        VBox vb = new VBox();</span>
+<span class="nc" id="L144">        vb.getChildren().addAll(title,descriptionText);</span>
+<span class="nc" id="L145">        vb.setSpacing(1);</span>
+<span class="nc" id="L146">        vb.setAlignment(Pos.TOP_LEFT);</span>
+<span class="nc" id="L147">        HBox hBox = new HBox(vb, region1, addbutton);</span>
+<span class="nc" id="L148">        hBox.setPadding(new Insets(15, 12, 15, 12));</span>
+
+
+<span class="nc" id="L151">        return hBox;</span>
+    }
+
+    private Node createCenter(Bookshelf bookshelf) {
+<span class="nc" id="L155">        ScrollPane sc = new ScrollPane();</span>
+<span class="nc" id="L156">        sc.setFitToHeight(true);</span>
+
+<span class="nc" id="L158">        return sc;</span>
+    }
+
+    public Node createTop2(String description) {
+<span class="nc" id="L162">        Button back = new Button(&quot;Go Back&quot;);</span>
+<span class="nc" id="L163">        back.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L164">            setTop(createTop());</span>
+            //setCenter(createCenter());
+            try {
+<span class="nc" id="L167">                List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
+<span class="nc" id="L168">                ArrayList&lt;Book&gt; allbooks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                for(Book b : db.getBooks()){</span>
+<span class="nc" id="L170">                    allbooks.add(b);</span>
+<span class="nc" id="L171">                }</span>
+
+<span class="nc" id="L173">                Bookshelf def = new Bookshelf(&quot;Default&quot;,&quot;Default Bookshelf&quot;, allbooks);</span>
+<span class="nc" id="L174">                bookshelveswithdefault.add(0,def);</span>
+<span class="nc" id="L175">                setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
+<span class="nc" id="L176">            } catch (SQLException throwables) {</span>
+<span class="nc" id="L177">                throwables.printStackTrace();</span>
+<span class="nc" id="L178">            } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L179">                e.printStackTrace();</span>
+<span class="nc" id="L180">            }</span>
+<span class="nc" id="L181">        });</span>
+<span class="nc" id="L182">        Text t = new Text(description);</span>
+
+<span class="nc" id="L184">        BorderPane borderPane = new BorderPane();</span>
+<span class="nc" id="L185">        borderPane.setRight(back);</span>
+<span class="nc" id="L186">        borderPane.setLeft(t);</span>
+<span class="nc" id="L187">        HBox.setHgrow(borderPane,Priority.ALWAYS);</span>
+<span class="nc" id="L188">        HBox hBox = new HBox();</span>
+<span class="nc" id="L189">        hBox.getChildren().addAll(borderPane);</span>
+<span class="nc" id="L190">        hBox.setPadding(new Insets(15, 12, 15, 12));</span>
+
+<span class="nc" id="L192">        return hBox;</span>
+    }
+
+    //Not used anymore
+    public Node createTop2() {
+
+
+<span class="nc" id="L199">        Button back = new Button(&quot;Go Back&quot;);</span>
+<span class="nc" id="L200">        back.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L201">            setTop(createTop());</span>
+            //setCenter(createCenter());
+            try {
+<span class="nc" id="L204">                List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
+<span class="nc" id="L205">                ArrayList&lt;Book&gt; allbooks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                for(Book b : db.getBooks()){</span>
+<span class="nc" id="L207">                    allbooks.add(b);</span>
+<span class="nc" id="L208">                }</span>
+
+<span class="nc" id="L210">                Bookshelf def = new Bookshelf(&quot;Default&quot;,&quot;Default Bookshelf&quot;, allbooks);</span>
+<span class="nc" id="L211">                bookshelveswithdefault.add(0,def);</span>
+<span class="nc" id="L212">                setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
+<span class="nc" id="L213">            } catch (SQLException throwables) {</span>
+<span class="nc" id="L214">                throwables.printStackTrace();</span>
+<span class="nc" id="L215">            } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L216">                e.printStackTrace();</span>
+<span class="nc" id="L217">            }</span>
+<span class="nc" id="L218">        });</span>
+
+<span class="nc" id="L220">        BorderPane borderPane = new BorderPane();</span>
+<span class="nc" id="L221">        borderPane.setRight(back);</span>
+<span class="nc" id="L222">        HBox.setHgrow(borderPane,Priority.ALWAYS);</span>
+<span class="nc" id="L223">        HBox hBox = new HBox(borderPane);</span>
+<span class="nc" id="L224">        hBox.setPadding(new Insets(15, 12, 15, 12));</span>
+
+<span class="nc" id="L226">        return hBox;</span>
+    }
+    public Node createCenter2() {
+<span class="nc" id="L229">        List&lt;Book&gt; books = null;</span>
+        try {
+<span class="nc" id="L231">            books = db.getBooks();</span>
+<span class="nc" id="L232">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L233">            throwables.printStackTrace();</span>
+<span class="nc" id="L234">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L235">            e.printStackTrace();</span>
+<span class="nc" id="L236">        }</span>
+<span class="nc" id="L237">        BorderPane pane = new BorderPane();</span>
+<span class="nc" id="L238">        BookListView blv = new BookListView(&quot;Default Bookshelf&quot;,books);</span>
+<span class="nc" id="L239">        pane.setCenter(blv);</span>
+<span class="nc" id="L240">        return pane;</span>
+
+    }
+    public Node createCenter3(String bookshelf) {
+<span class="nc" id="L244">        List&lt;Book&gt; books = null;</span>
+<span class="nc" id="L245">        books = (queryBooksOfBookshelf(bookshelf));</span>
+<span class="nc" id="L246">        BorderPane pane = new BorderPane();</span>
+<span class="nc" id="L247">        BookListView blv = new BookListView(bookshelf,books);</span>
+<span class="nc" id="L248">        pane.setCenter(blv);</span>
+<span class="nc" id="L249">        return pane;</span>
+
+    }
+    private List&lt;Book&gt; queryBooksOfBookshelf(String bookshelf){
+<span class="nc" id="L253">        List&lt;Book&gt; books = null;</span>
+        try {
+<span class="nc" id="L255">            books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));</span>
+            //String.valueOf((db.getBookshelfID(bookshelf)))
+<span class="nc" id="L257">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L258">            throwables.printStackTrace();</span>
+<span class="nc" id="L259">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L260">            e.printStackTrace();</span>
+<span class="nc" id="L261">        }</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        for (Book b: books</span>
+             ) {
+<span class="nc" id="L264">            System.out.println(&quot;BOOK : &quot;);</span>
+
+<span class="nc" id="L266">        }</span>
+<span class="nc" id="L267">        return books;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

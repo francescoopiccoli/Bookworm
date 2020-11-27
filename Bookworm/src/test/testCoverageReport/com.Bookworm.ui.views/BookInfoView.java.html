@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookInfoView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.views</a> &gt; <span class="el_source">BookInfoView.java</span></div><h1>BookInfoView.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.views;
+
+
+import com.Bookworm.App;
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
+import com.Bookworm.ui.widgets.BookListWidget;
+import com.Bookworm.ui.widgets.BookWidget;
+import com.Bookworm.ui.widgets.StarWidget;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
+
+import java.sql.SQLException;
+import java.util.*;
+
+public class BookInfoView extends BorderPane {
+
+
+    private static final int DEFAULT_WIDTH = 600;
+    private static final String LABEL_NO_BOOKSHELF = &quot;[No Bookshelf]&quot;;
+    private static final String LABEL_DEFAULT_BOOKSHELF = &quot;Default&quot;;
+    private static final int ID_NO_BOOKSHELF = -5;
+    private static final int ID_DEFAULT_BOOKSHELF = -6;
+
+<span class="nc" id="L39">    public static ArrayList&lt;Bookshelf&gt; bookShelf = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L40">    public static List&lt;Book&gt; bookList = new LinkedList&lt;&gt;(); // ?</span>
+    private  List&lt;BookWidget&gt; books;
+    private final Book book;
+    private final BookListWidget parent;
+    ImageView imageView;
+<span class="nc" id="L45">    public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)</span>
+
+    public static List&lt;Book&gt; getBookList() {
+<span class="nc" id="L48">        return bookList;</span>
+    }
+
+    public static void setBookList(List&lt;Book&gt; bookList) {
+<span class="nc" id="L52">        BookInfoView.bookList = bookList;</span>
+<span class="nc" id="L53">    }</span>
+
+    public List&lt;BookWidget&gt; getBooks() {
+<span class="nc" id="L56">        return books;</span>
+    }
+
+    public void setBooks(List&lt;BookWidget&gt; books) {
+<span class="nc" id="L60">        this.books = books;</span>
+<span class="nc" id="L61">    }</span>
+
+    public static ArrayList&lt;Bookshelf&gt; getBookShelf() {
+<span class="nc" id="L64">        return bookShelf;</span>
+    }
+
+    public static void setBookShelf(ArrayList&lt;Bookshelf&gt; bookShelf) {
+<span class="nc" id="L68">        BookInfoView.bookShelf = bookShelf;</span>
+<span class="nc" id="L69">    }</span>
+
+
+<span class="nc" id="L72">    public BookInfoView(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {</span>
+<span class="nc" id="L73">        this.book = book;</span>
+<span class="nc" id="L74">        this.parent = parent;</span>
+        Image image;
+        try {
+<span class="nc" id="L77">           image = new Image(book.getImageURL(), true);</span>
+<span class="nc" id="L78">        } catch (Exception e) {</span>
+<span class="nc" id="L79">            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">        this.imageView = new ImageView(image);</span>
+
+<span class="nc" id="L83">        setTop(addHBoxTop());</span>
+<span class="nc" id="L84">        setCenter(addVBox());</span>
+
+        // finally, set stylesheet of this whole window
+<span class="nc" id="L87">        getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L88">    }</span>
+
+    public static void spawnWindow(Book book, BookListWidget parent) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L91">        spawnWindow(book, DEFAULT_WIDTH, parent);</span>
+<span class="nc" id="L92">    }</span>
+
+    public static void spawnWindow(Book book, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L95">        spawnWindow(book, DEFAULT_WIDTH, image, parent);</span>
+<span class="nc" id="L96">    }</span>
+
+    public static void spawnWindow(Book book, int w, BookListWidget parent) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L99">        Image image = new Image(book.getImageURL());</span>
+<span class="nc" id="L100">        spawnWindow(book, w, image, parent);</span>
+<span class="nc" id="L101">    }</span>
+
+    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent) throws SQLException, ClassNotFoundException {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (!App.hasOpenedBook(book)) {</span>
+<span class="nc" id="L105">            App.openedBooks.add(book);</span>
+            //ImageView imageView = new ImageView(image);
+<span class="nc" id="L107">            BookInfoView bookInfoView = new BookInfoView(book, parent);</span>
+<span class="nc" id="L108">            Stage stage = new Stage();</span>
+<span class="nc" id="L109">            stage.setTitle(book.getAuthor() + &quot; - &quot; + book.getName());</span>
+<span class="nc" id="L110">            Scene scene = new Scene(bookInfoView);</span>
+<span class="nc" id="L111">            stage.setScene(scene);</span>
+<span class="nc" id="L112">            stage.setWidth(w);</span>
+<span class="nc" id="L113">            stage.show();</span>
+            // when the window is closed, book is removed from App.openedBooks
+<span class="nc" id="L115">            stage.setOnCloseRequest(e -&gt; App.openedBooks.remove(book));</span>
+        }
+<span class="nc" id="L117">    }</span>
+
+    public HBox addHBoxTop() {
+<span class="nc" id="L120">        HBox hbox = new HBox();</span>
+<span class="nc" id="L121">        hbox.getStyleClass().add(&quot;book-info-banner&quot;);</span>
+<span class="nc" id="L122">        hbox.setPadding(new Insets(20));</span>
+
+        //book title
+<span class="nc" id="L125">        Label displayTitle = new Label();</span>
+<span class="nc" id="L126">        displayTitle.setText(book.getName());</span>
+<span class="nc" id="L127">        displayTitle.getStyleClass().add(&quot;display&quot;);</span>
+<span class="nc" id="L128">        displayTitle.setFont(Font.font(&quot;Cantarell&quot;, FontWeight.BOLD, 18));</span>
+
+        //book author
+<span class="nc" id="L131">        Label displayAuthor = new Label();</span>
+<span class="nc" id="L132">        displayAuthor.setText(book.getAuthor());</span>
+<span class="nc" id="L133">        displayAuthor.getStyleClass().add(&quot;display&quot;);</span>
+<span class="nc" id="L134">        displayAuthor.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 12));</span>
+
+
+        //bookshelf
+<span class="nc" id="L138">        BorderPane bookshelfBox = new BorderPane();</span>
+<span class="nc" id="L139">        ComboBox&lt;Bookshelf&gt; comboBookshelf = new ComboBox&lt;&gt;();</span>
+<span class="nc" id="L140">        comboBookshelf.setPlaceholder(new Label(&quot;None&quot;));</span>
+        //list stays empty need to check later
+
+<span class="nc" id="L143">        Bookshelf noBookshelf = new Bookshelf(LABEL_NO_BOOKSHELF, &quot;&quot;, null);</span>
+<span class="nc" id="L144">        noBookshelf.setId(ID_NO_BOOKSHELF);</span>
+<span class="nc" id="L145">        Bookshelf defaultBookshelf = new Bookshelf(LABEL_DEFAULT_BOOKSHELF, &quot;The default reading list&quot;, null);</span>
+<span class="nc" id="L146">        defaultBookshelf.setId(ID_DEFAULT_BOOKSHELF);</span>
+
+<span class="nc" id="L148">        ObservableList&lt;Bookshelf&gt; list = FXCollections.observableArrayList(bookShelf);</span>
+<span class="nc" id="L149">        list.add(0, noBookshelf);</span>
+<span class="nc" id="L150">        list.add(1, defaultBookshelf);</span>
+
+        try {
+<span class="nc" id="L153">            LinkedList&lt;Bookshelf&gt; b = (LinkedList&lt;Bookshelf&gt;) DatabaseManager.getInstance().getBookShelves();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            for(Bookshelf bookshelf : b) {</span>
+<span class="nc" id="L155">                list.add(bookshelf.getId(), bookshelf);</span>
+<span class="nc" id="L156">            }</span>
+
+<span class="nc" id="L158">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L159">            throwables.printStackTrace();</span>
+<span class="nc" id="L160">        }</span>
+
+<span class="nc" id="L162">        comboBookshelf.setItems(list);</span>
+<span class="nc" id="L163">        comboBookshelf.getSelectionModel().select(0);</span>
+<span class="nc" id="L164">        comboBookshelf.setConverter(new StringConverter&lt;&gt;() {</span>
+
+            @Override
+            public String toString(Bookshelf bookshelf) {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                if (bookshelf != null)</span>
+<span class="nc" id="L169">                    return bookshelf.getName();</span>
+                else
+<span class="nc" id="L171">                    return null;</span>
+            }
+
+            @Override
+            public Bookshelf fromString(String s) {
+<span class="nc" id="L176">                return null;</span>
+            }
+        });
+
+        try {
+<span class="nc" id="L181">            updateBookId();</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">            if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L183">                int id = dbManager.getBookshelfIdByBook(book);</span>
+<span class="nc" id="L184">                comboBookshelf.setValue(defaultBookshelf);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                for(Bookshelf bs : comboBookshelf.getItems()) {</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                    if(bs.getId() == id)</span>
+<span class="nc" id="L187">                        comboBookshelf.setValue(bs);</span>
+<span class="nc" id="L188">                }</span>
+<span class="nc" id="L189">            } else {</span>
+<span class="nc" id="L190">                comboBookshelf.setValue(noBookshelf);</span>
+            }
+<span class="nc" id="L192">        } catch (Exception e) {</span>
+<span class="nc" id="L193">            e.printStackTrace();</span>
+<span class="nc" id="L194">        }</span>
+
+        // saving book in bookshelf: problem -&gt; bookId is never assigned
+<span class="nc" id="L197">        comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -&gt; {</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            if(!oldVal.getName().equals(newVal.getName())) {</span>
+                // delete first
+                try {
+<span class="nc" id="L201">                    dbManager.deleteBook(book);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">                    if(parent != null) {</span>
+<span class="nc" id="L203">                        List&lt;BookWidget&gt; books = parent.getBooks();</span>
+
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                        books.removeIf(widget -&gt; widget.getBook().getId() == book.getId());</span>
+<span class="nc" id="L206">                        parent.updateList(null);</span>
+                    }
+<span class="nc" id="L208">                } catch (Exception e) {</span>
+<span class="nc" id="L209">                    e.printStackTrace();</span>
+<span class="nc" id="L210">                }</span>
+                // then reinsert if needed
+
+<span class="nc bnc" id="L213" title="All 2 branches missed.">                if(newVal.getId() != ID_NO_BOOKSHELF) {</span>
+                    try {
+<span class="nc" id="L215">                        dbManager.insertBook(book, newVal.getName());</span>
+<span class="nc" id="L216">                        updateBookId();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                        if (parent != null) {</span>
+<span class="nc" id="L218">                            List&lt;BookWidget&gt; books = parent.getBooks();</span>
+<span class="nc" id="L219">                            books.add(new BookWidget(book));</span>
+<span class="nc" id="L220">                            parent.updateList(null);</span>
+                        }
+<span class="nc" id="L222">                    } catch (Exception e) {</span>
+<span class="nc" id="L223">                        e.printStackTrace();</span>
+<span class="nc" id="L224">                    }</span>
+                }
+            }
+<span class="nc" id="L227">        });</span>
+
+<span class="nc" id="L229">        BorderPane.setAlignment(comboBookshelf, Pos.CENTER);</span>
+<span class="nc" id="L230">        bookshelfBox.setRight(comboBookshelf);</span>
+
+        //Vbox for left elements
+<span class="nc" id="L233">        VBox vBox = new VBox();</span>
+<span class="nc" id="L234">        vBox.setSpacing(8);</span>
+<span class="nc" id="L235">        vBox.getChildren().addAll(displayTitle, displayAuthor);</span>
+<span class="nc" id="L236">        bookshelfBox.setLeft(vBox);</span>
+
+<span class="nc" id="L238">        HBox.setHgrow(bookshelfBox, Priority.ALWAYS);</span>
+<span class="nc" id="L239">        hbox.getChildren().addAll(bookshelfBox);</span>
+
+<span class="nc" id="L241">        return hbox;</span>
+    }
+
+    private void updateBookId() throws SQLException, ClassNotFoundException {
+<span class="nc" id="L245">        int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();</span>
+<span class="nc" id="L246">        book.setId(newId);</span>
+<span class="nc" id="L247">    }</span>
+
+    public VBox addVBox() throws SQLException, ClassNotFoundException {
+<span class="nc" id="L250">        VBox vbox = new VBox();</span>
+<span class="nc" id="L251">        vbox.setPadding(new Insets(10));</span>
+<span class="nc" id="L252">        vbox.setSpacing(5);</span>
+<span class="nc" id="L253">        vbox.setAlignment(Pos.CENTER);</span>
+
+
+        //description
+
+<span class="nc" id="L258">        Label description = new Label(&quot;Short Description&quot;);</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if(book.getDescription() != null)</span>
+<span class="nc" id="L260">            description.setText(book.getDescription());</span>
+<span class="nc" id="L261">        description.setWrapText(true);</span>
+<span class="nc" id="L262">        description.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
+<span class="nc" id="L263">        description.getStyleClass().add(&quot;description&quot;);</span>
+<span class="nc" id="L264">        description.setPadding(new Insets(10));</span>
+<span class="nc" id="L265">        HBox.setHgrow(description, Priority.ALWAYS);</span>
+
+        //scroll for description textarea
+
+<span class="nc" id="L269">        ScrollPane scrollPane = new ScrollPane(description);</span>
+<span class="nc" id="L270">        scrollPane.setFitToWidth(true);</span>
+<span class="nc" id="L271">        scrollPane.setFitToHeight(true);</span>
+<span class="nc" id="L272">        scrollPane.getStyleClass().add(&quot;scroll-description&quot;);</span>
+
+
+        //Review and rating Area
+<span class="nc" id="L276">        TextArea review = new TextArea(&quot;review&quot;);</span>
+        //in case the book is already in DB, retreives the already existing review
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L279">            review.setEditable(true);</span>
+<span class="nc" id="L280">            review.setText(dbManager.getReview(book));</span>
+            // override remote rating with local rating if it exists
+<span class="nc" id="L282">            book.setRating(dbManager.getRating(book));</span>
+<span class="nc" id="L283">            book.setReview(dbManager.getReview(book));</span>
+        } else {
+<span class="nc" id="L285">            review.setText(&quot;Add the book to your library to review it!&quot;);</span>
+        }
+        //generates starwidget calling the static method getStarWidget of Starwidget class
+<span class="nc" id="L288">        HBox starwidget = StarWidget.getStarWidget(this, book);</span>
+
+        //if review is changed, update/insert the new review in the database
+<span class="nc" id="L291">        review.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+            // this will run whenever text is changed
+            try {
+<span class="nc bnc" id="L294" title="All 2 branches missed.">                if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L295">                    updateBookId();</span>
+<span class="nc" id="L296">                    dbManager.insertReview(book, review.getText());</span>
+                } else {
+<span class="nc" id="L298">                    System.out.println(&quot;Book not saved, review has been ignored&quot;);</span>
+<span class="nc" id="L299">                    Platform.runLater(() -&gt; review.setText(&quot;Add the book to your library to review it!&quot;));</span>
+                }
+<span class="nc" id="L301">            } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L302">                throwables.printStackTrace();</span>
+<span class="nc" id="L303">            }</span>
+<span class="nc" id="L304">        });</span>
+<span class="nc" id="L305">        review.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
+<span class="nc" id="L306">        review.setWrapText(true);</span>
+<span class="nc" id="L307">        review.setPrefColumnCount(15);</span>
+
+
+        //scroll for review textarea
+<span class="nc" id="L311">        ScrollPane scrollPane2 = new ScrollPane(review);</span>
+<span class="nc" id="L312">        scrollPane2.getStyleClass().add(&quot;scrollReview&quot;);</span>
+<span class="nc" id="L313">        scrollPane2.setFitToWidth(true);</span>
+<span class="nc" id="L314">        scrollPane2.setFitToHeight(true);</span>
+
+        //Vbox for review
+<span class="nc" id="L317">        VBox reviewBox = new VBox();</span>
+<span class="nc" id="L318">        reviewBox.setSpacing(10);</span>
+<span class="nc" id="L319">        reviewBox.getChildren().addAll(starwidget, scrollPane2);</span>
+
+        //left side
+<span class="nc" id="L322">        VBox left = new VBox();</span>
+<span class="nc" id="L323">        left.setSpacing(20);</span>
+<span class="nc" id="L324">        VBox.setVgrow(scrollPane, Priority.ALWAYS);</span>
+<span class="nc" id="L325">        VBox.setVgrow(scrollPane2, Priority.ALWAYS);</span>
+<span class="nc" id="L326">        left.getChildren().addAll(scrollPane);</span>
+
+        //image
+<span class="nc" id="L329">        imageView.setFitWidth(200);</span>
+<span class="nc" id="L330">        imageView.setFitHeight(280);</span>
+<span class="nc" id="L331">        imageView.setPreserveRatio(false);</span>
+<span class="nc" id="L332">        HBox.setHgrow(imageView, Priority.ALWAYS);</span>
+<span class="nc" id="L333">        VBox.setVgrow(imageView, Priority.ALWAYS);</span>
+
+        //overall view
+<span class="nc" id="L336">        HBox overall = new HBox();</span>
+<span class="nc" id="L337">        VBox.setVgrow(overall, Priority.NEVER);</span>
+
+<span class="nc" id="L339">        overall.setSpacing(20);</span>
+<span class="nc" id="L340">        overall.maxHeightProperty().bind(imageView.fitHeightProperty());</span>
+<span class="nc" id="L341">        HBox.setHgrow(reviewBox, Priority.NEVER);</span>
+<span class="nc" id="L342">        overall.getChildren().addAll(imageView, left, new Separator(Orientation.VERTICAL), reviewBox);</span>
+
+
+
+<span class="nc" id="L346">        vbox.getChildren().addAll(overall);</span>
+
+
+<span class="nc" id="L349">        return vbox;</span>
+    }
+
+//method called in StarWidget class to refresh the bookinfo window once a new rating has been inserted
+    public void refresh() throws SQLException, ClassNotFoundException {
+<span class="nc" id="L354">        setCenter(addVBox());</span>
+<span class="nc" id="L355">    }</span>
+}
+
+
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

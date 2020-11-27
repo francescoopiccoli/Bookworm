@@ -241,7 +241,7 @@ public class BookInfoView extends BorderPane {
         return hbox;
     }
 
-    private void updateBookId() throws SQLException, ClassNotFoundException, NullPointerException {
+    private void updateBookId() throws SQLException, ClassNotFoundException {
         int newId = dbManager.getBook(book.getName(), book.getAuthor()).getId();
         book.setId(newId);
     }

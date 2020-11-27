@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bookshelf.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.model</a> &gt; <span class="el_source">Bookshelf.java</span></div><h1>Bookshelf.java</h1><pre class="source lang-java linenums">package com.Bookworm.model;
+import java.util.ArrayList;
+
+public class Bookshelf {
+	private int id;
+	private String description;
+	private String name;
+	private ArrayList&lt;Book&gt; books;
+
+	public Bookshelf(String name, String description, ArrayList&lt;Book&gt; books) {
+<span class="nc" id="L11">		super();</span>
+<span class="nc" id="L12">		this.name = name;</span>
+<span class="nc" id="L13">		this.description = description;</span>
+<span class="nc" id="L14">		this.books = books;</span>
+<span class="nc" id="L15">	}</span>
+	public Bookshelf(String name, String description) {
+<span class="fc" id="L17">		super();</span>
+<span class="fc" id="L18">		this.name = name;</span>
+<span class="fc" id="L19">		this.description = description;</span>
+<span class="fc" id="L20">		this.books = null;</span>
+<span class="fc" id="L21">	}</span>
+
+<span class="nc" id="L23">	public Bookshelf() {}</span>
+
+	public String getName() {
+<span class="nc" id="L26">		return name;</span>
+	}
+
+	public void setName(String name) {
+<span class="nc" id="L30">		this.name = name;</span>
+<span class="nc" id="L31">	}</span>
+
+	public String getDescription() {
+<span class="nc" id="L34">		return description;</span>
+	}
+
+<span class="nc" id="L37">	public void setDescription(String description) { this.description = description; }</span>
+
+	public void setBooks(ArrayList&lt;Book&gt; books) {
+<span class="nc" id="L40">		this.books = books;</span>
+<span class="nc" id="L41">	}</span>
+
+	public ArrayList&lt;Book&gt; getBooks() {
+<span class="nc" id="L44">		return books;</span>
+	}
+
+	public void setId(int id) {
+<span class="nc" id="L48">		this.id = id;</span>
+<span class="nc" id="L49">	}</span>
+
+	public int getId() {
+<span class="nc" id="L52">		return id;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
