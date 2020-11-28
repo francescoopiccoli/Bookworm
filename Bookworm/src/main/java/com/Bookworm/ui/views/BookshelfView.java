@@ -3,26 +3,23 @@ package com.Bookworm.ui.views;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.ui.widgets.BookListWidget;
-import com.Bookworm.ui.widgets.BookWidget;
-
 import com.Bookworm.ui.widgets.BookshelfWidget;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class BookshelfView extends BorderPane {
@@ -158,8 +155,27 @@ public class BookshelfView extends BorderPane {
         return sc;
     }
 
-    public Node createTop2(String description) {
-        Button back = new Button("Go Back");
+
+    public Node createTop2(String description, Bookshelf bookshelf) {
+            Button deleteButton = new Button("Delete Bookshelf");
+            deleteButton.setOnMouseClicked(event -> {
+                try {
+                    ArrayList<Book> books = bookshelf.getBooks();
+                    if (books != null) {
+                        for(Book b: books) {
+                            db.deleteBook(b);
+                        }
+                    }
+                    db.deleteBookshelf(bookshelf);
+                    //BookListView.getListWidget().updateList();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+            Button back = new Button("Go Back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             //setCenter(createCenter());
@@ -182,8 +198,10 @@ public class BookshelfView extends BorderPane {
         Text t = new Text(description);
 
         BorderPane borderPane = new BorderPane();
-        borderPane.setRight(back);
-        borderPane.setLeft(t);
+        borderPane.setLeft(back);
+        borderPane.setRight(deleteButton);
+        //borderPane.setRight(back);
+        //borderPane.setLeft(t);
         HBox.setHgrow(borderPane,Priority.ALWAYS);
         HBox hBox = new HBox();
         hBox.getChildren().addAll(borderPane);

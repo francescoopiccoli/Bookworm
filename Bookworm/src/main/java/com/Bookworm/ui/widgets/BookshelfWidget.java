@@ -129,13 +129,15 @@ public class BookshelfWidget extends ScrollPane{
                         isDefault = true;
                     }
                 if(isDefault==false){
+                    int finalJ = j;
                     button.setOnMouseClicked((event -> {
-                        parent.setTop(parent.createTop2(bookshelfDesc));
+                        parent.setTop(parent.createTop2(bookshelfDesc, bookshelves.get(finalJ)));
                         parent.setCenter(parent.createCenter3(bookshelfName));
                     }));}
                 else {
+                    int finalJ1 = j;
                     button.setOnMouseClicked((event -> {
-                    parent.setTop(parent.createTop2(bookshelfDesc));
+                        parent.setTop(parent.createTop2(bookshelfDesc,bookshelves.get(finalJ1)));
                     parent.setCenter(parent.createCenter2());
                     }));
 
