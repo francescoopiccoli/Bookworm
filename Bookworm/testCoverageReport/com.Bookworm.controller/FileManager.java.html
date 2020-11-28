@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.controller</a> &gt; <span class="el_source">FileManager.java</span></div><h1>FileManager.java</h1><pre class="source lang-java linenums">package com.Bookworm.controller;
+
+import com.Bookworm.model.*;
+
+import java.io.File;
+import java.util.ArrayList;
+
+// implements StorageManager
+<span class="nc" id="L9">public class FileManager {</span>
+<span class="nc" id="L10">    public static String pathToFilesDirectory = &quot;./src/main/java/com/Bookworm/files/&quot;;</span>
+
+    //@Override
+    public void reload() {
+<span class="nc" id="L14">        loadBookshelves();</span>
+<span class="nc" id="L15">    }</span>
+
+    //@Override
+    public ArrayList&lt;Book&gt; getAuthors(String author) {
+<span class="nc" id="L19">        return null;</span>
+    }
+
+    //saves book in the files directory, both in default bookshelf and in the selected bookshelf, if specified
+    //@Override
+    public void insertBook(Book book, String bookshelf) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (bookshelf.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L26">            Serializer.serializeBook(book, &quot;default&quot;, 1);</span>
+        } else {
+<span class="nc" id="L28">            Serializer.serializeBook(book, bookshelf, 1);</span>
+<span class="nc" id="L29">            Serializer.serializeBook(book, &quot;default&quot;, 1);</span>
+        }
+<span class="nc" id="L31">    }</span>
+
+    // creates all bookshelves objects and populates them with their books
+    //@Override
+    public ArrayList&lt;Bookshelf&gt; loadBookshelves() {
+<span class="nc" id="L36">        String[] bookshelvesNames = getBookshelves();</span>
+<span class="nc" id="L37">        ArrayList&lt;Bookshelf&gt; bookshelves = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        for (String bookshelvesName : bookshelvesNames) {</span>
+<span class="nc" id="L39">            Bookshelf newBookshelf = new Bookshelf(bookshelvesName, &quot;&quot;, new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L40">            newBookshelf.setBooks(readBookshelfBooks(newBookshelf.getName()));</span>
+<span class="nc" id="L41">            bookshelves.add(newBookshelf);</span>
+<span class="nc" id="L42">            System.out.println();</span>
+<span class="nc" id="L43">            System.out.println(newBookshelf.getName() + &quot;:&quot;);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            for (Book book : newBookshelf.getBooks()) {</span>
+<span class="nc" id="L45">                System.out.println(&quot;\t&quot; + book.getName());</span>
+<span class="nc" id="L46">            }</span>
+        }
+<span class="nc" id="L48">        return bookshelves;</span>
+    }
+
+    //@Override
+    public void deleteBook(String book, String bookshelf) {
+<span class="nc" id="L53">        File fileToDelete = new File(pathToFilesDirectory + &quot;/&quot; + bookshelf + &quot;/&quot; +  book);</span>
+<span class="nc" id="L54">        File fileToDelete2 = new File(pathToFilesDirectory + &quot;/default/&quot; +  book);</span>
+<span class="nc" id="L55">        resetSystem(fileToDelete);</span>
+<span class="nc" id="L56">        resetSystem(fileToDelete2);</span>
+<span class="nc" id="L57">        reload();</span>
+<span class="nc" id="L58">    }</span>
+    //deletes all bookshelves directories and serialized books
+    //@Override
+    public boolean resetSystem(File dir) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (dir.isDirectory()) {</span>
+<span class="nc" id="L63">            String[] children = dir.list();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            for (String child : children) {</span>
+<span class="nc" id="L65">                boolean success = resetSystem(new File(dir, child));</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                if (!success) {</span>
+<span class="nc" id="L68">                    return false;</span>
+                }
+            }
+        }
+<span class="nc" id="L72">        return dir.delete();</span>
+    }
+
+
+    // gets all bookshelves names in files directory
+    private static String[] getBookshelves() {
+<span class="nc" id="L78">        File file = new File(pathToFilesDirectory);</span>
+<span class="nc" id="L79">        return file.list((current, name) -&gt; new File(current, name).isDirectory());</span>
+    }
+
+    // reads all files inside of a bookshelf and deserializes Book objects
+    private static ArrayList&lt;Book&gt; readBookshelfBooks(String bookshelfName) {
+<span class="nc" id="L84">        File directoryPath = new File(pathToFilesDirectory + bookshelfName);</span>
+        //List of all files and directories
+<span class="nc" id="L86">        String[] contents = directoryPath.list();</span>
+<span class="nc" id="L87">        ArrayList&lt;Book&gt; books = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        for (String content : contents) {</span>
+<span class="nc" id="L90">            books.add(Serializer.deserializeBook(content, bookshelfName));</span>
+        }
+<span class="nc" id="L92">        return books;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

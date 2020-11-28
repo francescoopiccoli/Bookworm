@@ -69,7 +69,7 @@ public class DatabaseManager implements BookStorage {
         }
 
         try {
-            if (con == null || con.isClosed()) {
+            if (con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -87,7 +87,7 @@ public class DatabaseManager implements BookStorage {
         }
 
         try {
-            if (con == null || con.isClosed()) {
+            if ( con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -112,7 +112,7 @@ public class DatabaseManager implements BookStorage {
         }
 
         try {
-            if (con == null || con.isClosed()) {
+            if (con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();

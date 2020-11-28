@@ -4,6 +4,7 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +23,7 @@ public class BookListWidget extends ScrollPane {
     // by default the spawned book list will update this window, but it can be changed
     private BookListWidget parentWidget = this;
     public static final String PLACEHOLDER_IMAGE_URI = "/Images/owl_placeholder.png";
+
 
 
     public BookListWidget getParentWidget() {
@@ -60,11 +62,12 @@ public class BookListWidget extends ScrollPane {
 
             image = new Image(getClass().getResourceAsStream(BookListWidget.PLACEHOLDER_IMAGE_URI));
             imageView = new ImageView(this.image);
-            imageView.setFitHeight(250);
-            imageView.setFitWidth(500);
+            imageView.setFitHeight(105);
+            imageView.setFitWidth(120);
+            Label l = new Label("Add a book to start!");
             VBox centerVBox = new VBox();
             HBox hBox = new HBox();
-            centerVBox.getChildren().addAll(hBox, imageView);
+            centerVBox.getChildren().addAll(hBox, imageView, l);
             centerVBox.setSpacing(50);
             centerVBox.setAlignment(Pos.BASELINE_CENTER);
             setContent(centerVBox);
@@ -109,13 +112,7 @@ public class BookListWidget extends ScrollPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    try {
-                        BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
                 }));
 
                 HBox.setMargin(b, new Insets(20));

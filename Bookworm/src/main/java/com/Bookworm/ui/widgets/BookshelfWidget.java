@@ -28,6 +28,8 @@ public class BookshelfWidget extends ScrollPane{
     private List<ImageView> covers = new ArrayList<>();
     private BookshelfView parent;
     private Image image;
+    public static final String BOOKSHELF_IMAGE_URI = "/Images/bookshelfPlaceholder.png";
+
     public BookshelfWidget(List<Bookshelf>bookshelves, BookshelfView parent){
         super();
         this.bookshelves = bookshelves;
@@ -36,10 +38,10 @@ public class BookshelfWidget extends ScrollPane{
             try {
                 List<Book> list = DatabaseManager.getInstance().getBookShelfBooks(b.getId());
                 if(list.isEmpty()){
-                    image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
+                    image = new Image(getClass().getResource(BOOKSHELF_IMAGE_URI).toExternalForm());
                     ImageView img = new ImageView(image);
                     img.setFitHeight(200);
-                    img.setFitWidth(150);
+                    img.setFitWidth(160);
 
                     covers.add(img);
                 }else {
