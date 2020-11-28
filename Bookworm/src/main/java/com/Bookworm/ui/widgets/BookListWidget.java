@@ -11,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class BookListWidget extends ScrollPane {
             int i = 0;
             HBox hb = new HBox();
             for (BookWidget b : books) {
-                System.out.println(b.book.getName());
+                //System.out.println(b.book.getName());
                 if (i >= numColumns) {
                     i = 0;
                 }
@@ -97,14 +96,12 @@ public class BookListWidget extends ScrollPane {
                     hb.setAlignment(Pos.CENTER);
                     vb.getChildren().add(hb);
                 }
-
                 // filtering
-                if (filter != null
-                        && !b.getBook().getName().toLowerCase().contains(filter.toLowerCase())
-                        && (
-                        b.getBook().getDescription() == null ||
+                if (
+                        filter != null && !b.getBook().getName().toLowerCase().contains(filter.toLowerCase()) &&
+                        ( b.getBook().getDescription() == null ||
                                 !b.getBook().getDescription().toLowerCase().contains(filter.toLowerCase())
-                )
+                        ) && !b.getBook().getAuthor().toLowerCase().contains(filter.toLowerCase())
                 )
                     continue;
 

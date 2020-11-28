@@ -47,6 +47,8 @@ public class App extends Application {
     // does not work idk why - TO TEST
     public static boolean hasOpenedBook(Book book) {
         System.out.println("Checking if book was already opened...");
+        System.out.println(openedBooks.size());
+        if (openedBooks.size() > 0) {
         for (Book openedBook : openedBooks) {
             if (book.getId() > 0 && openedBook.getId() == book.getId()) {
                 System.out.println("WAS PRESENT with id");
@@ -55,6 +57,7 @@ public class App extends Application {
                 System.out.println("WAS PRESENT with name and author");
                 return true;
             }
+        }
         }
         return false;
     }

@@ -167,11 +167,13 @@ public class BookInfoView extends BorderPane {
         try {
             LinkedList<Bookshelf> bookshelves = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
             LinkedList<String> bookshelfNamesString = new LinkedList<>();
+            bookshelfNamesString.add("Default");
             for(Bookshelf b : bookshelves){
                 bookshelfNamesString.add(b.getName());
             }
-            int largestString = bookshelfNamesString.get(0).length();
-            int index = 0;
+
+                int largestString = bookshelfNamesString.get(0).length();
+                int index = 0;
 
             for(int i = 0; i < bookshelfNamesString.size(); i++)
             {
@@ -197,11 +199,14 @@ public class BookInfoView extends BorderPane {
 
         list.add(0, noBookshelf);
         list.add(1, defaultBookshelf);
+        int i = 1;
 
         try {
+            //CHECK this i instead of bookshelf.getId()!!!
             LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
             for(Bookshelf bookshelf : b) {
-                list.add(bookshelf.getId(), bookshelf);
+                list.add(i, bookshelf);
+                i++;
             }
 
         } catch (SQLException | ClassNotFoundException throwables) {
