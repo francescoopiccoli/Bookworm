@@ -34,7 +34,7 @@ public class BookListView extends BorderPane {
         headerPane.setPadding(new Insets(20));
         setTop(headerPane);
 
-        Text t = new Text(title);
+        Label t = new Label(title);
         t.setFont(Font.font("Arial", FontWeight.EXTRA_LIGHT, 18));
         headerPane.setLeft(t);
 

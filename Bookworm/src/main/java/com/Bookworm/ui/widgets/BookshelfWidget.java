@@ -78,6 +78,7 @@ public class BookshelfWidget extends ScrollPane{
             imageView.setFitHeight(250);
             imageView.setFitWidth(500);
             VBox centerVBox = new VBox();
+            centerVBox.getStyleClass().add("inner");
             HBox hBox = new HBox();
             centerVBox.getChildren().addAll(hBox, imageView);
             centerVBox.setSpacing(50);
@@ -92,6 +93,7 @@ public class BookshelfWidget extends ScrollPane{
 
         } else {
             VBox vb = new VBox();
+            vb.getStyleClass().add("inner");
             vb.setAlignment(Pos.CENTER);
 
             int width = (int) getWidth();

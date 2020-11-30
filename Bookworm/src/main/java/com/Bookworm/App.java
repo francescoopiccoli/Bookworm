@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -64,6 +65,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+
         //views.put("Home", new Label("implement me"));
         DiscoverView discoverView = new DiscoverView();
         //BookListWidget readingListWidget;
@@ -99,6 +101,7 @@ public class App extends Application {
         vBox.setPadding(new Insets(20));
 		vBox.setAlignment(Pos.CENTER);
         Text title = new Text("Bookworm");
+        title.setFill(Paint.valueOf("#F2BC94"));
         title.setFont(Font.font("Noto Sans Condensed", FontWeight.BOLD, 28));
         vBox.getChildren().add(title);
 
@@ -137,6 +140,7 @@ public class App extends Application {
 
         for (Map.Entry<String, Region> entry : views.entrySet()) {
             ToggleButton button = new NavToggleButton(entry.getKey());
+            button.getStyleClass().add("buttonsBasic");
             if (currentView.equals(entry.getValue()))
                 button.setSelected(true);
 

@@ -41,13 +41,16 @@ public class BookWidget extends BorderPane {
                 title = title.substring(0, 19) + "\u2026";
             }
             Text t = new Text(title);
+
             t.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+
             setMargin(t, new Insets(20));
             setAlignment(t, Pos.BOTTOM_CENTER);
+            t.getStyleClass().add("BookTitle");
             setBottom(t);
         }
         //setPadding(new Insets(10));
-        setStyle("-fx-background-color: linear-gradient(to top, #ccc, #fff); -fx-border-color: #999;");
+        setStyle("-fx-background-color: #722620; -fx-border-color: #30110D;");
     }
 
     public Book getBook() {

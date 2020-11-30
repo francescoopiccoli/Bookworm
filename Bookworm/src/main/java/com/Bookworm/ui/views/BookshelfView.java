@@ -71,6 +71,7 @@ public class BookshelfView extends BorderPane {
             test.setTitle("Add Bookshelf");
             VBox root = new VBox();
             root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
+            //root.getStylesheets().add(getClass().getResource("/Stylesheets/style2.css").toExternalForm());
             root.setSpacing(5);
             Label name = new Label("Insert the name of your Bookshelf");
             TextField nameField = new TextField();
@@ -151,7 +152,7 @@ public class BookshelfView extends BorderPane {
     private Node createCenter(Bookshelf bookshelf) {
         ScrollPane sc = new ScrollPane();
         sc.setFitToHeight(true);
-
+        sc.getStyleClass().add("inner");
         return sc;
     }
 

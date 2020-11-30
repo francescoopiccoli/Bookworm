@@ -23,7 +23,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="765e32cc-f44c-4f36-90a0-604a2472d944" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/controller/GoogleBooksClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/controller/GoogleBooksClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style2.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookInfoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookInfoView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BookwormDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/BookwormDB.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,9 +63,10 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Bookworm/src/test/testCoverageReport" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
-  <component name="RunManager" selected="JUnit.All in App">
+  <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.Bookworm.App" />
       <module name="App" />
@@ -86,8 +98,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in App" />
         <item itemvalue="Application.App" />
+        <item itemvalue="JUnit.All in App" />
       </list>
     </recent_temporary>
   </component>
@@ -101,6 +113,9 @@
       <updated>1606401947110</updated>
     </task>
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -131,45 +146,50 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="82" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1606478341958" />
-    <state width="1237" height="118" key="GridCell.Tab.0.bottom" timestamp="1606478520138">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606760868150">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1237" height="118" key="GridCell.Tab.0.center" timestamp="1606478520138">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606760868150">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1237" height="118" key="GridCell.Tab.0.left" timestamp="1606478520138">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606760868150">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1237" height="118" key="GridCell.Tab.0.right" timestamp="1606478520138">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606760868150">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state x="458" y="255" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606478497618">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
+    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606760176671">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="458" y="255" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1606478497618" />
+    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606760176671" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1606402090854">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1606402090854" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/App$App.ic" NAME="App Coverage Results" MODIFIED="1606226428885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.Bookworm.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/App$DatabaseManagerTest.ic" NAME="DatabaseManagerTest Coverage Results" MODIFIED="1606226941591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.Bookworm.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/App$GUItests.ic" NAME="GUItests Coverage Results" MODIFIED="1606226911036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.Bookworm.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/App$All_in_App.exec" NAME="All in App Coverage Results" MODIFIED="1606478261394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/App$All_in_App.ic" NAME="All in App Coverage Results" MODIFIED="1606478210641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/App$App.ic" NAME="App Coverage Results" MODIFIED="1606226428885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.Bookworm.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/App$GoogleBooksClientUnitTest.ic" NAME="GoogleBooksClientUnitTest Coverage Results" MODIFIED="1606228767702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.Bookworm.controller.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/App$All_in_App.exec" NAME="All in App Coverage Results" MODIFIED="1606478261394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/App$GUItests.ic" NAME="GUItests Coverage Results" MODIFIED="1606226911036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.Bookworm.controller.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/App$All_in_App.ic" NAME="All in App Coverage Results" MODIFIED="1606478210641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

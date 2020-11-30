@@ -19,9 +19,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.sql.SQLException;
@@ -82,7 +84,7 @@ public class BookInfoView extends BorderPane {
 
         setTop(addHBoxTop());
         setCenter(addVBox());
-
+        setStyle("-fx-background-color: #F2BC94;");
         // finally, set stylesheet of this whole window
         getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
     }
@@ -106,13 +108,15 @@ public class BookInfoView extends BorderPane {
             //ImageView imageView = new ImageView(image);
             BookInfoView bookInfoView = new BookInfoView(book, parent);
             Stage stage = new Stage();
+
             stage.setTitle(book.getAuthor() + " - " + book.getName());
-            Scene scene = new Scene(bookInfoView);
+            Scene scene = new Scene(bookInfoView, Color.WHITE);
             stage.setScene(scene);
             stage.setWidth(w);
             stage.show();
             // when the window is closed, book is removed from App.openedBooks
             stage.setOnCloseRequest(e -> App.openedBooks.remove(book));
+
         }
     }
 
@@ -347,6 +351,7 @@ public class BookInfoView extends BorderPane {
         //description
 
         Label description = new Label("Short Description");
+        description.setStyle("-fx-text-fill: #722620;");
         if(book.getDescription() != null)
             description.setText(book.getDescription());
         description.setWrapText(true);
@@ -365,6 +370,7 @@ public class BookInfoView extends BorderPane {
 
         //Review and rating Area
         TextArea review = new TextArea("review");
+        review.setStyle("-fx-text-fill: #722620;");
         //in case the book is already in DB, retreives the already existing review
         try {
             if(dbManager.bookAlreadySaved(book)) {
@@ -407,7 +413,7 @@ public class BookInfoView extends BorderPane {
 
         //scroll for review textarea
         ScrollPane scrollPane2 = new ScrollPane(review);
-        scrollPane2.getStyleClass().add("scrollReview");
+        //scrollPane2.getStyleClass().add("scrollReview");
         scrollPane2.setFitToWidth(true);
         scrollPane2.setFitToHeight(true);
 

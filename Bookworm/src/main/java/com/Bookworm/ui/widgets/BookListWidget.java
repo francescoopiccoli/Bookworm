@@ -51,6 +51,7 @@ public class BookListWidget extends ScrollPane {
 
     public void updateList() throws NullPointerException {
         updateList("");
+
     }
 
     public void updateList(String filter) throws NullPointerException {
@@ -64,7 +65,9 @@ public class BookListWidget extends ScrollPane {
             imageView.setFitHeight(105);
             imageView.setFitWidth(120);
             Label l = new Label("Add a book to start!");
+            l.setStyle("-fx-text-fill: #722620");
             VBox centerVBox = new VBox();
+            centerVBox.getStyleClass().add("inner");
             HBox hBox = new HBox();
             centerVBox.getChildren().addAll(hBox, imageView, l);
             centerVBox.setSpacing(50);
@@ -79,6 +82,7 @@ public class BookListWidget extends ScrollPane {
 
         } else {
             VBox vb = new VBox();
+            vb.getStyleClass().add("inner");
             vb.setAlignment(Pos.CENTER);
 
             int width = (int) getWidth();
