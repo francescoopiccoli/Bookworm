@@ -223,7 +223,6 @@ public class BookInfoView extends BorderPane {
                 comboBookshelf.getSelectionModel().select(0);
             }
             else{
-
                 list.remove(0);
                 comboBookshelf.setItems(list);
                 comboBookshelf.getSelectionModel().select(1);

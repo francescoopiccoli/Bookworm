@@ -23,6 +23,7 @@ import com.google.api.services.books.Books.Volumes.List;
 import com.google.api.services.books.model.Volume;
 import com.google.api.services.books.model.Volumes;
 
+import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class GoogleBooksClient {
 
 
   //method called by searchBooks to find all books given the  query written in a formal way
-  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query) throws Exception, NullPointerException {
+  public static LinkedList<Book> getFoundBooks(JsonFactory jsonFactory, String query){
 
     final Books books = connectToAPI(jsonFactory);
 
@@ -67,16 +68,31 @@ public class GoogleBooksClient {
 
     // Set query string and filter only Google eBooks.
     System.out.println("Query: [" + query + "]");
-    List volumesList = books.volumes().list(query);
-   // volumesList.setFilter("ebooks");
+    List volumesList = null;
+    try {
+      volumesList = books.volumes().list(query);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    // volumesList.setFilter("ebooks");
     volumesList.setMaxResults((long) 40);
     //volumesList.setOrderBy("newest");
     // Execute the query.
-    Volumes volumes = volumesList.execute();
-    if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
-      System.out.println("No matches found.");
-      return null;
+    Volumes volumes = null;
+    try {
+      volumes = volumesList.execute();
+    } catch (UnknownHostException e) {
+      System.out.println("An error occurred, check your internet connection!");
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+
+    try {
+      if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
+        System.out.println("No matches found.");
+        return null;
+      }
+
     for (Volume volume : volumes.getItems()) {
       Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
       Volume.SaleInfo saleInfo = volume.getSaleInfo();
@@ -114,6 +130,10 @@ public class GoogleBooksClient {
       foundBooks.add(currentBook);
     }
     return foundBooks;
+    } catch (NullPointerException e) {
+
+      return null;
+    }
   }
 
   //method called in method RefreshThread in DiscoverView to retrieve a list of "Book" objects given the user-formulated query
@@ -147,17 +167,13 @@ public class GoogleBooksClient {
       if (prefix != null) {
         formalQuery = prefix + formalQuery;
       }
-      try {
-        LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
-        return foundBooks;
-      } catch (IOException e) {
-        System.err.println(e.getMessage());
-      }
+      LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
+      return foundBooks;
     } catch (Throwable t) {
       t.printStackTrace();
     }
     System.exit(0);
-     return null;
+    return null;
    }
 
 }

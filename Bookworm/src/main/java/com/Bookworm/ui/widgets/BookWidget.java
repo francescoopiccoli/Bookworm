@@ -29,7 +29,12 @@ public class BookWidget extends BorderPane {
         // is this responsible for the weird NullPointerException stuff?
 
         try {
-            image = new Image(book.getImageURL(), true);
+            if(book.getImageURL() == ""){
+                image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
+            }
+            else{
+                image = new Image(book.getImageURL(), true);
+            }
             imageView.setImage(image);
         } catch (IllegalArgumentException | NullPointerException e) {
             image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));

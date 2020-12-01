@@ -1,5 +1,6 @@
 package com.Bookworm.ui.widgets;
 
+import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
@@ -64,7 +65,14 @@ public class BookListWidget extends ScrollPane {
             imageView = new ImageView(this.image);
             imageView.setFitHeight(105);
             imageView.setFitWidth(120);
-            Label l = new Label("Add a book to start!");
+            Label l;
+            //to check whether the user is connected or not, but slows down the application launch..
+            if(GoogleBooksClient.searchBooks("sample") == null){
+                l = new Label("No internet connection, make sure to be connected to search new books!");
+            }
+            else{
+                l = new Label("Add a book to start!");
+            }
             l.setStyle("-fx-text-fill: #722620");
             VBox centerVBox = new VBox();
             centerVBox.getStyleClass().add("inner");
@@ -114,6 +122,7 @@ public class BookListWidget extends ScrollPane {
                     // bookInfo should accept Book object, not just its parameters!
 
                     BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
+
                 }));
 
                 HBox.setMargin(b, new Insets(20));
