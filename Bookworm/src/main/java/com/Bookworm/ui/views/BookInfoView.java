@@ -18,16 +18,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BookInfoView extends BorderPane {
 
@@ -203,7 +207,7 @@ public class BookInfoView extends BorderPane {
 
         list.add(0, noBookshelf);
         list.add(1, defaultBookshelf);
-        int i = 1;
+        int i = 2;
 
         try {
             //CHECK this i instead of bookshelf.getId()!!!
