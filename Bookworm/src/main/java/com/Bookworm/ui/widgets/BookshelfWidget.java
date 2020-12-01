@@ -21,6 +21,9 @@ import javafx.scene.layout.VBox;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 //NOT USED
 public class BookshelfWidget extends ScrollPane{
     private String currentFilter = "";
@@ -28,6 +31,8 @@ public class BookshelfWidget extends ScrollPane{
     private List<ImageView> covers = new ArrayList<>();
     private BookshelfView parent;
     private Image image;
+    private static final Logger LOGGER = Logger.getLogger(BookshelfWidget.class.getName());
+
     public static final String BOOKSHELF_IMAGE_URI = "/Images/bookshelfPlaceholder.png";
 
     public BookshelfWidget(List<Bookshelf>bookshelves, BookshelfView parent){
@@ -52,9 +57,11 @@ public class BookshelfWidget extends ScrollPane{
                     covers.add(img);
                 }
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+                //throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.log( Level.SEVERE, e.toString(), e);
+                //e.printStackTrace();
             }
         }
         setFitToHeight(true);

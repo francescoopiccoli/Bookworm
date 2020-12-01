@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookshelfView extends BorderPane {
     private DatabaseManager db = BookInfoView.dbManager;
@@ -28,6 +30,9 @@ public class BookshelfView extends BorderPane {
     private List<Bookshelf> bookshelves;
     private List<ImageView> covers = new ArrayList<>();
     private Image image;
+    private static final Logger LOGGER = Logger.getLogger(BookshelfView.class.getName());
+
+
     public BookshelfView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
@@ -42,9 +47,11 @@ public class BookshelfView extends BorderPane {
             bookshelveswithdefault.add(0,def);
             setCenter(new BookshelfWidget(bookshelveswithdefault,this));
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
+            //e.printStackTrace();
         }
         //setCenter(createCenter());
 
@@ -102,9 +109,11 @@ public class BookshelfView extends BorderPane {
                         db.insertBookshelf(list);
                     }
                 } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
+                    LOGGER.log( Level.SEVERE, e1.toString(), e1);
+                    //e1.printStackTrace();
                 } catch (SQLException e1) {
-                    e1.printStackTrace();
+                    LOGGER.log( Level.SEVERE, e1.toString(), e1);
+                    //e1.printStackTrace();
                 }
                 //ADD code that creates new List
                 test.hide();
@@ -121,9 +130,11 @@ public class BookshelfView extends BorderPane {
                     bookshelveswithdefault.add(0,def);
                     setCenter(new BookshelfWidget(bookshelveswithdefault,this));
                 } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+                    //throwables.printStackTrace();
                 } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
+                    LOGGER.log( Level.SEVERE, ex.toString(), ex);
+                    //ex.printStackTrace();
                 }
 
             });
@@ -170,9 +181,11 @@ public class BookshelfView extends BorderPane {
                     db.deleteBookshelf(bookshelf);
                     //BookListView.getListWidget().updateList();
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    LOGGER.log( Level.SEVERE, e.toString(), e);
+                    //e.printStackTrace();
                 } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+                    //throwables.printStackTrace();
                 }
             });
 
@@ -191,9 +204,11 @@ public class BookshelfView extends BorderPane {
                 bookshelveswithdefault.add(0,def);
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+                //throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.log( Level.SEVERE, e.toString(), e);
+                //e.printStackTrace();
             }
         });
         Text t = new Text(description);
@@ -230,9 +245,11 @@ public class BookshelfView extends BorderPane {
                 bookshelveswithdefault.add(0,def);
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+                //throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.log( Level.SEVERE, e.toString(), e);
+                //e.printStackTrace();
             }
         });
 
@@ -249,9 +266,11 @@ public class BookshelfView extends BorderPane {
         try {
             books = db.getBooks();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
+            //e.printStackTrace();
         }
         BorderPane pane = new BorderPane();
         BookListView blv = new BookListView("Default Bookshelf",books);
@@ -274,9 +293,11 @@ public class BookshelfView extends BorderPane {
             books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));
             //String.valueOf((db.getBookshelfID(bookshelf)))
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
+            //e.printStackTrace();
         }
         for (Book b: books
              ) {

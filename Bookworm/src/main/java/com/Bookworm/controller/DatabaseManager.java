@@ -7,6 +7,8 @@ import com.Bookworm.model.Bookshelf;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //QUESTIONS:
 // if I delete a bookshelf, what happens to the book within it?
@@ -18,6 +20,7 @@ public class DatabaseManager implements BookStorage {
     private PreparedStatement ps;
     private ResultSet res;
     private static DatabaseManager dbmanager;
+    private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
 
     //singleton design pattern
@@ -25,7 +28,8 @@ public class DatabaseManager implements BookStorage {
         try {
             dbmanager = new DatabaseManager();
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         }
     }
 
@@ -222,8 +226,8 @@ public class DatabaseManager implements BookStorage {
             }
             return res.getString("review");
         } catch (NullPointerException e) {
-                System.out.println("Error in getReview: book was null");
-                return null;
+            LOGGER.log( Level.SEVERE, "Error in getReview: book was null", e);
+            return null;
         }
         finally {
             if (ps != null) {
@@ -284,7 +288,8 @@ public class DatabaseManager implements BookStorage {
             }
             return res.getInt("rating");
         } catch(NullPointerException e) {
-            System.out.println("Error in getRating: book is null");
+            LOGGER.log( Level.SEVERE, "Error in getRating: book is null", e);
+            //System.out.println("Error in getRating: book is null");
             return -1;
         }
         finally {
@@ -426,7 +431,8 @@ public class DatabaseManager implements BookStorage {
             ps.setString(8, b.getImageURL());
             ps.executeUpdate();
         } catch (NullPointerException e) {
-            System.out.println("Error in insert book: inserted bookshelf or book was null");
+            LOGGER.log( Level.SEVERE, "Error in insert book: inserted bookshelf or book was null", e);
+            //System.out.println("Error in insert book: inserted bookshelf or book was null");
         } finally {
             if (ps != null) {
                 ps.close();
@@ -450,7 +456,8 @@ public class DatabaseManager implements BookStorage {
             ps.executeUpdate();
 
         } catch(NullPointerException e) {
-            System.out.println("Error in insertRating: book is empty");
+            LOGGER.log( Level.SEVERE, "Error in insertRating: book is empty", e);
+            //System.out.println("Error in insertRating: book is empty");
         }
         finally {
             if (ps != null) {
@@ -474,7 +481,8 @@ public class DatabaseManager implements BookStorage {
             ps.executeUpdate();
 
         } catch(NullPointerException e) {
-            System.out.println("Error in insert review, book was null");
+            LOGGER.log( Level.SEVERE, "Error in insert review, book was null", e);
+            //System.out.println("Error in insert review, book was null");
         }
         finally {
             if (ps != null) {
@@ -498,7 +506,8 @@ public class DatabaseManager implements BookStorage {
             ps.setString(3, bs.getDescription());
             ps.executeUpdate();
         } catch (NullPointerException e) {
-            System.out.println("Error in insert bookshelf: inserted bookshelf was null");
+            LOGGER.log( Level.SEVERE, "Error in insert bookshelf: inserted bookshelf was null", e);
+            //System.out.println("Error in insert bookshelf: inserted bookshelf was null");
         } finally {
             if (ps != null) {
                 ps.close();
@@ -572,7 +581,8 @@ public class DatabaseManager implements BookStorage {
             return ps.execute();
 
         } catch (NullPointerException e) {
-            System.out.println("Error in delete bookshelf: bookshelf is null");
+            LOGGER.log( Level.SEVERE, "Error in delete bookshelf: bookshelf is null", e);
+            //System.out.println("Error in delete bookshelf: bookshelf is null");
             return false;
         } finally {
             if (ps != null) {

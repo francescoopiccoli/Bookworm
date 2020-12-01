@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -41,6 +43,7 @@ public class App extends Application {
 	private Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
 	private ToggleGroup toggleGroup;
+    private static final Logger LOGGER = Logger.getLogger(App.class.getName());
 
     // array to keep track of all the book info views, to avoid opening two views of the same book
     public static List<Book> openedBooks = new ArrayList<>();
@@ -75,7 +78,8 @@ public class App extends Application {
             views.put("My Books", readingListView);
             discoverView.setMyBooksWidget(readingListView.getListWidget());
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         }
         views.put("Bookshelves", new BookshelfView());
 

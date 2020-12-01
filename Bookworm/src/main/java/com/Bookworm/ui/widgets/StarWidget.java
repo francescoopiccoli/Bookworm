@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StarWidget {
 
@@ -26,10 +28,10 @@ public class StarWidget {
     private static Button b;
     private static DatabaseManager db = DatabaseManager.getInstance();
     private static BookInfoView parent;
+    private static final Logger LOGGER = Logger.getLogger(StarWidget.class.getName());
 
     //generate the correct widget: according to the rating, draw the correct number of filled / empty stars
     private static HBox generateWidget(){
-
         try {
             if(db.getBook(book.getName(), book.getAuthor()) != null){
                 rating = db.getBook(book.getName(), book.getAuthor()).getRating();
@@ -38,9 +40,11 @@ public class StarWidget {
                 rating = book.getRating();
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
         for(int i = 0; i < 5; i++){
@@ -69,9 +73,12 @@ public class StarWidget {
                         updateWidget(newRating);
                     }
                 } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    //throwables.printStackTrace();
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+
                 } catch (ClassNotFoundException classNotFoundException) {
-                    classNotFoundException.printStackTrace();
+                    //classNotFoundException.printStackTrace();
+                    LOGGER.log( Level.SEVERE, classNotFoundException.toString(), classNotFoundException);
                 }
             });
         }
@@ -86,9 +93,11 @@ public class StarWidget {
         try {
             db.insertRating(book, newRating);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
+            //throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
+            //e.printStackTrace();
         }
         rating = newRating;
         parent.refresh();
