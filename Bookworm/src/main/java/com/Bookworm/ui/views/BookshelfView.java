@@ -33,13 +33,6 @@ public class BookshelfView extends BorderPane {
         setTop(createTop());
         try {
             List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
-            ArrayList<Book> allbooks = new ArrayList<>();
-            for(Book b : db.getBooks()){
-                allbooks.add(b);
-            }
-
-            Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
-            bookshelveswithdefault.add(0,def);
             setCenter(new BookshelfWidget(bookshelveswithdefault,this));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -52,7 +45,6 @@ public class BookshelfView extends BorderPane {
 
 
     private Node createTop() {
-
 
         //principal view
         Label title = new Label();
@@ -112,13 +104,6 @@ public class BookshelfView extends BorderPane {
                 //Reload central part with lists
                 try {
                     List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
-                    ArrayList<Book> allbooks = new ArrayList<>();
-                    for(Book b : db.getBooks()){
-                        allbooks.add(b);
-                    }
-
-                    Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
-                    bookshelveswithdefault.add(0,def);
                     setCenter(new BookshelfWidget(bookshelveswithdefault,this));
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -182,13 +167,6 @@ public class BookshelfView extends BorderPane {
             //setCenter(createCenter());
             try {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
-                ArrayList<Book> allbooks = new ArrayList<>();
-                for(Book b : db.getBooks()){
-                    allbooks.add(b);
-                }
-
-                Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
-                bookshelveswithdefault.add(0,def);
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -200,7 +178,8 @@ public class BookshelfView extends BorderPane {
 
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(back);
-        borderPane.setRight(deleteButton);
+        System.out.println(bookshelf.getId());
+        if (bookshelf.getId()!=1)borderPane.setRight(deleteButton);
         //borderPane.setRight(back);
         //borderPane.setLeft(t);
         HBox.setHgrow(borderPane,Priority.ALWAYS);
@@ -221,13 +200,6 @@ public class BookshelfView extends BorderPane {
             //setCenter(createCenter());
             try {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
-                ArrayList<Book> allbooks = new ArrayList<>();
-                for(Book b : db.getBooks()){
-                    allbooks.add(b);
-                }
-
-                Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
-                bookshelveswithdefault.add(0,def);
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

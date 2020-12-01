@@ -38,7 +38,6 @@ public class BookInfoView extends BorderPane {
 
     private static final int DEFAULT_WIDTH = 600;
     private static final String LABEL_NO_BOOKSHELF = "[No Bookshelf]";
-    private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
     private static final int ID_NO_BOOKSHELF = -5;
     private static final int ID_DEFAULT_BOOKSHELF = -6;
 
@@ -148,11 +147,6 @@ public class BookInfoView extends BorderPane {
         comboBookshelf.setPlaceholder(new Label("None"));
         //list stays empty need to check later
 
-        Bookshelf noBookshelf = new Bookshelf(LABEL_NO_BOOKSHELF, "", null);
-        noBookshelf.setId(ID_NO_BOOKSHELF);
-        Bookshelf defaultBookshelf = new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null);
-        defaultBookshelf.setId(ID_DEFAULT_BOOKSHELF);
-
         VBox rightElements = new VBox();
         Button deleteButton = new Button("Delete");
         deleteButton.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
@@ -204,15 +198,14 @@ public class BookInfoView extends BorderPane {
 
         ObservableList<Bookshelf> list = FXCollections.observableArrayList(bookShelf);
 
-
-        list.add(0, noBookshelf);
-        list.add(1, defaultBookshelf);
-        int i = 2;
+        Bookshelf b = new Bookshelf("Not added", "");
+        list.add(0, b);
+        int i = 1;
 
         try {
             //CHECK this i instead of bookshelf.getId()!!!
-            LinkedList<Bookshelf> b = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
-            for(Bookshelf bookshelf : b) {
+            LinkedList<Bookshelf> b2 = (LinkedList<Bookshelf>) DatabaseManager.getInstance().getBookShelves();
+            for(Bookshelf bookshelf : b2) {
                 list.add(i, bookshelf);
                 i++;
             }
@@ -257,13 +250,12 @@ public class BookInfoView extends BorderPane {
             updateBookId();
             if(dbManager.bookAlreadySaved(book)) {
                 int id = dbManager.getBookshelfIdByBook(book);
-                comboBookshelf.setValue(defaultBookshelf);
                 for(Bookshelf bs : comboBookshelf.getItems()) {
                     if(bs.getId() == id)
                         comboBookshelf.setValue(bs);
                 }
             } else {
-                comboBookshelf.setValue(noBookshelf);
+                comboBookshelf.setValue(b);
             }
         } catch (Exception e) {
             e.printStackTrace();
