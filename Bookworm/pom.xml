@@ -4,11 +4,19 @@
     <groupId>com.Bookworm</groupId>
     <artifactId>App</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <!--Sonar properties -->
+        <jacoco.version>0.8.3</jacoco.version>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.language>java</sonar.language>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -20,6 +28,7 @@
             <artifactId>google-api-client</artifactId>
             <version>1.30.11</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-books -->
         <dependency>
             <groupId>com.google.apis</groupId>
@@ -49,11 +58,38 @@
             <version>3.32.3.2</version>
         </dependency>
     </dependencies>
+
     <build>
 
-            <testSourceDirectory>src/test</testSourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
 
         <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.7.0.1746</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -63,35 +99,39 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.7.0.1746</version>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
             </plugin>
 
-             <plugin>
-                 <groupId>org.openjfx</groupId>
-                 <artifactId>javafx-maven-plugin</artifactId>
-                 <version>0.0.5</version>
-                 <configuration>
-                     <mainClass>com.Bookworm.App</mainClass>
-                 </configuration>
-             </plugin>
-
-             <plugin>
-                 <groupId>org.codehaus.mojo</groupId>
-                 <artifactId>exec-maven-plugin</artifactId>
-                 <version>1.2.1</version>
-                 <executions>
-                     <execution>
-                         <goals>
-                             <goal>java</goal>
-                         </goals>
-                     </execution>
-                 </executions>
-                 <configuration>
-                     <mainClass>com.Bookworm.App</mainClass>
-                 </configuration>
-             </plugin>
-         </plugins>
-     </build>
- </project>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.5</version>
+                <configuration>
+                    <mainClass>com.Bookworm.App</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.Bookworm.App</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
