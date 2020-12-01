@@ -48,7 +48,6 @@ public class DatabaseManager implements BookStorage {
 
     //initialiseDB creates the database tables in case they do not exist yet
     private void initialiseDB() throws SQLException, ClassNotFoundException {
-
         try {
             if (con == null || con.isClosed()) {
                 getConnection();
@@ -111,7 +110,7 @@ public class DatabaseManager implements BookStorage {
             }
         }
 
-        try {
+        /*try {
             if (con.isClosed()) {
                 getConnection();
             }
@@ -128,7 +127,8 @@ public class DatabaseManager implements BookStorage {
             if (con != null) {
                 con.close();
             }
-        }
+        }*/
+        //if no default bookself is present it is created
     }
 
     // retrieve a book from database given the name and the author of the book

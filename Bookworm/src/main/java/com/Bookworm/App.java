@@ -2,6 +2,7 @@ package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
 import com.Bookworm.ui.views.BookListView;
 import com.Bookworm.ui.views.BookshelfView;
 import com.Bookworm.ui.views.DiscoverView;
@@ -45,17 +46,14 @@ public class App extends Application {
     // array to keep track of all the book info views, to avoid opening two views of the same book
     public static List<Book> openedBooks = new ArrayList<>();
 
-    // does not work idk why - TO TEST
     public static boolean hasOpenedBook(Book book) {
-        System.out.println("Checking if book was already opened...");
-        System.out.println(openedBooks.size());
         if (openedBooks.size() > 0) {
         for (Book openedBook : openedBooks) {
             if (book.getId() > 0 && openedBook.getId() == book.getId()) {
-                System.out.println("WAS PRESENT with id");
+                //System.out.println("Book opened, present with id");
                 return true;
             } else if (openedBook.getName().equals(book.getName()) && openedBook.getAuthor().equals(book.getAuthor())) {
-                System.out.println("WAS PRESENT with name and author");
+                //System.out.println("Book opened, present with name and author");
                 return true;
             }
         }
@@ -65,10 +63,19 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
+        //creating default bookshelf if not present
+        try {
+            if (DatabaseManager.getInstance().getBookshelfID("Default") == -1) {
+                Bookshelf defaultB = new Bookshelf("Default", "Default bookshelf");
+                DatabaseManager.getInstance().insertBookshelf(defaultB);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        //views.put("Home", new Label("implement me"));
         DiscoverView discoverView = new DiscoverView();
-        //BookListWidget readingListWidget;
         views.put("Discover", discoverView);
         try {
             BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
@@ -95,7 +102,7 @@ public class App extends Application {
     }
 
 
-    
+
     private VBox _generateTopBar() {
 		VBox vBox = new VBox();
         vBox.setPadding(new Insets(20));
@@ -148,6 +155,18 @@ public class App extends Application {
             hBox.getChildren().add(button);
             button.setOnAction((event) -> {
                 String text = ((ToggleButton) event.getSource()).getText();
+                if (text == "My Books") {
+                    BookListView readingListView = null;
+                    try {
+                        readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    readingListView.getListWidget().updateList();
+                    views.put("My Books", readingListView);
+                }
                 mainPane.setCenter(_generateContent(text));
             });
             button.setToggleGroup(toggleGroup);
