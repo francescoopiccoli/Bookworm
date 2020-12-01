@@ -150,9 +150,12 @@ public class BookshelfView extends BorderPane {
                     if (books != null) {
                         for(Book b: books) {
                             db.deleteBook(b);
+                            //start
+                           // db.insertBook(b, "Default");
                         }
                     }
                     db.deleteBookshelf(bookshelf);
+                    deleteButton.setText("Click on Go Back");
                     //BookListView.getListWidget().updateList();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

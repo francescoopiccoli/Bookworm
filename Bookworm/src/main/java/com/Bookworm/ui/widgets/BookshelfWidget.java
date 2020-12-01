@@ -133,24 +133,13 @@ public class BookshelfWidget extends ScrollPane{
                     button.setPrefWidth(250);
                     String bookshelfName = bookshelves.get(j).getName();
                     String bookshelfDesc = bookshelves.get(j).getDescription();
-                    boolean isDefault = false;
-                    if(j==0){
-                        isDefault = true;
-                    }
-                if(isDefault==false){
+
+
                     int finalJ = j;
                     button.setOnMouseClicked((event -> {
                         parent.setTop(parent.createTop2(bookshelfDesc, bookshelves.get(finalJ)));
                         parent.setCenter(parent.createCenter3(bookshelfName));
-                    }));}
-                else {
-                    int finalJ1 = j;
-                    button.setOnMouseClicked((event -> {
-                        parent.setTop(parent.createTop2(bookshelfDesc,bookshelves.get(finalJ1)));
-                    parent.setCenter(parent.createCenter2());
                     }));
-
-                }
 
                     HBox.setMargin(button, new Insets(20));
                     hb.getChildren().add(button);

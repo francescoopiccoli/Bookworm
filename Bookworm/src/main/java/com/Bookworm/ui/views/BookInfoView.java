@@ -263,6 +263,7 @@ public class BookInfoView extends BorderPane {
 
         // saving book in bookshelf: problem -> bookId is never assigned
         comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -> {
+            //???
             if(!oldVal.getName().equals(newVal.getName())) {
                 // delete first
                 try {
