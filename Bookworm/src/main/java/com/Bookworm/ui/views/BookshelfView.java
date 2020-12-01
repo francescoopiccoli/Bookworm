@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -24,18 +25,29 @@ import java.util.List;
 public class BookshelfView extends BorderPane {
     private DatabaseManager db = BookInfoView.dbManager;
     boolean flagExist = false;
+    private List<Bookshelf> bookshelves;
     private List<ImageView> covers = new ArrayList<>();
+    private Image image;
     public BookshelfView() {
         //Create an instance of Discover to fill the borderpane with its functions
         setTop(createTop());
         try {
-            List<Bookshelf> bookshelves = db.getBookShelves();
-            setCenter(new BookshelfWidget(bookshelves,this));
+            List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
+            ArrayList<Book> allbooks = new ArrayList<>();
+            for(Book b : db.getBooks()){
+                allbooks.add(b);
+            }
+
+            Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
+            bookshelveswithdefault.add(0,def);
+            setCenter(new BookshelfWidget(bookshelveswithdefault,this));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        //setCenter(createCenter());
+
     }
 
 
@@ -99,8 +111,15 @@ public class BookshelfView extends BorderPane {
 
                 //Reload central part with lists
                 try {
-                    List<Bookshelf> bookshelves = db.getBookShelves();
-                    setCenter(new BookshelfWidget(bookshelves,this));
+                    List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
+                    ArrayList<Book> allbooks = new ArrayList<>();
+                    for(Book b : db.getBooks()){
+                        allbooks.add(b);
+                    }
+
+                    Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
+                    bookshelveswithdefault.add(0,def);
+                    setCenter(new BookshelfWidget(bookshelveswithdefault,this));
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (ClassNotFoundException ex) {
@@ -139,19 +158,17 @@ public class BookshelfView extends BorderPane {
 
 
     public Node createTop2(String description, Bookshelf bookshelf) {
-
-                Button deleteButton = new Button("Delete Bookshelf");
-                deleteButton.setOnMouseClicked(event -> {
+            Button deleteButton = new Button("Delete Bookshelf");
+            deleteButton.setOnMouseClicked(event -> {
                 try {
                     ArrayList<Book> books = bookshelf.getBooks();
                     if (books != null) {
                         for(Book b: books) {
                             db.deleteBook(b);
-                            db.insertBook(b, "Default");
                         }
                     }
                     db.deleteBookshelf(bookshelf);
-                    setCenter(new BookshelfWidget(db.getBookShelves(),this));
+                    //BookListView.getListWidget().updateList();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (SQLException throwables) {
@@ -160,12 +177,19 @@ public class BookshelfView extends BorderPane {
             });
 
             Button back = new Button("Go Back");
-            back.setOnMouseClicked(event -> {
+        back.setOnMouseClicked(event -> {
             setTop(createTop());
-
+            //setCenter(createCenter());
             try {
-                List<Bookshelf> bookshelves = db.getBookShelves();
-                setCenter(new BookshelfWidget(bookshelves,this));
+                List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
+                ArrayList<Book> allbooks = new ArrayList<>();
+                for(Book b : db.getBooks()){
+                    allbooks.add(b);
+                }
+
+                Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
+                bookshelveswithdefault.add(0,def);
+                setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -176,8 +200,7 @@ public class BookshelfView extends BorderPane {
 
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(back);
-        System.out.println("HEY HERE" + bookshelf.getName() + bookshelf.getId());
-        if (bookshelf.getId() != 1) {borderPane.setRight(deleteButton);}
+        borderPane.setRight(deleteButton);
         //borderPane.setRight(back);
         //borderPane.setLeft(t);
         HBox.setHgrow(borderPane,Priority.ALWAYS);
@@ -188,7 +211,39 @@ public class BookshelfView extends BorderPane {
         return hBox;
     }
 
+    //Not used anymore
+    public Node createTop2() {
 
+
+        Button back = new Button("Go Back");
+        back.setOnMouseClicked(event -> {
+            setTop(createTop());
+            //setCenter(createCenter());
+            try {
+                List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
+                ArrayList<Book> allbooks = new ArrayList<>();
+                for(Book b : db.getBooks()){
+                    allbooks.add(b);
+                }
+
+                Bookshelf def = new Bookshelf("Default","Default Bookshelf", allbooks);
+                bookshelveswithdefault.add(0,def);
+                setCenter(new BookshelfWidget(bookshelveswithdefault,this));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setRight(back);
+        HBox.setHgrow(borderPane,Priority.ALWAYS);
+        HBox hBox = new HBox(borderPane);
+        hBox.setPadding(new Insets(15, 12, 15, 12));
+
+        return hBox;
+    }
     public Node createCenter2() {
         List<Book> books = null;
         try {
@@ -202,6 +257,7 @@ public class BookshelfView extends BorderPane {
         BookListView blv = new BookListView("Default Bookshelf",books);
         pane.setCenter(blv);
         return pane;
+
     }
     public Node createCenter3(String bookshelf) {
         List<Book> books = null;

@@ -38,7 +38,9 @@ public class BookInfoView extends BorderPane {
 
     private static final int DEFAULT_WIDTH = 600;
     private static final String LABEL_NO_BOOKSHELF = "[No Bookshelf]";
+    private static final String LABEL_DEFAULT_BOOKSHELF = "Default";
     private static final int ID_NO_BOOKSHELF = -5;
+    private static final int ID_DEFAULT_BOOKSHELF = -6;
 
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
@@ -148,6 +150,8 @@ public class BookInfoView extends BorderPane {
 
         Bookshelf noBookshelf = new Bookshelf(LABEL_NO_BOOKSHELF, "", null);
         noBookshelf.setId(ID_NO_BOOKSHELF);
+        Bookshelf defaultBookshelf = new Bookshelf(LABEL_DEFAULT_BOOKSHELF, "The default reading list", null);
+        defaultBookshelf.setId(ID_DEFAULT_BOOKSHELF);
 
         VBox rightElements = new VBox();
         Button deleteButton = new Button("Delete");
@@ -202,7 +206,8 @@ public class BookInfoView extends BorderPane {
 
 
         list.add(0, noBookshelf);
-        int i = 1;
+        list.add(1, defaultBookshelf);
+        int i = 2;
 
         try {
             //CHECK this i instead of bookshelf.getId()!!!
@@ -252,6 +257,7 @@ public class BookInfoView extends BorderPane {
             updateBookId();
             if(dbManager.bookAlreadySaved(book)) {
                 int id = dbManager.getBookshelfIdByBook(book);
+                comboBookshelf.setValue(defaultBookshelf);
                 for(Bookshelf bs : comboBookshelf.getItems()) {
                     if(bs.getId() == id)
                         comboBookshelf.setValue(bs);

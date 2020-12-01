@@ -28,6 +28,8 @@ import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GoogleBooksClient {
   private static final String APPLICATION_NAME = "bookworm";
@@ -38,6 +40,8 @@ public class GoogleBooksClient {
   private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
   private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
   public static LinkedList<Book> foundBooks;
+  private static final Logger LOGGER = Logger.getLogger(GoogleBooksClient.class.getName());
+
 
 
   public static Books connectToAPI(JsonFactory jsonFactory) {
@@ -47,11 +51,13 @@ public class GoogleBooksClient {
               .setGoogleClientRequestInitializer(new BooksRequestInitializer(API_KEY))
               .build();
     } catch (GeneralSecurityException e) {
-      System.out.println("Error instantiating google api client");
-      e.printStackTrace();
+      LOGGER.log( Level.SEVERE, "Error instantiating google api client", e);
+      //System.out.println("Error instantiating google api client");
+      //e.printStackTrace();
     } catch (IOException e) {
-      System.out.println("Error instantiating google api client");
-      e.printStackTrace();
+      LOGGER.log( Level.SEVERE, "Error instantiating google api client", e);
+      //System.out.println("Error instantiating google api client");
+      //e.printStackTrace();
     }
     return null;
   }
@@ -72,7 +78,8 @@ public class GoogleBooksClient {
     try {
       volumesList = books.volumes().list(query);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.log( Level.SEVERE, e.toString(), e);
+      //e.printStackTrace();
     }
     // volumesList.setFilter("ebooks");
     volumesList.setMaxResults((long) 40);
@@ -82,9 +89,10 @@ public class GoogleBooksClient {
     try {
       volumes = volumesList.execute();
     } catch (UnknownHostException e) {
-      System.out.println("An error occurred, check your internet connection!");
+      LOGGER.log( Level.SEVERE, "An error occurred, check your internet connection!", e);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.log( Level.SEVERE, e.toString(), e);
+      //e.printStackTrace();
     }
 
     try {
@@ -131,7 +139,7 @@ public class GoogleBooksClient {
     }
     return foundBooks;
     } catch (NullPointerException e) {
-
+      LOGGER.log( Level.SEVERE, e.toString(), e);
       return null;
     }
   }
@@ -170,7 +178,8 @@ public class GoogleBooksClient {
       LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
       return foundBooks;
     } catch (Throwable t) {
-      t.printStackTrace();
+      LOGGER.log( Level.SEVERE, t.toString(), t);
+      //t.printStackTrace();
     }
     System.exit(0);
     return null;
