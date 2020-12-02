@@ -159,7 +159,7 @@ public class App extends Application {
             hBox.getChildren().add(button);
             button.setOnAction((event) -> {
                 String text = ((ToggleButton) event.getSource()).getText();
-                if (text == "My Books") {
+                if (text.equals("My Books")) {
                     BookListView readingListView = null;
                     try {
                         readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());

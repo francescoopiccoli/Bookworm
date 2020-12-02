@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +51,7 @@ public class DatabaseManagerTest {
     public void getRewiew() throws SQLException, ClassNotFoundException {
         assertNull(dbtest.getReview(null));
         assertNotNull(dbtest.getReview(book1));
-   }
+    }
 
     @Test
     public void getRating() throws SQLException, ClassNotFoundException {
@@ -68,23 +70,25 @@ public class DatabaseManagerTest {
     @Test
     public void getBookshelves() throws SQLException, ClassNotFoundException {
         assertNotNull(dbtest.getBookShelves(), "The list of bookshelf cannot be null");
+        List<Bookshelf> list = dbtest.getBookShelves();
+        if (list == null) {
+            fail("Bookshelf List cannot be null");
+        }
     }
-
     @Test
+    public void getBookshelfID() throws SQLException, ClassNotFoundException {
+     dbtest.insertBookshelf(bookshelf2);
+     dbtest.getBookshelfID(bookshelf2.getName());
+     assertEquals(dbtest.getBookshelfID(bookshelf2.getName()),5);
+     //delete to prevent other tests failures
+    }
+        @Test
     public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
         assertTrue(dbtest.bookAlreadySaved(book1));
         assertFalse(dbtest.bookAlreadySaved(book4));
     }
 
-    @Disabled
-    public void insertBookNullPointerException() throws SQLException, ClassNotFoundException {
-        try {
-            dbtest.insertBook(null, "");
-            dbtest.insertBook(book1, null);
-        } catch (NullPointerException e) {
-            fail("No exception should be thrown");
-        }
-    }
+
 
     // issues with book.getId, ALWAYS call getBook(book) before referencing to its ID
     @Test
@@ -97,23 +101,49 @@ public class DatabaseManagerTest {
         dbtest.insertRating(null, 5);
     }
 
-    // not working
-    @Disabled
-    public void getBookshelfID() throws SQLException, ClassNotFoundException {
-        dbtest.insertBookshelf(bookshelf1);
-        dbtest.insertBookshelf(bookshelf2);
-        int a = dbtest.getBookshelfID("bookshelf2");
-        assertEquals(2, a);
-        try {
-            dbtest.insertBookshelf(null);
-        } catch (NullPointerException e) {
-            fail("No exception should be thrown");
+    @Test
+    public void getBookshelfIdByBook() throws SQLException, ClassNotFoundException, NullPointerException {
+        Book test = dbtest.getBook("The Great Gatsby", "Francis Scott Fitzgerald");
+        assertNotNull(test);
+        List<Book> list = new LinkedList<>();
+        list.add(test);
+        assertNotNull(list);
+        assertEquals(-1,dbtest.getBookshelfIdByBook(test));
+
+    }
+
+    @Test
+    public void getBookShelfBooks() throws SQLException, ClassNotFoundException, NullPointerException {
+        List<Book> list = new LinkedList<>();
+        list.add(book1);
+        assertNotNull(dbtest.getBookShelves());
+        dbtest.getBookshelfID(bookshelf1.getName());
+        assertNotNull(dbtest.getBookShelfBooks(bookshelf1.getId()));
+    }
+
+    @Test
+    public void insertBookshelf() throws SQLException, ClassNotFoundException, NullPointerException {
+    dbtest.insertBookshelf(bookshelf1);
+    List<Bookshelf> bookshelfList= dbtest.getBookShelves();
+    for (int i=0; i<bookshelfList.size();i++){
+        assertNotNull(bookshelfList.get(i));
+    }
+
+    }
+
+    @Test
+    public void deleteBookshelf() throws SQLException, ClassNotFoundException, NullPointerException {
+        dbtest.deleteBookshelf(bookshelf1);
+        dbtest.deleteBookshelf(bookshelf2);
+        assertNotNull(dbtest.getBookShelves());
+        if (dbtest.getBookShelves().isEmpty()){
+           System.out.println("There are no more bookshelf");
         }
     }
 
     @Test
     public void insertReview() throws SQLException, ClassNotFoundException {
-            dbtest.insertReview(book1, "Made me cry");
+        dbtest.insertReview(book1, "Made me cry");
     }
 
     @AfterAll
