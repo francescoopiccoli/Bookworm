@@ -79,8 +79,7 @@ public class DatabaseManagerTest {
     public void getBookshelfID() throws SQLException, ClassNotFoundException {
      dbtest.insertBookshelf(bookshelf2);
      dbtest.getBookshelfID(bookshelf2.getName());
-     assertEquals(dbtest.getBookshelfID(bookshelf2.getName()),5);
-     //delete to prevent other tests failures
+     assertNotNull(dbtest.getBookshelfID(bookshelf2.getName()));
     }
         @Test
     public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
@@ -137,7 +136,7 @@ public class DatabaseManagerTest {
         dbtest.deleteBookshelf(bookshelf2);
         assertNotNull(dbtest.getBookShelves());
         if (dbtest.getBookShelves().isEmpty()){
-           System.out.println("There are no more bookshelf");
+           System.out.println("There are no more bookshelves");
         }
     }
 
