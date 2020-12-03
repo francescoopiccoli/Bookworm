@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GoogleBooksClientUnitTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.controller</a> &gt; <span class="el_source">GoogleBooksClientUnitTest.java</span></div><h1>GoogleBooksClientUnitTest.java</h1><pre class="source lang-java linenums">package com.Bookworm.controller;
+
+import com.Bookworm.model.Book;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.googleapis.testing.json.GoogleJsonResponseExceptionFactoryTesting;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.books.Books;
+import com.google.api.services.books.model.Volumes;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L21">public class GoogleBooksClientUnitTest {</span>
+
+<span class="fc" id="L23">    private static final JsonFactory JSON_FACTORY = new JacksonFactory().getDefaultInstance();</span>
+    private static final int HTTP_CODE_NOT_FOUND = 404;
+    private static final String REASON_PHRASE_NOT_FOUND = &quot;NOT FOUND&quot;;
+<span class="fc" id="L26">    static Book book1 = new Book(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;, &quot;&quot;);</span>
+<span class="fc" id="L27">    Books.Volumes.List volumesList = null;</span>
+    private static LinkedList&lt;Book&gt; testSearchBook;
+<span class="fc" id="L29">    GoogleBooksClient googleBooksClient = new GoogleBooksClient();</span>
+<span class="fc" id="L30">    private static final Logger LOGGER = Logger.getLogger(GoogleBooksClient.class.getName());</span>
+    //added random value to the query, need to check database changes
+    private static final String query = &quot;The Great Gatsby&quot;;
+
+    @Test
+    public void connectToAPI() throws IOException, GeneralSecurityException {
+        //check json factory object is not null
+<span class="fc" id="L37">        assertNotNull(JSON_FACTORY);</span>
+        //check connection
+<span class="fc" id="L39">        GoogleJsonResponseException exception =</span>
+<span class="fc" id="L40">                GoogleJsonResponseExceptionFactoryTesting.newMock(</span>
+                        JSON_FACTORY, HTTP_CODE_NOT_FOUND, REASON_PHRASE_NOT_FOUND);
+<span class="fc" id="L42">        assertEquals(HTTP_CODE_NOT_FOUND, exception.getStatusCode());</span>
+<span class="fc" id="L43">        assertEquals(REASON_PHRASE_NOT_FOUND, exception.getStatusMessage());</span>
+<span class="fc" id="L44">        assertNotNull(googleBooksClient.connectToAPI(JSON_FACTORY));</span>
+
+<span class="fc" id="L46">    }</span>
+
+    @Test
+    public void getFoundBooks() throws NullPointerException, IOException, Exception {
+
+        try {
+<span class="fc" id="L52">            volumesList = googleBooksClient.connectToAPI(JSON_FACTORY)</span>
+<span class="fc" id="L53">                    .volumes().list(query);</span>
+<span class="nc" id="L54">        } catch (IOException e) {</span>
+<span class="nc" id="L55">            LOGGER.log(Level.SEVERE, e.toString(), e);</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">        Volumes volumes = null;</span>
+<span class="fc" id="L58">        volumes = volumesList.execute();</span>
+<span class="fc" id="L59">        assertNotNull(volumes);</span>
+<span class="fc" id="L60">        assertNotNull(googleBooksClient.getFoundBooks(JSON_FACTORY, query));</span>
+
+<span class="fc" id="L62">    }</span>
+
+    @Test
+
+    public void searchBooks() throws NullPointerException {
+<span class="fc" id="L67">        testSearchBook = googleBooksClient.searchBooks(query);</span>
+<span class="fc" id="L68">        assertNotNull(testSearchBook);</span>
+<span class="fc" id="L69">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

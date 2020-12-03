@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package com.Bookworm;
+
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
+import com.Bookworm.ui.views.BookListView;
+import com.Bookworm.ui.views.BookshelfView;
+import com.Bookworm.ui.views.DiscoverView;
+import com.Bookworm.ui.widgets.NavToggleButton;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+/**
+ * JavaFX App
+ */
+<span class="nc" id="L41">public class App extends Application {</span>
+
+<span class="nc" id="L43">	private Region currentView = new DiscoverView();</span>
+<span class="nc" id="L44">	private Map&lt;String,Region&gt; views = new LinkedHashMap&lt;&gt;();</span>
+	private BorderPane mainPane;
+	private ToggleGroup toggleGroup;
+<span class="fc" id="L47">    private static final Logger LOGGER = Logger.getLogger(App.class.getName());</span>
+
+    // array to keep track of all the book info views, to avoid opening two views of the same book
+<span class="fc" id="L50">    public static List&lt;Book&gt; openedBooks = new ArrayList&lt;&gt;();</span>
+
+    public static boolean hasOpenedBook(Book book) {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (openedBooks.size() &gt; 0) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (Book openedBook : openedBooks) {</span>
+<span class="fc bfc" id="L55" title="All 4 branches covered.">            if (book.getId() &gt; 0 &amp;&amp; openedBook.getId() == book.getId()) {</span>
+                //System.out.println(&quot;Book opened, present with id&quot;);
+<span class="fc" id="L57">                return true;</span>
+<span class="pc bpc" id="L58" title="1 of 4 branches missed.">            } else if (openedBook.getName().equals(book.getName()) &amp;&amp; openedBook.getAuthor().equals(book.getAuthor())) {</span>
+                //System.out.println(&quot;Book opened, present with name and author&quot;);
+<span class="fc" id="L60">                return true;</span>
+            }
+<span class="fc" id="L62">        }</span>
+        }
+<span class="fc" id="L64">        return false;</span>
+    }
+
+    @Override
+    public void start(Stage stage) {
+        //creating default bookshelf if not present
+        try {
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (DatabaseManager.getInstance().getBookshelfID(&quot;Default&quot;) == -1) {</span>
+<span class="nc" id="L72">                Bookshelf defaultB = new Bookshelf(&quot;Default&quot;, &quot;Default bookshelf&quot;);</span>
+<span class="nc" id="L73">                DatabaseManager.getInstance().insertBookshelf(defaultB);</span>
+            }
+<span class="nc" id="L75">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L76">            throwables.printStackTrace();</span>
+<span class="nc" id="L77">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L78">            e.printStackTrace();</span>
+<span class="nc" id="L79">        }</span>
+
+<span class="nc" id="L81">        DiscoverView discoverView = new DiscoverView();</span>
+<span class="nc" id="L82">        views.put(&quot;Discover&quot;, discoverView);</span>
+        try {
+<span class="nc" id="L84">            BookListView readingListView = new BookListView(&quot;Reading List&quot;, DatabaseManager.getInstance().getBooks());</span>
+<span class="nc" id="L85">            views.put(&quot;My Books&quot;, readingListView);</span>
+<span class="nc" id="L86">            discoverView.setMyBooksWidget(readingListView.getListWidget());</span>
+<span class="nc" id="L87">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L88">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+            //throwables.printStackTrace();
+<span class="nc" id="L90">        }</span>
+<span class="nc" id="L91">        views.put(&quot;Bookshelves&quot;, new BookshelfView());</span>
+
+<span class="nc" id="L93">        mainPane = new BorderPane();</span>
+<span class="nc" id="L94">        mainPane.setTop(_generateTopBar());</span>
+<span class="nc" id="L95">        mainPane.setBottom(_generateSidebar());</span>
+<span class="nc" id="L96">        mainPane.setCenter(_generateContent(&quot;Discover&quot;));</span>
+<span class="nc" id="L97">        var scene = new Scene(mainPane, 800, 600);</span>
+<span class="nc" id="L98">        scene.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L99">        stage.setScene(scene);</span>
+<span class="nc" id="L100">        stage.show();</span>
+        // when you close the main app you close also all the other books
+<span class="nc" id="L102">        stage.setOnCloseRequest(e -&gt; {</span>
+<span class="nc" id="L103">            Platform.exit();</span>
+<span class="nc" id="L104">            System.exit(0);</span>
+<span class="nc" id="L105">        });</span>
+<span class="nc" id="L106">    }</span>
+
+
+
+    private VBox _generateTopBar() {
+<span class="nc" id="L111">		VBox vBox = new VBox();</span>
+<span class="nc" id="L112">        vBox.setPadding(new Insets(20));</span>
+<span class="nc" id="L113">		vBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L114">        Text title = new Text(&quot;Bookworm&quot;);</span>
+<span class="nc" id="L115">        title.setFill(Paint.valueOf(&quot;#F2BC94&quot;));</span>
+<span class="nc" id="L116">        title.setFont(Font.font(&quot;Noto Sans Condensed&quot;, FontWeight.BOLD, 28));</span>
+<span class="nc" id="L117">        vBox.getChildren().add(title);</span>
+
+<span class="nc" id="L119">        return vBox;</span>
+    }
+    
+    private Region _generateContent(String name) {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (Map.Entry&lt;String, Region&gt; entry : views.entrySet()) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (entry.getKey().equals(name)) {</span>
+<span class="nc" id="L125">                selectButton(name);</span>
+<span class="nc" id="L126">                return entry.getValue();</span>
+            }
+<span class="nc" id="L128">        }</span>
+        // default
+<span class="nc" id="L130">        return new Label(&quot;View not found&quot;);</span>
+    }
+
+    private void selectButton(String name) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if(toggleGroup != null) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            for (Toggle toggle : toggleGroup.getToggles()) {</span>
+<span class="nc" id="L136">                ToggleButton button = (ToggleButton) toggle; // we assume all to be buttons</span>
+<span class="nc bnc" id="L137" title="All 4 branches missed.">                if (button.getText().equals(name) &amp;&amp; !button.isSelected())</span>
+<span class="nc" id="L138">                    button.setSelected(true);</span>
+<span class="nc" id="L139">            }</span>
+        }
+<span class="nc" id="L141">    }</span>
+	
+	private HBox _generateSidebar() {
+<span class="nc" id="L144">    	HBox hBox = new HBox();</span>
+<span class="nc" id="L145">        hBox.setPadding(new Insets(10));</span>
+<span class="nc" id="L146">        hBox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L147">        hBox.setSpacing(8);</span>
+
+<span class="nc" id="L149">        toggleGroup = new ToggleGroup();</span>
+
+
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        for (Map.Entry&lt;String, Region&gt; entry : views.entrySet()) {</span>
+<span class="nc" id="L153">            ToggleButton button = new NavToggleButton(entry.getKey());</span>
+<span class="nc" id="L154">            button.getStyleClass().add(&quot;buttonsBasic&quot;);</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (currentView.equals(entry.getValue()))</span>
+<span class="nc" id="L156">                button.setSelected(true);</span>
+
+<span class="nc" id="L158">            HBox.setMargin(button, new Insets(0, 0, 0, 8));</span>
+<span class="nc" id="L159">            hBox.getChildren().add(button);</span>
+<span class="nc" id="L160">            button.setOnAction((event) -&gt; {</span>
+<span class="nc" id="L161">                String text = ((ToggleButton) event.getSource()).getText();</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                if (text.equals(&quot;My Books&quot;)) {</span>
+<span class="nc" id="L163">                    BookListView readingListView = null;</span>
+                    try {
+<span class="nc" id="L165">                        readingListView = new BookListView(&quot;Reading List&quot;, DatabaseManager.getInstance().getBooks());</span>
+<span class="nc" id="L166">                    } catch (SQLException throwables) {</span>
+<span class="nc" id="L167">                        throwables.printStackTrace();</span>
+<span class="nc" id="L168">                    } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L169">                        e.printStackTrace();</span>
+<span class="nc" id="L170">                    }</span>
+<span class="nc" id="L171">                    readingListView.getListWidget().updateList();</span>
+<span class="nc" id="L172">                    views.put(&quot;My Books&quot;, readingListView);</span>
+                }
+<span class="nc" id="L174">                mainPane.setCenter(_generateContent(text));</span>
+<span class="nc" id="L175">            });</span>
+<span class="nc" id="L176">            button.setToggleGroup(toggleGroup);</span>
+<span class="nc" id="L177">        }</span>
+
+<span class="nc" id="L179">        return hBox;</span>
+    }
+	
+
+    public static void main(String[] args) {
+<span class="nc" id="L184">        launch();</span>
+<span class="nc" id="L185">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

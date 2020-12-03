@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GUItests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.controller</a> &gt; <span class="el_source">GUItests.java</span></div><h1>GUItests.java</h1><pre class="source lang-java linenums">package com.Bookworm.controller;
+
+import com.Bookworm.App;
+import com.Bookworm.model.Book;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+<span class="fc" id="L12">public class GUItests {</span>
+<span class="fc" id="L13">    static Book book = new Book(&quot;history&quot;, &quot;peppa&quot;, &quot;null&quot;);</span>
+<span class="fc" id="L14">    static Book book2 = new Book(&quot;history2&quot;, &quot;peppa2&quot;, &quot;descripion&quot;);</span>
+<span class="fc" id="L15">    static Book book3 = new Book(&quot;history3&quot;, &quot;peppa3&quot;, &quot;descripion2&quot;);</span>
+<span class="fc" id="L16">    static Book book4 = new Book(&quot;history4&quot;, &quot;peppa4&quot;, &quot;null3&quot;);</span>
+<span class="fc" id="L17">    static Book book5 = new Book(&quot;history5&quot;, &quot;peppa5&quot;, &quot;null4&quot;);</span>
+
+    @BeforeAll
+    public static void setUp() {
+<span class="fc" id="L21">        App.openedBooks.add(book);</span>
+<span class="fc" id="L22">        App.openedBooks.add(book2);</span>
+<span class="fc" id="L23">        book3.setId(2);</span>
+<span class="fc" id="L24">        App.openedBooks.add(book3);</span>
+<span class="fc" id="L25">        book3.setName(&quot;other&quot;);</span>
+<span class="fc" id="L26">        App.openedBooks.add(book4);</span>
+<span class="fc" id="L27">    }</span>
+
+    @Test
+    public void hasOpenedBookWithoutId() {
+<span class="fc" id="L31">        assertTrue(App.hasOpenedBook(book2));</span>
+<span class="fc" id="L32">    }</span>
+
+    @Test
+    public void hasOpenedBookWithoutId2() {
+<span class="fc" id="L36">        assertFalse(App.hasOpenedBook(book5));</span>
+<span class="fc" id="L37">    }</span>
+
+
+    @Test
+    public void hasOpenedBookWithId() {
+<span class="fc" id="L42">        assertTrue(App.hasOpenedBook(book3));</span>
+<span class="fc" id="L43">    }</span>
+
+
+    @AfterAll
+    public static void tearDown() {
+<span class="fc" id="L48">        App.openedBooks.remove(book);</span>
+<span class="fc" id="L49">        App.openedBooks.remove(book2);</span>
+<span class="fc" id="L50">        App.openedBooks.remove(book3);</span>
+<span class="fc" id="L51">        App.openedBooks.remove(book4);</span>
+<span class="fc" id="L52">        App.openedBooks.remove(book5);</span>
+<span class="fc" id="L53">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

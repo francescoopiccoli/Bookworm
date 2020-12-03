@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StarWidget.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.widgets</a> &gt; <span class="el_source">StarWidget.java</span></div><h1>StarWidget.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.widgets;
+
+import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.model.Book;
+import com.Bookworm.ui.views.BookInfoView;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+<span class="nc" id="L18">public class StarWidget {</span>
+
+    public static final String STAR_EMPTY = &quot;/Images/star-empty.png&quot;;
+    public static final String STAR_FILLED = &quot;/Images/star-filled.png&quot;;
+    private static HBox starWidgetBox;
+<span class="nc" id="L23">    private static Image emptyStar = new Image(StarWidget.class.getResourceAsStream(STAR_EMPTY));</span>
+<span class="nc" id="L24">    private static Image filledStar = new Image(StarWidget.class.getResourceAsStream(STAR_FILLED));</span>
+    private static Book book;
+<span class="nc" id="L26">    private static int rating = 0;</span>
+    private static ImageView imageview;
+    private static Button b;
+<span class="nc" id="L29">    private static DatabaseManager db = DatabaseManager.getInstance();</span>
+    private static BookInfoView parent;
+<span class="nc" id="L31">    private static final Logger LOGGER = Logger.getLogger(StarWidget.class.getName());</span>
+
+    //generate the correct widget: according to the rating, draw the correct number of filled / empty stars
+    private static HBox generateWidget(){
+        try {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if(db.getBook(book.getName(), book.getAuthor()) != null){</span>
+<span class="nc" id="L37">                rating = db.getBook(book.getName(), book.getAuthor()).getRating();</span>
+            }
+            else{
+<span class="nc" id="L40">                rating = book.getRating();</span>
+            }
+<span class="nc" id="L42">        } catch (SQLException throwables) {</span>
+            //throwables.printStackTrace();
+<span class="nc" id="L44">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L45">        } catch (ClassNotFoundException e) {</span>
+            //e.printStackTrace();
+<span class="nc" id="L47">            LOGGER.log( Level.SEVERE, e.toString(), e);</span>
+<span class="nc" id="L48">        }</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for(int i = 0; i &lt; 5; i++){</span>
+<span class="nc" id="L51">            b = new Button();</span>
+<span class="nc" id="L52">            b.getStyleClass().add(&quot;starButton&quot;);</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if(i &lt; rating){</span>
+<span class="nc" id="L55">                imageview = new ImageView(filledStar);</span>
+<span class="nc" id="L56">                b.setGraphic(imageview);</span>
+            }
+
+            else{
+<span class="nc" id="L60">                imageview = new ImageView(emptyStar);</span>
+<span class="nc" id="L61">                b.setGraphic(imageview);</span>
+            }
+
+<span class="nc" id="L64">            imageview.setFitWidth(18);</span>
+<span class="nc" id="L65">            imageview.setFitHeight(18);</span>
+<span class="nc" id="L66">            starWidgetBox.getChildren().add(b);</span>
+<span class="nc" id="L67">            starWidgetBox.setHgrow(b, Priority.ALWAYS);</span>
+
+<span class="nc" id="L69">            int newRating = i+1;</span>
+<span class="nc" id="L70">            b.setOnAction(e -&gt; {</span>
+                try {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if(db.getBook(book.getName(), book.getAuthor()) != null){</span>
+<span class="nc" id="L73">                        updateWidget(newRating);</span>
+                    }
+<span class="nc" id="L75">                } catch (SQLException throwables) {</span>
+                    //throwables.printStackTrace();
+<span class="nc" id="L77">                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+
+<span class="nc" id="L79">                } catch (ClassNotFoundException classNotFoundException) {</span>
+                    //classNotFoundException.printStackTrace();
+<span class="nc" id="L81">                    LOGGER.log( Level.SEVERE, classNotFoundException.toString(), classNotFoundException);</span>
+<span class="nc" id="L82">                }</span>
+<span class="nc" id="L83">            });</span>
+        }
+
+<span class="nc" id="L86">        return starWidgetBox;</span>
+    }
+
+
+
+    //updates bookinfo by inserting new rating value in the database and refreshing the bookinfo window
+    private static void updateWidget(int newRating){
+        try {
+<span class="nc" id="L94">            db.insertRating(book, newRating);</span>
+<span class="nc" id="L95">        } catch (SQLException throwables) {</span>
+<span class="nc" id="L96">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+            //throwables.printStackTrace();
+<span class="nc" id="L98">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L99">            LOGGER.log( Level.SEVERE, e.toString(), e);</span>
+            //e.printStackTrace();
+<span class="nc" id="L101">        }</span>
+<span class="nc" id="L102">        rating = newRating;</span>
+<span class="nc" id="L103">        parent.refresh();</span>
+<span class="nc" id="L104">    }</span>
+
+
+    //method called in bookinfo to create the initial starwidget
+    public static HBox getStarWidget(BookInfoView parentView, Book b){
+<span class="nc" id="L109">        book = b;</span>
+<span class="nc" id="L110">        parent = parentView;</span>
+<span class="nc" id="L111">        starWidgetBox = new HBox();</span>
+<span class="nc" id="L112">        starWidgetBox.getStylesheets().add(StarWidget.class.getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L113">        return generateWidget();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

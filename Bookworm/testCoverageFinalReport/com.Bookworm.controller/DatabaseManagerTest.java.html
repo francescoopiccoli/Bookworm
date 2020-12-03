@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseManagerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.controller</a> &gt; <span class="el_source">DatabaseManagerTest.java</span></div><h1>DatabaseManagerTest.java</h1><pre class="source lang-java linenums">package com.Bookworm.controller;
+
+import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+<span class="fc" id="L18">public class DatabaseManagerTest {</span>
+    // copy and paste DatabaseManager in DatabaseManagerTest and change name to the database to create
+    // a new database only for tests
+    // use methods of DatabaseManagerTest
+    // i think insertBook is not working
+<span class="fc" id="L23">    static DatabaseManager dbtest = DatabaseManager.getInstance();</span>
+<span class="fc" id="L24">    static Book book1 = new Book(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;, &quot;&quot;);</span>
+<span class="fc" id="L25">    static Book book2 = new Book(&quot;War and Peace&quot;, &quot;A thicc big book&quot;, &quot;Lev Tolstoj&quot;);</span>
+<span class="fc" id="L26">    static Book book3 = new Book(&quot;The Lord of the Rings&quot;, &quot;J. R. R. Tolkien&quot;, &quot;A damn epic book&quot;);</span>
+<span class="fc" id="L27">    static Book book4 = new Book(&quot;The Greeeeeat Gatsby&quot;, &quot;Non esiste, non inserirmi&quot;, &quot;&quot;);</span>
+<span class="fc" id="L28">    static Bookshelf bookshelf1 = new Bookshelf(&quot;bookshelf1&quot;, &quot;test&quot;);</span>
+<span class="fc" id="L29">    static Bookshelf bookshelf2 = new Bookshelf(&quot;bookshelf2&quot;, &quot;test2&quot;);</span>
+
+    @BeforeAll
+    public static void setUp() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L33">        dbtest.insertBook(book1, &quot;FirstBookshelf&quot;);</span>
+<span class="fc" id="L34">        dbtest.insertBook(book2, &quot;FirstBookshelf&quot;);</span>
+<span class="fc" id="L35">        dbtest.insertBook(book3, &quot;FirstBookshelf&quot;);</span>
+<span class="fc" id="L36">    }</span>
+
+    @Test
+    public void getBook() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L40">        assertNotNull(dbtest.getBook(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;), &quot;Book has been inserted in setUp&quot;);</span>
+<span class="fc" id="L41">        assertNull(dbtest.getBook(&quot;does not exist&quot;, &quot;Francis Scott Fitzgerald&quot;));</span>
+<span class="fc" id="L42">    }</span>
+
+    @Test
+    public void getBooks() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L46">        assertNotNull(dbtest.getBooks(), &quot;List of book cannot be null &quot;);</span>
+<span class="fc" id="L47">    }</span>
+
+
+    @Test
+    public void getRewiew() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L52">        assertNull(dbtest.getReview(null));</span>
+<span class="fc" id="L53">        assertNotNull(dbtest.getReview(book1));</span>
+<span class="fc" id="L54">    }</span>
+
+    @Test
+    public void getRating() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L58">        assertEquals(0, dbtest.getRating(book1));</span>
+<span class="fc" id="L59">        assertEquals(-1, dbtest.getRating(null));</span>
+<span class="fc" id="L60">    }</span>
+
+    @Test
+    public void getAuthors() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L64">        List&lt;String&gt; authorList = dbtest.getAuthors();</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">        if (authorList == null || authorList.isEmpty()) {</span>
+<span class="nc" id="L66">            fail(&quot;Author List cannot be neither null nor empty, since books have been inserted&quot;);</span>
+        }
+<span class="fc" id="L68">    }</span>
+
+    @Test
+    public void getBookshelves() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L72">        assertNotNull(dbtest.getBookShelves(), &quot;The list of bookshelf cannot be null&quot;);</span>
+<span class="fc" id="L73">        List&lt;Bookshelf&gt; list = dbtest.getBookShelves();</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (list == null) {</span>
+<span class="nc" id="L75">            fail(&quot;Bookshelf List cannot be null&quot;);</span>
+        }
+<span class="fc" id="L77">    }</span>
+    @Test
+    public void getBookshelfID() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L80">     dbtest.insertBookshelf(bookshelf2);</span>
+<span class="fc" id="L81">     dbtest.getBookshelfID(bookshelf2.getName());</span>
+<span class="fc" id="L82">    }</span>
+        @Test
+    public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L85">        assertTrue(dbtest.bookAlreadySaved(book1));</span>
+<span class="fc" id="L86">        assertFalse(dbtest.bookAlreadySaved(book4));</span>
+<span class="fc" id="L87">    }</span>
+
+
+
+    // issues with book.getId, ALWAYS call getBook(book) before referencing to its ID
+    @Test
+    public void insertRating() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L94">        Book book12 = dbtest.getBook(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;);</span>
+<span class="fc" id="L95">        dbtest.insertRating(book12, 5);</span>
+<span class="fc" id="L96">        System.out.println(dbtest.getRating(book12));</span>
+<span class="fc" id="L97">        assertEquals(5, dbtest.getRating(book12));</span>
+        //a response is shown in the console, but no error is thrown
+<span class="fc" id="L99">        dbtest.insertRating(null, 5);</span>
+<span class="fc" id="L100">    }</span>
+
+    @Test
+    public void getBookshelfIdByBook() throws SQLException, ClassNotFoundException, NullPointerException {
+<span class="fc" id="L104">        Book test = dbtest.getBook(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;);</span>
+<span class="fc" id="L105">        assertNotNull(test);</span>
+<span class="fc" id="L106">        List&lt;Book&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L107">        list.add(test);</span>
+<span class="fc" id="L108">        assertNotNull(list);</span>
+<span class="fc" id="L109">        assertEquals(-1,dbtest.getBookshelfIdByBook(test));</span>
+
+<span class="fc" id="L111">    }</span>
+
+    @Test
+    public void getBookShelfBooks() throws SQLException, ClassNotFoundException, NullPointerException {
+<span class="fc" id="L115">        List&lt;Book&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L116">        list.add(book1);</span>
+<span class="fc" id="L117">        assertNotNull(dbtest.getBookShelves());</span>
+<span class="fc" id="L118">        dbtest.getBookshelfID(bookshelf1.getName());</span>
+<span class="fc" id="L119">        assertNotNull(dbtest.getBookShelfBooks(bookshelf1.getId()));</span>
+<span class="fc" id="L120">    }</span>
+
+    @Test
+    public void insertBookshelf() throws SQLException, ClassNotFoundException, NullPointerException {
+<span class="fc" id="L124">    dbtest.insertBookshelf(bookshelf1);</span>
+<span class="fc" id="L125">    List&lt;Bookshelf&gt; bookshelfList= dbtest.getBookShelves();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">    for (int i=0; i&lt;bookshelfList.size();i++){</span>
+<span class="fc" id="L127">        assertNotNull(bookshelfList.get(i));</span>
+    }
+
+<span class="fc" id="L130">    }</span>
+
+    @Test
+    public void deleteBookshelf() throws SQLException, ClassNotFoundException, NullPointerException {
+<span class="fc" id="L134">        dbtest.deleteBookshelf(bookshelf1);</span>
+<span class="fc" id="L135">        dbtest.deleteBookshelf(bookshelf2);</span>
+<span class="fc" id="L136">        assertNotNull(dbtest.getBookShelves());</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (dbtest.getBookShelves().isEmpty()){</span>
+<span class="nc" id="L138">           System.out.println(&quot;There are no more bookshelves&quot;);</span>
+        }
+<span class="fc" id="L140">    }</span>
+
+    @Test
+    public void insertReview() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L144">        dbtest.insertReview(book1, &quot;Made me cry&quot;);</span>
+<span class="fc" id="L145">    }</span>
+
+    @AfterAll
+    public static void tearDown() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L149">        Book book12 = dbtest.getBook(&quot;The Great Gatsby&quot;, &quot;Francis Scott Fitzgerald&quot;);</span>
+<span class="fc" id="L150">        Book book22 = dbtest.getBook(&quot;War and Peace&quot;, &quot;A thicc big book&quot;);</span>
+<span class="fc" id="L151">        Book book32 = dbtest.getBook(&quot;The Lord of the Rings&quot;, &quot;J. R. R. Tolkien&quot;);</span>
+<span class="fc" id="L152">        dbtest.deleteBook(book12);</span>
+<span class="fc" id="L153">        dbtest.deleteBook(book22);</span>
+<span class="fc" id="L154">        dbtest.deleteBook(book32);</span>
+<span class="fc" id="L155">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

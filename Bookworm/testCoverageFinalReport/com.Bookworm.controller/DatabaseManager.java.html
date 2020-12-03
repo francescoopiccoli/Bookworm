@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.controller</a> &gt; <span class="el_source">DatabaseManager.java</span></div><h1>DatabaseManager.java</h1><pre class="source lang-java linenums">package com.Bookworm.controller;
+
+
+import com.Bookworm.model.Book;
+import com.Bookworm.model.Bookshelf;
+
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+//QUESTIONS:
+// if I delete a bookshelf, what happens to the book within it?
+// inserting a book in default reading list, what about is bookshelfID attribute? as for now, set to 0
+
+public class DatabaseManager implements BookStorage {
+    public static Connection con;
+    private Statement s;
+    private PreparedStatement ps;
+    private ResultSet res;
+    private static DatabaseManager dbmanager;
+<span class="fc" id="L23">    private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());</span>
+
+
+    //singleton design pattern
+    static {
+        try {
+<span class="fc" id="L29">            dbmanager = new DatabaseManager();</span>
+<span class="nc" id="L30">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L31">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+            //throwables.printStackTrace();
+<span class="fc" id="L33">        }</span>
+<span class="fc" id="L34">    }</span>
+
+    //initialise DB in the constructor
+<span class="fc" id="L37">    private DatabaseManager() throws SQLException, ClassNotFoundException {</span>
+<span class="fc" id="L38">        initialiseDB();</span>
+<span class="fc" id="L39">    }</span>
+
+    public static DatabaseManager getInstance() {
+<span class="fc" id="L42">        return dbmanager;</span>
+    }
+
+    //connecting to the local database file &quot;BookwormDB.db&quot;
+    private void getConnection() throws ClassNotFoundException, SQLException {
+        // sqlite driver
+<span class="fc" id="L48">        Class.forName(&quot;org.sqlite.JDBC&quot;);</span>
+        // database path, if it's new database, it will be created in the project folder
+<span class="fc" id="L50">        con = DriverManager.getConnection(&quot;jdbc:sqlite:BookwormDB.db&quot;);</span>
+<span class="fc" id="L51">    }</span>
+
+    //initialiseDB creates the database tables in case they do not exist yet
+    private void initialiseDB() throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L56" title="3 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L57">                getConnection();</span>
+            }
+            //sqlite Foreign key constraints are not active by default. You must enable them with the following command, once per database session :
+            //PRAGMA foreign_keys = ON;
+            //source: https://stackoverflow.com/questions/52226080/sqlite-on-delete-cascade-is-not-working-right
+<span class="fc" id="L62">            s = con.createStatement();</span>
+<span class="fc" id="L63">            s.executeUpdate(&quot;PRAGMA foreign_keys = ON;&quot;);</span>
+
+        } finally {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            if (s != null) {</span>
+<span class="fc" id="L67">                s.close();</span>
+            }
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L70">                con.close();</span>
+            }
+        }
+
+        try {
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (con.isClosed()) {</span>
+<span class="fc" id="L76">                getConnection();</span>
+            }
+<span class="fc" id="L78">            s = con.createStatement();</span>
+<span class="fc" id="L79">            s.executeUpdate(&quot;CREATE TABLE IF NOT EXISTS Bookshelf(&quot; +</span>
+                    &quot;id INTEGER PRIMARY KEY AUTOINCREMENT,&quot; +
+                    &quot;name TEXT NOT NULL,&quot; +
+                    &quot;description TEXT)&quot;);
+        } finally {
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (s != null) {</span>
+<span class="fc" id="L85">                s.close();</span>
+            }
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L88">                con.close();</span>
+            }
+        }
+
+        try {
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if ( con.isClosed()) {</span>
+<span class="fc" id="L94">                getConnection();</span>
+            }
+<span class="fc" id="L96">            s = con.createStatement();</span>
+<span class="fc" id="L97">            s.executeUpdate(&quot;CREATE TABLE IF NOT EXISTS Book(&quot; +</span>
+                    &quot;id INTEGER PRIMARY KEY AUTOINCREMENT,&quot; +
+                    &quot;name TEXT NOT NULL,&quot; +
+                    &quot;description,&quot; +
+                    &quot;author TEXT,&quot; +
+                    &quot;rating INTEGER,&quot; +
+                    &quot;review TEXT,&quot; +
+                    &quot;bookshelfID,&quot; +
+                    &quot;imageURL TEXT,&quot; +
+                    &quot;UNIQUE(name,author),&quot; +
+                    &quot;FOREIGN KEY(bookshelfID) REFERENCES Bookshelf(id) ON DELETE CASCADE)&quot;); //!!! ON DELETE CASCADE not sure if works
+        } finally {
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            if (s != null) {</span>
+<span class="fc" id="L110">                s.close();</span>
+            }
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L113">                con.close();</span>
+            }
+        }
+
+        /*try {
+            if (con.isClosed()) {
+                getConnection();
+            }
+            s = con.createStatement();
+            s.executeUpdate(&quot;CREATE TABLE IF NOT EXISTS BookTags(&quot; +
+                    &quot;bookID INTEGER,&quot; +
+                    &quot;tagName TEXT,&quot; +
+                    &quot;PRIMARY KEY (bookID, tagName),&quot; +
+                    &quot;FOREIGN KEY(bookID) REFERENCES Book(id))&quot;);
+        } finally {
+            if (s != null) {
+                s.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }*/
+        //if no default bookself is present it is created
+<span class="fc" id="L136">    }</span>
+
+    // retrieve a book from database given the name and the author of the book
+    public Book getBook(String name, String author) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L141" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L142">                getConnection();</span>
+            }
+<span class="fc" id="L144">            ps = con.prepareStatement(&quot;SELECT * FROM Book WHERE name = ? and author = ?;&quot;);</span>
+<span class="fc" id="L145">            ps.setString(1, name);</span>
+<span class="fc" id="L146">            ps.setString(2, author);</span>
+<span class="fc" id="L147">            res = ps.executeQuery();</span>
+
+            //check if resultset returned something
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (!res.isClosed()) {</span>
+<span class="fc" id="L151">                Book book = new Book();</span>
+<span class="fc" id="L152">                book.setId(res.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L153">                book.setName(res.getString(&quot;name&quot;));</span>
+<span class="fc" id="L154">                book.setAuthor(res.getString(&quot;author&quot;));</span>
+<span class="fc" id="L155">                book.setDescription(res.getString(&quot;description&quot;));</span>
+<span class="fc" id="L156">                book.setRating(res.getInt(&quot;rating&quot;));</span>
+<span class="fc" id="L157">                book.setImageURL(res.getString(&quot;imageURL&quot;));</span>
+<span class="fc" id="L158">                book.setReview(res.getString(&quot;review&quot;));</span>
+<span class="fc" id="L159">                return book;</span>
+            } else {
+<span class="fc" id="L161">                return null;</span>
+            }
+        } finally {
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L165">                ps.close();</span>
+            }
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L168">                res.close();</span>
+            }
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L171">                con.close();</span>
+            }
+        }
+    }
+
+    //retrieves all books saved in the database
+    public List&lt;Book&gt; getBooks() throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L179" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L180">                getConnection();</span>
+            }
+<span class="fc" id="L182">            ps = con.prepareStatement(&quot;SELECT * FROM Book&quot;);</span>
+<span class="fc" id="L183">            res = ps.executeQuery();</span>
+<span class="fc" id="L184">            List&lt;Book&gt; list = new LinkedList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            while (res.next()) {</span>
+<span class="fc" id="L187">                Book book = new Book();</span>
+<span class="fc" id="L188">                book.setId(res.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L189">                book.setName(res.getString(&quot;name&quot;));</span>
+<span class="fc" id="L190">                book.setAuthor(res.getString(&quot;author&quot;));</span>
+<span class="fc" id="L191">                book.setDescription(res.getString(&quot;description&quot;));</span>
+<span class="fc" id="L192">                book.setRating(res.getInt(&quot;rating&quot;));</span>
+<span class="fc" id="L193">                book.setImageURL(res.getString(&quot;imageURL&quot;));</span>
+<span class="fc" id="L194">                book.setReview(res.getString(&quot;review&quot;));</span>
+<span class="fc" id="L195">                list.add(book);</span>
+<span class="fc" id="L196">            }</span>
+
+<span class="fc" id="L198">            return list;</span>
+
+        } finally {
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L202">                ps.close();</span>
+            }
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L205">                res.close();</span>
+            }
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L208">                con.close();</span>
+            }
+        }
+    }
+
+
+    //retrieves the review of the specified book
+    public String getReview(Book b) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L217" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L218">                getConnection();</span>
+            }
+<span class="fc" id="L220">            ps = con.prepareStatement(&quot;SELECT review FROM Book WHERE id = ?;&quot;);</span>
+<span class="fc" id="L221">            ps.setInt(1, b.getId());</span>
+<span class="fc" id="L222">            res = ps.executeQuery();</span>
+            //res.isClosed == nothing found
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">            if (res.isClosed()) {</span>
+<span class="fc" id="L225">                return &quot;&quot;;</span>
+            }
+<span class="nc" id="L227">            return res.getString(&quot;review&quot;);</span>
+<span class="fc" id="L228">        } catch (NullPointerException e) {</span>
+<span class="fc" id="L229">            LOGGER.log( Level.SEVERE, &quot;Error in getReview: book was null&quot;, e);</span>
+<span class="fc" id="L230">            return null;</span>
+        }
+        finally {
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L234">                ps.close();</span>
+            }
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L237">                res.close();</span>
+            }
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L240">                con.close();</span>
+            }
+        }
+    }
+
+    public int getBookshelfIdByBook(Book b) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L247" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L248">                getConnection();</span>
+            }
+<span class="fc" id="L250">            ps = con.prepareStatement(&quot;SELECT bookshelfID FROM Book WHERE id = ?;&quot;);</span>
+<span class="fc" id="L251">            ps.setInt(1, b.getId());</span>
+<span class="fc" id="L252">            res = ps.executeQuery();</span>
+            //res.isClosed == nothing found
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">            if (res.isClosed()) {</span>
+<span class="nc" id="L255">                return -1;</span>
+            }
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">            if(res.getBoolean(1)) // not null</span>
+<span class="fc" id="L258">                return res.getInt(1);</span>
+            else
+<span class="nc" id="L260">                return -1;</span>
+<span class="nc" id="L261">        } catch(NullPointerException e) {</span>
+<span class="nc" id="L262">            return -1;</span>
+        } finally {
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L265">                ps.close();</span>
+            }
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L268">                res.close();</span>
+            }
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L271">                con.close();</span>
+            }
+        }
+    }
+
+    //retrieves the rating of the specified book
+    public int getRating(Book b) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L279" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L280">                getConnection();</span>
+            }
+<span class="fc" id="L282">            ps = con.prepareStatement(&quot;SELECT rating FROM Book WHERE id = ?;&quot;);</span>
+<span class="fc" id="L283">            ps.setInt(1, b.getId());</span>
+<span class="fc" id="L284">            res = ps.executeQuery();</span>
+            //res.isClosed == nothing found
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            if (res.isClosed()) {</span>
+<span class="fc" id="L287">                return 0;</span>
+            }
+<span class="fc" id="L289">            return res.getInt(&quot;rating&quot;);</span>
+<span class="fc" id="L290">        } catch(NullPointerException e) {</span>
+<span class="fc" id="L291">            LOGGER.log( Level.SEVERE, &quot;Error in getRating: book is null&quot;, e);</span>
+            //System.out.println(&quot;Error in getRating: book is null&quot;);
+<span class="fc" id="L293">            return -1;</span>
+        }
+        finally {
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L297">                ps.close();</span>
+            }
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L300">                res.close();</span>
+            }
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L303">                con.close();</span>
+            }
+        }
+    }
+
+
+    //retrieves a list of strings containing all authors
+    public List&lt;String&gt; getAuthors() throws SQLException, ClassNotFoundException {
+        try {
+<span class="fc" id="L312">            List&lt;String&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L313" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L314">                getConnection();</span>
+            }
+<span class="fc" id="L316">            ps = con.prepareStatement(&quot;SELECT distinct author FROM Book order by author asc&quot;);</span>
+<span class="fc" id="L317">            res = ps.executeQuery();</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            while (res.next()) {</span>
+<span class="fc" id="L319">                list.add(res.getString(1));</span>
+            }
+<span class="fc" id="L321">            return list;</span>
+        } finally {
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L324">                ps.close();</span>
+            }
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L327">                res.close();</span>
+            }
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L330">                con.close();</span>
+            }
+        }
+    }
+
+
+    //return all books belonging to a bookshelf
+    //could be refactored and integrated directly in getBooks by passing a bookshelfID as parameter
+    public List&lt;Book&gt; getBookShelfBooks(int bookshelfID) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L340" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L341">                getConnection();</span>
+            }
+
+<span class="fc" id="L344">            ps = con.prepareStatement(&quot;SELECT * FROM Book WHERE bookshelfID = ? ;&quot;);</span>
+<span class="fc" id="L345">            ps.setInt(1, bookshelfID);</span>
+<span class="fc" id="L346">            res = ps.executeQuery();</span>
+
+<span class="fc" id="L348">            List&lt;Book&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">            while (res.next()) {</span>
+<span class="nc" id="L350">                Book book = new Book();</span>
+<span class="nc" id="L351">                book.setId(res.getInt(&quot;id&quot;));</span>
+<span class="nc" id="L352">                book.setName(res.getString(&quot;name&quot;));</span>
+<span class="nc" id="L353">                book.setAuthor(res.getString(&quot;author&quot;));</span>
+<span class="nc" id="L354">                book.setDescription(res.getString(&quot;description&quot;));</span>
+<span class="nc" id="L355">                book.setRating(res.getInt(&quot;rating&quot;));</span>
+<span class="nc" id="L356">                book.setImageURL(res.getString(&quot;imageURL&quot;));</span>
+<span class="nc" id="L357">                book.setReview(res.getString(&quot;review&quot;));</span>
+<span class="nc" id="L358">                list.add(book);</span>
+                //bookshelf.setBooks(); -&gt; todo, but how?
+<span class="nc" id="L360">            }</span>
+<span class="fc" id="L361">            return list;</span>
+        } finally {
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L364">                ps.close();</span>
+            }
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L367">                res.close();</span>
+            }
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L370">                con.close();</span>
+            }
+        }
+    }
+
+
+    //return a list of bookshelf objects, namely all the bookshelves existing in the database
+    public List&lt;Bookshelf&gt; getBookShelves() throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L379" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L380">                getConnection();</span>
+            }
+<span class="fc" id="L382">            ps = con.prepareStatement(&quot;SELECT * FROM Bookshelf&quot;);</span>
+<span class="fc" id="L383">            res = ps.executeQuery();</span>
+<span class="fc" id="L384">            List&lt;Bookshelf&gt; list = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">            while (res.next()) {</span>
+<span class="fc" id="L386">                Bookshelf bookshelf = new Bookshelf();</span>
+<span class="fc" id="L387">                bookshelf.setId(res.getInt(&quot;id&quot;));</span>
+<span class="fc" id="L388">                bookshelf.setName(res.getString(&quot;name&quot;));</span>
+<span class="fc" id="L389">                bookshelf.setDescription(res.getString(&quot;description&quot;));</span>
+                //bookshelf.setBooks(); -&gt; todo, but how?
+<span class="fc" id="L391">                list.add(bookshelf);</span>
+<span class="fc" id="L392">            }</span>
+<span class="fc" id="L393">            return list;</span>
+        } finally {
+<span class="pc bpc" id="L395" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L396">                ps.close();</span>
+            }
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L399">                res.close();</span>
+            }
+<span class="pc bpc" id="L401" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L402">                con.close();</span>
+            }
+        }
+    }
+
+    public boolean bookAlreadySaved(Book book) throws SQLException, ClassNotFoundException {
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        return (getBook(book.getName(), book.getAuthor()) != null);</span>
+    }
+
+    //since bookshelf is not an attribute of Book, it has to be passed as parameter
+    public void insertBook(Book b, String bookshelf) throws ClassNotFoundException, SQLException {
+        try {
+<span class="fc" id="L414">            int bookshelfID = getBookshelfID(bookshelf);</span>
+<span class="pc bpc" id="L415" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L416">                getConnection();</span>
+            }
+<span class="fc" id="L418">            ps = con.prepareStatement(&quot;INSERT INTO Book VALUES (?, ?, ?, ?, ?, ?, ?, ?);&quot;);</span>
+<span class="fc" id="L419">            ps.setString(1, null);</span>
+<span class="fc" id="L420">            ps.setString(2, b.getName());</span>
+<span class="fc" id="L421">            ps.setString(3, b.getDescription());</span>
+<span class="fc" id="L422">            ps.setString(4, b.getAuthor());</span>
+<span class="fc" id="L423">            ps.setInt(5, b.getRating());</span>
+<span class="fc" id="L424">            ps.setString(6, b.getReview());</span>
+<span class="fc" id="L425">            ps.setString(7, null); // bookshelf.getId</span>
+            // in case bookshelf id is not found, the bookshelfID column in DB will contain a 0
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">            if (bookshelfID == 0) {</span>
+<span class="nc" id="L428">                ps.setInt(7, 0);</span>
+            }
+<span class="fc" id="L430">            ps.setInt(7, bookshelfID);</span>
+<span class="fc" id="L431">            ps.setString(8, b.getImageURL());</span>
+<span class="fc" id="L432">            ps.executeUpdate();</span>
+<span class="nc" id="L433">        } catch (NullPointerException e) {</span>
+<span class="nc" id="L434">            LOGGER.log( Level.SEVERE, &quot;Error in insert book: inserted bookshelf or book was null&quot;, e);</span>
+            //System.out.println(&quot;Error in insert book: inserted bookshelf or book was null&quot;);
+        } finally {
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L438">                ps.close();</span>
+            }
+<span class="pc bpc" id="L440" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L441">                con.close();</span>
+            }
+        }
+
+<span class="fc" id="L445">    }</span>
+
+    //instead of the whole book, just the id could be passed as parameter
+    public void insertRating(Book b, int rating) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L450" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L451">                getConnection();</span>
+            }
+<span class="fc" id="L453">            ps = con.prepareStatement(&quot;UPDATE Book set rating = ? WHERE id= ?&quot;);</span>
+<span class="fc" id="L454">            ps.setInt(1, rating);</span>
+<span class="fc" id="L455">            ps.setInt(2, b.getId());</span>
+<span class="fc" id="L456">            ps.executeUpdate();</span>
+
+<span class="fc" id="L458">        } catch(NullPointerException e) {</span>
+<span class="fc" id="L459">            LOGGER.log( Level.SEVERE, &quot;Error in insertRating: book is empty&quot;, e);</span>
+            //System.out.println(&quot;Error in insertRating: book is empty&quot;);
+        }
+        finally {
+<span class="pc bpc" id="L463" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L464">                ps.close();</span>
+            }
+<span class="pc bpc" id="L466" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L467">                con.close();</span>
+            }
+        }
+<span class="fc" id="L470">    }</span>
+
+    //instead of the whole book, just the id could be passed as parameter
+    public void insertReview(Book b, String review) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L475" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L476">                getConnection();</span>
+            }
+<span class="fc" id="L478">            ps = con.prepareStatement(&quot;UPDATE Book set review = ? WHERE id= ?&quot;);</span>
+<span class="fc" id="L479">            ps.setString(1, review);</span>
+<span class="fc" id="L480">            ps.setInt(2, b.getId());</span>
+<span class="fc" id="L481">            ps.executeUpdate();</span>
+
+<span class="nc" id="L483">        } catch(NullPointerException e) {</span>
+<span class="nc" id="L484">            LOGGER.log( Level.SEVERE, &quot;Error in insert review, book was null&quot;, e);</span>
+            //System.out.println(&quot;Error in insert review, book was null&quot;);
+        }
+        finally {
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L489">                ps.close();</span>
+            }
+<span class="pc bpc" id="L491" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L492">                con.close();</span>
+            }
+        }
+<span class="fc" id="L495">    }</span>
+
+
+    public void insertBookshelf(Bookshelf bs) throws ClassNotFoundException, SQLException {
+        try {
+<span class="pc bpc" id="L500" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L501">                getConnection();</span>
+            }
+<span class="fc" id="L503">            ps = con.prepareStatement(&quot;INSERT INTO Bookshelf VALUES (?, ?, ?);&quot;);</span>
+<span class="fc" id="L504">            ps.setString(1, null);</span>
+<span class="fc" id="L505">            ps.setString(2, bs.getName());</span>
+<span class="fc" id="L506">            ps.setString(3, bs.getDescription());</span>
+<span class="fc" id="L507">            ps.executeUpdate();</span>
+<span class="nc" id="L508">        } catch (NullPointerException e) {</span>
+<span class="nc" id="L509">            LOGGER.log( Level.SEVERE, &quot;Error in insert bookshelf: inserted bookshelf was null&quot;, e);</span>
+            //System.out.println(&quot;Error in insert bookshelf: inserted bookshelf was null&quot;);
+        } finally {
+<span class="pc bpc" id="L512" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L513">                ps.close();</span>
+            }
+<span class="pc bpc" id="L515" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L516">                con.close();</span>
+            }
+        }
+<span class="fc" id="L519">    }</span>
+
+
+    public int getBookshelfID(String bookshelfName) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L524" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L525">                getConnection();</span>
+            }
+<span class="fc" id="L527">            ps = con.prepareStatement(&quot;SELECT id FROM Bookshelf WHERE name = ?;&quot;);</span>
+<span class="fc" id="L528">            ps.setString(1, bookshelfName);</span>
+<span class="fc" id="L529">            res = ps.executeQuery();</span>
+            //res.isClosed == nothing found
+<span class="fc bfc" id="L531" title="All 2 branches covered.">            if (res.isClosed()) {</span>
+<span class="fc" id="L532">                return -1;</span>
+            }
+<span class="fc" id="L534">            return res.getInt(&quot;id&quot;);</span>
+        } finally {
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L537">                ps.close();</span>
+            }
+<span class="pc bpc" id="L539" title="1 of 2 branches missed.">            if (res != null) {</span>
+<span class="fc" id="L540">                res.close();</span>
+            }
+<span class="pc bpc" id="L542" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L543">                con.close();</span>
+            }
+        }
+    }
+
+
+    public boolean deleteBook(Book book) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L551" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L552">                getConnection();</span>
+            }
+<span class="pc bpc" id="L554" title="1 of 2 branches missed.">            if (book == null) {</span>
+<span class="nc" id="L555">                System.out.println(&quot;Error in delete book: book is null&quot;);</span>
+<span class="nc" id="L556">                return false;</span>
+            }
+<span class="fc" id="L558">            ps = con.prepareStatement(&quot;DELETE FROM Book WHERE id = ?&quot;);</span>
+<span class="fc" id="L559">            ps.setInt(1, book.getId());</span>
+<span class="fc" id="L560">            System.out.println(book.getId());</span>
+<span class="fc" id="L561">            return ps.execute();</span>
+
+        } finally {
+<span class="pc bpc" id="L564" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L565">                ps.close();</span>
+            }
+<span class="pc bpc" id="L567" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L568">                con.close();</span>
+            }
+        }
+    }
+
+
+    public boolean deleteBookshelf(Bookshelf bookshelf) throws SQLException, ClassNotFoundException {
+        try {
+<span class="pc bpc" id="L576" title="2 of 4 branches missed.">            if (con == null || con.isClosed()) {</span>
+<span class="fc" id="L577">                getConnection();</span>
+            }
+<span class="fc" id="L579">            ps = con.prepareStatement(&quot;DELETE FROM Bookshelf WHERE id = ?&quot;);</span>
+<span class="fc" id="L580">            ps.setInt(1, bookshelf.getId());</span>
+<span class="fc" id="L581">            return ps.execute();</span>
+
+<span class="nc" id="L583">        } catch (NullPointerException e) {</span>
+<span class="nc" id="L584">            LOGGER.log( Level.SEVERE, &quot;Error in delete bookshelf: bookshelf is null&quot;, e);</span>
+            //System.out.println(&quot;Error in delete bookshelf: bookshelf is null&quot;);
+<span class="nc" id="L586">            return false;</span>
+        } finally {
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">            if (ps != null) {</span>
+<span class="fc" id="L589">                ps.close();</span>
+            }
+<span class="pc bpc" id="L591" title="1 of 2 branches missed.">            if (con != null) {</span>
+<span class="fc" id="L592">                con.close();</span>
+            }
+        }
+    }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
