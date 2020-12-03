@@ -44,7 +44,7 @@ public class GoogleBooksClient {
 
 
 
-  public static Books connectToAPI(JsonFactory jsonFactory) {
+  public static Books connectToAPI(JsonFactory jsonFactory) throws NullPointerException {
     try {
       return new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
               .setApplicationName(APPLICATION_NAME)

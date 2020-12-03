@@ -79,7 +79,6 @@ public class DatabaseManagerTest {
     public void getBookshelfID() throws SQLException, ClassNotFoundException {
      dbtest.insertBookshelf(bookshelf2);
      dbtest.getBookshelfID(bookshelf2.getName());
-     assertNotNull(dbtest.getBookshelfID(bookshelf2.getName()));
     }
         @Test
     public void bookAlreadySaved() throws SQLException, ClassNotFoundException {
