@@ -120,8 +120,16 @@
     -fx-max-width: 175px;
     -fx-pref-height: 250px;
 
+}
+.bookshelfWidget{
+    -fx-background-radius: 20;
 
-
+    -fx-overflow: hidden;
+    -fx-text-overflow: ellipsis;
+    -fx-min-width: 175px;
+    -fx-pref-height: 250px;
+    -fx-pref-height: 250px;
+    -fx-border-insets: 25px;
 
 }
 .vbrect{
@@ -177,6 +185,7 @@
        -fx-padding: 25px;
        -fx-border-insets: 5px;
        -fx-background-insets: 5px;
-       -fx-background-color: linear-gradient(#F2BC94, #722620);
+       -fx-backoground-color: linear-gradient(#F2BC94, #722620);
 
 }
+

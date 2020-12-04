@@ -93,6 +93,7 @@ public class DiscoverView extends BorderPane {
 
         searchWidget = new TextField();
         searchWidget.setEditable(true);
+        searchWidget.setPromptText("Search");
         searchWidget.setOnAction(event -> {
             if (!searchWidget.getText().equals("")) {
                 RefreshThread thread = new RefreshThread(this, searchWidget.getText());

@@ -11,12 +11,14 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -83,7 +85,10 @@ public class BookshelfWidget extends ScrollPane{
             image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());
             ImageView imageView = new ImageView(this.image);
             imageView.setFitHeight(250);
-            imageView.setFitWidth(500);
+            imageView.setFitWidth(150);
+            imageView = new ImageView(this.image);
+
+
             VBox centerVBox = new VBox();
             centerVBox.getStyleClass().add("inner");
             HBox hBox = new HBox();
@@ -118,8 +123,10 @@ public class BookshelfWidget extends ScrollPane{
                     hb = new HBox();
                     hb.setAlignment(Pos.CENTER);
                     ImageView imgv = new ImageView(image);
-                    imgv.setFitWidth(150);
+                    imgv.setFitWidth(180);
                     imgv.setFitHeight(200);
+
+
                     vb.getChildren().add(hb);
                 }
 
@@ -129,8 +136,10 @@ public class BookshelfWidget extends ScrollPane{
                     continue;
 
                     Button button = new Button(bookshelves.get(j).getName(), covers.get(j));
+                    button.getStyleClass().add("bookshelfWidget");
                     //To FIx
                     button.setPrefWidth(250);
+                    button.setAlignment(Pos.CENTER_LEFT);
                     String bookshelfName = bookshelves.get(j).getName();
                     String bookshelfDesc = bookshelves.get(j).getDescription();
 

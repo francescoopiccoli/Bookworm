@@ -43,7 +43,7 @@ public class BookListView extends BorderPane {
         listWidget.updateList();
 
         TextField textField = new TextField();
-        textField.setPromptText("dragons, cats, tolkien...");
+        textField.setPromptText("Filter");
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             String filter = newValue;
             listWidget.updateList(filter);

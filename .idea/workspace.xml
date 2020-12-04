@@ -23,16 +23,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="765e32cc-f44c-4f36-90a0-604a2472d944" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Images/star-filled3.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookInfoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookInfoView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/DiscoverView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/DiscoverView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/StarWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/StarWidget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BookwormDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/BookwormDB.db" afterDir="false" />
     </list>
@@ -62,9 +61,17 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Bookworm/src/test/testCoverageReport" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Bookworm/src/main/resources/Images" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Utente\Desktop\Programming\Updated\Bookworm\Bookworm\src\main\resources\Images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Utente\Desktop\Programming\Updated\Bookworm\Bookworm\src\main\resources\Images" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -138,6 +145,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1606478239535" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1607074205284">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607074205284" />
     <state x="365" y="175" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1606476474418">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -146,31 +157,47 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="82" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1606478341958" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606760868150">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1607078117752">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606760868150">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607078117752" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1607078117752">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606760868150">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607078117752" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1607078117752">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606760868150">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607078117752" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1607078117752">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1237" height="118" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1606478520138" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606760868150" />
-    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606760176671">
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607078117752" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1607075500493">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607075500493" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1607075500493">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607075500493" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1607075500493">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607075500493" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1607075500493">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607075500493" />
+    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1607078207455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="458" y="255" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1606478497618" />
-    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606760176671" />
+    <state x="687" y="390" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607078207455" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1606402090854">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -65,16 +65,16 @@ public class BookshelfView extends BorderPane {
             root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
             //root.getStylesheets().add(getClass().getResource("/Stylesheets/style2.css").toExternalForm());
             root.setSpacing(5);
-            Label name = new Label("Insert the name of your Bookshelf");
+            Label name = new Label("Bookshelf name");
             TextField nameField = new TextField();
 
             root.getChildren().addAll(name, nameField);
-            Label Description = new Label("Insert a description for your bookshelf");
+            Label Description = new Label("Description");
             TextField descfield = new TextField();
 
             root.getChildren().addAll(Description, descfield);
             BorderPane pane = new BorderPane();
-            Button commit = new Button("Create the new Bookshelf");
+            Button commit = new Button("Create");
             commit.getStyleClass().add("commitBookshelfButton");
             flagExist = false;
             commit.setOnMouseClicked(e -> {
@@ -114,7 +114,7 @@ public class BookshelfView extends BorderPane {
             });
             pane.setCenter(commit);
             root.getChildren().add(pane);
-            test.setScene(new Scene(root, 450, 250));
+            test.setScene(new Scene(root, 450, 175));
             test.show();
         });
 

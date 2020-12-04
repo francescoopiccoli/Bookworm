@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -24,6 +25,11 @@ public class BookWidget extends BorderPane {
         imageView = new ImageView(this.image);
         imageView.setFitHeight(250);
         imageView.setFitWidth(180);
+        imageView.setStyle("-fx-background-radius: 25 25 0 0;");
+        Rectangle r = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
+        r.setArcHeight(25);
+        r.setArcWidth(25);
+        imageView.setClip(r);
         setCenter(imageView);
 
         // is this responsible for the weird NullPointerException stuff?
@@ -55,7 +61,8 @@ public class BookWidget extends BorderPane {
             setBottom(t);
         }
         //setPadding(new Insets(10));
-        setStyle("-fx-background-color: #722620; -fx-border-color: #30110D;");
+        setStyle("-fx-background-color: #722620; -fx-background-radius: 25;");//-fx-border-radius: 30;");
+
     }
 
     public Book getBook() {

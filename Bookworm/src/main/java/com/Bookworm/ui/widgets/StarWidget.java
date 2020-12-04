@@ -19,6 +19,7 @@ public class StarWidget {
 
     public static final String STAR_EMPTY = "/Images/star-empty.png";
     public static final String STAR_FILLED = "/Images/star-filled.png";
+    public static final String STAR_FILLED2 = "/Images/star-filled3.png";
     private static HBox starWidgetBox;
     private static Image emptyStar = new Image(StarWidget.class.getResourceAsStream(STAR_EMPTY));
     private static Image filledStar = new Image(StarWidget.class.getResourceAsStream(STAR_FILLED));
