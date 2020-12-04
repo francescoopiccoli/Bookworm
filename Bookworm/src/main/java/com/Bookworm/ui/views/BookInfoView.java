@@ -130,7 +130,11 @@ public class BookInfoView extends BorderPane {
 
         //book title
         Label displayTitle = new Label();
-        displayTitle.setText(book.getName());
+        String bookname = book.getName();
+        if(bookname.length() >= 52){
+            bookname = bookname.substring(0, 52) + "\n" + bookname.substring(52);
+        }
+        displayTitle.setText(bookname);
         displayTitle.getStyleClass().add("display");
         displayTitle.setFont(Font.font("Cantarell", FontWeight.BOLD, 18));
 
