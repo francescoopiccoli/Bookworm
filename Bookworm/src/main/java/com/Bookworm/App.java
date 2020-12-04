@@ -75,9 +75,9 @@ public class App extends Application {
                 DatabaseManager.getInstance().insertBookshelf(defaultB);
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
 
@@ -90,7 +90,6 @@ public class App extends Application {
             discoverView.setMyBooksWidget(readingListView.getListWidget());
         } catch (SQLException | ClassNotFoundException throwables) {
             LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
-            //throwables.printStackTrace();
         }
         views.put("Bookshelves", new BookshelfView());
 
@@ -168,15 +167,14 @@ public class App extends Application {
                     try {
                         readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
                     } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                        LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        LOGGER.log( Level.SEVERE, e.toString(), e);
                     }
                     readingListView.getListWidget().updateList();
                     views.put("My Books", readingListView);
                 }
                 if (text.equals("Discover")) {
-                    System.out.println("YEY");
                     //to check whether the user is connected or not, but slows down the application launch..
                     if(GoogleBooksClient.searchBooks("sample") == null){
                         discoverView.setCentralLabel("No internet connection, make sure to be connected to search new books!");
