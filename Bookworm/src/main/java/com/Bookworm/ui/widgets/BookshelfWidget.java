@@ -54,8 +54,8 @@ public class BookshelfWidget extends ScrollPane{
                 }else {
                     image = new Image(list.get(0).getImageURL());
                     ImageView img = new ImageView(image);
-                    img.setFitHeight(200);
-                    img.setFitWidth(150);
+                    img.setFitHeight(100);
+                    img.setFitWidth(70);
                     covers.add(img);
                 }
             } catch (SQLException throwables) {

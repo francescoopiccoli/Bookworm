@@ -65,8 +65,9 @@ public class BookshelfView extends BorderPane {
             root.getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
             //root.getStylesheets().add(getClass().getResource("/Stylesheets/style2.css").toExternalForm());
             root.setSpacing(5);
-            Label name = new Label("Bookshelf name");
+            Label name = new Label("Name");
             TextField nameField = new TextField();
+            nameField.setPrefWidth(10);
 
             root.getChildren().addAll(name, nameField);
             Label Description = new Label("Description");

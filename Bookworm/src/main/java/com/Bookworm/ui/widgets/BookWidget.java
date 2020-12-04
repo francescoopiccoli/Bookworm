@@ -24,7 +24,7 @@ public class BookWidget extends BorderPane {
         image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));
         imageView = new ImageView(this.image);
         imageView.setFitHeight(250);
-        imageView.setFitWidth(180);
+        imageView.setFitWidth(185);
         imageView.setStyle("-fx-background-radius: 25 25 0 0;");
         Rectangle r = new Rectangle(imageView.getFitWidth(), imageView.getFitHeight());
         r.setArcHeight(25);
@@ -48,8 +48,8 @@ public class BookWidget extends BorderPane {
 
         if(book != null) {
             String title = book.getName();
-            if (title.length() > 20) {
-                title = title.substring(0, 19) + "\u2026";
+            if (title.length() > 18) {
+                title = title.substring(0, 17) + "\u2026";
             }
             Text t = new Text(title);
 
