@@ -20,7 +20,6 @@ import java.util.List;
 
 public class DiscoverView extends BorderPane {
 
-    BorderPane layout;
     BookListWidget bookListWidget; // the widget from the other page
 
     public BookListWidget getMyBooksWidget() {
@@ -142,7 +141,10 @@ public class DiscoverView extends BorderPane {
         private void setLoading(boolean b) {
             Platform.runLater(() -> d.setLoadingStatus(b));
         }
-    }
 
+    }
+    public void setCentralLabel(String text) {
+        bookListWidget.setLabel(text);
+    }
 
 }

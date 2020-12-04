@@ -131,7 +131,6 @@ public class BookshelfView extends BorderPane {
         HBox hBox = new HBox(vb, region1, addbutton);
         hBox.setPadding(new Insets(15, 12, 15, 12));
 
-
         return hBox;
     }
 
@@ -230,20 +229,20 @@ public class BookshelfView extends BorderPane {
             e.printStackTrace();
         }
         BorderPane pane = new BorderPane();
-        BookListView blv = new BookListView("Default Bookshelf",books);
+        BookListView blv = new BookListView("Default Bookshelf","", books);
         pane.setCenter(blv);
         return pane;
-
     }
-    public Node createCenter3(String bookshelf) {
+
+    public Node createCenter3(String bookshelf, String desc) {
         List<Book> books = null;
         books = (queryBooksOfBookshelf(bookshelf));
         BorderPane pane = new BorderPane();
-        BookListView blv = new BookListView(bookshelf,books);
+        BookListView blv = new BookListView(bookshelf,desc,books);
         pane.setCenter(blv);
         return pane;
-
     }
+
     private List<Book> queryBooksOfBookshelf(String bookshelf){
         List<Book> books = null;
         try {

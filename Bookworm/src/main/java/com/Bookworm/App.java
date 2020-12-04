@@ -1,6 +1,7 @@
 package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
+import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.ui.views.BookListView;
@@ -45,6 +46,7 @@ public class App extends Application {
 	private BorderPane mainPane;
 	private ToggleGroup toggleGroup;
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
+    private DiscoverView discoverView;
 
     // array to keep track of all the book info views, to avoid opening two views of the same book
     public static List<Book> openedBooks = new ArrayList<>();
@@ -73,20 +75,21 @@ public class App extends Application {
                 DatabaseManager.getInstance().insertBookshelf(defaultB);
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
-        DiscoverView discoverView = new DiscoverView();
+
+        discoverView = new DiscoverView();
+
         views.put("Discover", discoverView);
         try {
-            BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+            BookListView readingListView = new BookListView("Reading List", "", DatabaseManager.getInstance().getBooks());
             views.put("My Books", readingListView);
             discoverView.setMyBooksWidget(readingListView.getListWidget());
         } catch (SQLException | ClassNotFoundException throwables) {
             LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
-            //throwables.printStackTrace();
         }
         views.put("Bookshelves", new BookshelfView());
 
@@ -162,17 +165,26 @@ public class App extends Application {
                 if (text.equals("My Books")) {
                     BookListView readingListView = null;
                     try {
-                        readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+                        readingListView = new BookListView("Reading List", "", DatabaseManager.getInstance().getBooks());
                     } catch (SQLException throwables) {
-                        throwables.printStackTrace();
+                        LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        LOGGER.log( Level.SEVERE, e.toString(), e);
                     }
                     readingListView.getListWidget().updateList();
                     views.put("My Books", readingListView);
                 }
+                if (text.equals("Discover")) {
+                    //to check whether the user is connected or not, but slows down the application launch..
+                    if(GoogleBooksClient.searchBooks("sample") == null){
+                        discoverView.setCentralLabel("No internet connection, make sure to be connected to search new books!");
+                    } else {
+                        discoverView.setCentralLabel("Add a book to start!");
+                    }
+                }
                 mainPane.setCenter(_generateContent(text));
             });
+
             button.setToggleGroup(toggleGroup);
         }
 
