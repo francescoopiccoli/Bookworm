@@ -1,6 +1,5 @@
 package com.Bookworm.ui.widgets;
 
-import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.ui.views.BookInfoView;
 import javafx.geometry.Insets;
@@ -20,11 +19,10 @@ public class BookListWidget extends ScrollPane {
     private Image image;
     private ImageView imageView;
     private String currentFilter = "";
+    private Label l = new Label();
     // by default the spawned book list will update this window, but it can be changed
     private BookListWidget parentWidget = this;
     public static final String PLACEHOLDER_IMAGE_URI = "/Images/owl_placeholder.png";
-
-
 
     public BookListWidget getParentWidget() {
         return parentWidget;
@@ -65,14 +63,7 @@ public class BookListWidget extends ScrollPane {
             imageView = new ImageView(this.image);
             imageView.setFitHeight(105);
             imageView.setFitWidth(120);
-            Label l;
-            //to check whether the user is connected or not, but slows down the application launch..
-            if(GoogleBooksClient.searchBooks("sample") == null){
-                l = new Label("No internet connection, make sure to be connected to search new books!");
-            }
-            else{
-                l = new Label("Add a book to start!");
-            }
+            l.setText("Add a book to start!");
             l.setStyle("-fx-text-fill: #722620");
             VBox centerVBox = new VBox();
             centerVBox.getStyleClass().add("inner");
@@ -161,5 +152,7 @@ public class BookListWidget extends ScrollPane {
     public Image getImage() {
         return image;
     }
-
+    public void setLabel(String text) {
+        l.setText(text);
+    }
 }
