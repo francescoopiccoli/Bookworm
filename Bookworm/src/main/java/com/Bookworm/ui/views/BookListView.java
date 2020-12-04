@@ -4,12 +4,11 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class BookListView extends BorderPane {
     private final BookListWidget listWidget;
     private String currentFilter = "";
 
-    public BookListView(String title, List<Book> books) {
+    public BookListView(String title, String desc, List<Book> books) {
         super();
         this.title = title;
         this.books = new ArrayList<>();
@@ -37,6 +36,10 @@ public class BookListView extends BorderPane {
         Label t = new Label(title);
         t.setFont(Font.font("Arial", FontWeight.EXTRA_LIGHT, 18));
         headerPane.setLeft(t);
+
+        Label t2 = new Label(desc);
+        t2.setFont(Font.font("Arial", FontWeight.EXTRA_LIGHT, 13));
+        headerPane.setBottom(t2);
 
         listWidget = new BookListWidget(books);
         setCenter(listWidget);

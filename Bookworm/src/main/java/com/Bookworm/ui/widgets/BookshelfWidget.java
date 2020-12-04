@@ -115,7 +115,6 @@ public class BookshelfWidget extends ScrollPane{
             HBox hb = new HBox();
 
             for(int j = 0; j<bookshelves.size();j++) {
-                System.out.println(bookshelves.get(j).getName());
                 if (i >= numColumns) {
                     i = 0;
                 }
@@ -147,7 +146,7 @@ public class BookshelfWidget extends ScrollPane{
                     int finalJ = j;
                     button.setOnMouseClicked((event -> {
                         parent.setTop(parent.createTop2(bookshelfDesc, bookshelves.get(finalJ)));
-                        parent.setCenter(parent.createCenter3(bookshelfName));
+                        parent.setCenter(parent.createCenter3(bookshelfName, bookshelfDesc));
                     }));
 
                     HBox.setMargin(button, new Insets(20));

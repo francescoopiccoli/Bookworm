@@ -85,7 +85,7 @@ public class App extends Application {
 
         views.put("Discover", discoverView);
         try {
-            BookListView readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+            BookListView readingListView = new BookListView("Reading List", "", DatabaseManager.getInstance().getBooks());
             views.put("My Books", readingListView);
             discoverView.setMyBooksWidget(readingListView.getListWidget());
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -165,7 +165,7 @@ public class App extends Application {
                 if (text.equals("My Books")) {
                     BookListView readingListView = null;
                     try {
-                        readingListView = new BookListView("Reading List", DatabaseManager.getInstance().getBooks());
+                        readingListView = new BookListView("Reading List", "", DatabaseManager.getInstance().getBooks());
                     } catch (SQLException throwables) {
                         LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                     } catch (ClassNotFoundException e) {
