@@ -20,79 +20,79 @@ import java.util.List;
 
 public class DiscoverView extends BorderPane {
 
-    BorderPane layout;
     BookListWidget bookListWidget; // the widget from the other page
 
     public BookListWidget getMyBooksWidget() {
-<span class="nc" id="L27">        return myBooksWidget;</span>
+<span class="nc" id="L26">        return myBooksWidget;</span>
     }
 
     public void setMyBooksWidget(BookListWidget myBooksWidget) {
-<span class="nc" id="L31">        this.myBooksWidget = myBooksWidget;</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L30">        this.myBooksWidget = myBooksWidget;</span>
+<span class="nc" id="L31">    }</span>
 
     BookListWidget myBooksWidget;
     // sicuro che sia static?
-<span class="nc" id="L36">    public static List&lt;Book&gt; bookList = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L35">    public static List&lt;Book&gt; bookList = new LinkedList&lt;&gt;();</span>
     private boolean loadingStatus;
     private TextField searchWidget;
 
     public static List&lt;Book&gt; getBookList() {
-<span class="nc" id="L41">        return bookList;</span>
+<span class="nc" id="L40">        return bookList;</span>
     }
 
     public static void setBookList(List&lt;Book&gt; bookList) {
-<span class="nc" id="L45">        DiscoverView.bookList = bookList;</span>
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L44">        DiscoverView.bookList = bookList;</span>
+<span class="nc" id="L45">    }</span>
 
     private void setLoadingStatus(boolean loadingStatus) throws NullPointerException {
-<span class="nc" id="L49">        this.loadingStatus = loadingStatus;</span>
+<span class="nc" id="L48">        this.loadingStatus = loadingStatus;</span>
 
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L50">    }</span>
     private boolean getLoadingStatus() {
-<span class="nc" id="L53">        return loadingStatus;</span>
+<span class="nc" id="L52">        return loadingStatus;</span>
     }
 
-<span class="nc" id="L56">    public DiscoverView() {</span>
+<span class="nc" id="L55">    public DiscoverView() {</span>
         //Create an instance of Discover to fill the borderpane with its functions
-<span class="nc" id="L58">        setTop(createTopDisc());</span>
-<span class="nc" id="L59">        setCenter(getCenterDisc());</span>
+<span class="nc" id="L57">        setTop(createTopDisc());</span>
+<span class="nc" id="L58">        setCenter(getCenterDisc());</span>
 
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L60">    }</span>
 
     public Node getCenterDisc() throws  NullPointerException{
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (bookListWidget == null)</span>
-<span class="nc" id="L65">            bookListWidget = new BookListWidget(bookList);</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (bookListWidget == null)</span>
+<span class="nc" id="L64">            bookListWidget = new BookListWidget(bookList);</span>
 
-<span class="nc" id="L67">        bookListWidget.setBooks(bookList);</span>
+<span class="nc" id="L66">        bookListWidget.setBooks(bookList);</span>
         // don't update the Discover list, but the My Books one by default
-<span class="nc" id="L69">        bookListWidget.setParentWidget(myBooksWidget);</span>
+<span class="nc" id="L68">        bookListWidget.setParentWidget(myBooksWidget);</span>
 
-<span class="nc" id="L71">        bookListWidget.updateList();</span>
+<span class="nc" id="L70">        bookListWidget.updateList();</span>
 
-<span class="nc" id="L73">        return bookListWidget;</span>
+<span class="nc" id="L72">        return bookListWidget;</span>
 
     }
 
     public Node createTopDisc() {
-<span class="nc" id="L78">        VBox vb = new VBox();</span>
-<span class="nc" id="L79">        HBox hb = new HBox();</span>
-<span class="nc" id="L80">        hb.setPadding(new Insets(15, 12, 15, 12));</span>
+<span class="nc" id="L77">        VBox vb = new VBox();</span>
+<span class="nc" id="L78">        HBox hb = new HBox();</span>
+<span class="nc" id="L79">        hb.setPadding(new Insets(15, 12, 15, 12));</span>
 
         //create  labels for text
 
-<span class="nc" id="L84">        Label title = new Label();</span>
-<span class="nc" id="L85">        title.setText(&quot;Discover new books&quot;);</span>
-<span class="nc" id="L86">        title.setStyle(&quot;-fx-font-size: 16;-fx-font-weight:bold&quot;);</span>
-<span class="nc" id="L87">        Label descriptionText = new Label();</span>
-<span class="nc" id="L88">        descriptionText.setText(&quot;Search for books and add them to your libraries&quot;);</span>
-<span class="nc" id="L89">        vb.getChildren().addAll(title,descriptionText);</span>
-<span class="nc" id="L90">        vb.setSpacing(1);</span>
+<span class="nc" id="L83">        Label title = new Label();</span>
+<span class="nc" id="L84">        title.setText(&quot;Discover new books&quot;);</span>
+<span class="nc" id="L85">        title.setStyle(&quot;-fx-font-size: 16;-fx-font-weight:bold&quot;);</span>
+<span class="nc" id="L86">        Label descriptionText = new Label();</span>
+<span class="nc" id="L87">        descriptionText.setText(&quot;Search for books and add them to your libraries&quot;);</span>
+<span class="nc" id="L88">        vb.getChildren().addAll(title,descriptionText);</span>
+<span class="nc" id="L89">        vb.setSpacing(1);</span>
 
         //search box
 
-<span class="nc" id="L94">        searchWidget = new TextField();</span>
-<span class="nc" id="L95">        searchWidget.setEditable(true);</span>
+<span class="nc" id="L93">        searchWidget = new TextField();</span>
+<span class="nc" id="L94">        searchWidget.setEditable(true);</span>
+<span class="nc" id="L95">        searchWidget.setPromptText(&quot;Search&quot;);</span>
 <span class="nc" id="L96">        searchWidget.setOnAction(event -&gt; {</span>
 <span class="nc bnc" id="L97" title="All 2 branches missed.">            if (!searchWidget.getText().equals(&quot;&quot;)) {</span>
 <span class="nc" id="L98">                RefreshThread thread = new RefreshThread(this, searchWidget.getText());</span>
@@ -141,8 +141,11 @@ public class DiscoverView extends BorderPane {
         private void setLoading(boolean b) {
 <span class="nc" id="L142">            Platform.runLater(() -&gt; d.setLoadingStatus(b));</span>
 <span class="nc" id="L143">        }</span>
-    }
 
+    }
+    public void setCentralLabel(String text) {
+<span class="nc" id="L147">        bookListWidget.setLabel(text);</span>
+<span class="nc" id="L148">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -23,17 +23,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="765e32cc-f44c-4f36-90a0-604a2472d944" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Images/star-filled3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/BookshelfView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/DiscoverView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/views/DiscoverView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookListWidget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookWidget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/BookshelfWidget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/StarWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/java/com/Bookworm/ui/widgets/StarWidget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/src/main/resources/Stylesheets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BookwormDB.db" beforeDir="false" afterPath="$PROJECT_DIR$/BookwormDB.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/DatabaseManagerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/DatabaseManagerTest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/DatabaseManagerTest.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/DatabaseManagerTest.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/index.source.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.controller/index.source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView$1.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView$1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookInfoView.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookListView.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookListView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookListView.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookListView.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookshelfView.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookshelfView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookshelfView.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/BookshelfView.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/DiscoverView.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/DiscoverView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/DiscoverView.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/DiscoverView.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/index.source.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.views/index.source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookListWidget.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookListWidget.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookListWidget.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookListWidget.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookWidget.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookWidget.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookWidget.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookWidget.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookshelfWidget.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookshelfWidget.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookshelfWidget.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/BookshelfWidget.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/StarWidget.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/StarWidget.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/StarWidget.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/StarWidget.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/index.source.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm.ui.widgets/index.source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/App.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/App.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/App.java.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/App.java.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/index.source.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/com.Bookworm/index.source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/jacoco-sessions.html" beforeDir="false" afterPath="$PROJECT_DIR$/Bookworm/testCoverageFinalReport/jacoco-sessions.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +62,7 @@
   </component>
   <component name="ExportToHTMLSettings">
     <option name="OPEN_IN_BROWSER" value="true" />
-    <option name="OUTPUT_DIRECTORY" value="C:\Users\matte\OneDrive\Documenti\GitHub\Bookworm\Bookworm\src\test\testCoverageReport" />
+    <option name="OUTPUT_DIRECTORY" value="C:\Users\matte\OneDrive\Documenti\GitHub\Bookworm\Bookworm\testCoverageFinalReport" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -61,7 +81,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Bookworm/src/main/resources/Images" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Bookworm/testCoverageFinalReport" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
@@ -204,19 +224,19 @@
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1606402090854" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/App$DatabaseManagerTest.ic" NAME="DatabaseManagerTest Coverage Results" MODIFIED="1606226941591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.Bookworm.controller.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/App$GUItests.ic" NAME="GUItests Coverage Results" MODIFIED="1606226911036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.Bookworm.controller.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/App$All_in_App.exec" NAME="All in App Coverage Results" MODIFIED="1606478261394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/App$All_in_App.ic" NAME="All in App Coverage Results" MODIFIED="1606478210641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/App$App.ic" NAME="App Coverage Results" MODIFIED="1606226428885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.Bookworm.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/App$DatabaseManagerTest.ic" NAME="DatabaseManagerTest Coverage Results" MODIFIED="1606226941591" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.Bookworm.controller.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/App$GoogleBooksClientUnitTest.ic" NAME="GoogleBooksClientUnitTest Coverage Results" MODIFIED="1606228767702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.Bookworm.controller.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/App$All_in_App.exec" NAME="All in App Coverage Results" MODIFIED="1607203517766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="jacoco" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/App$GUItests.ic" NAME="GUItests Coverage Results" MODIFIED="1606226911036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.Bookworm.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/App$All_in_App.ic" NAME="All in App Coverage Results" MODIFIED="1606478210641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

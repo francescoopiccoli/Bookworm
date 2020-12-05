@@ -4,12 +4,11 @@ import com.Bookworm.model.Book;
 import com.Bookworm.ui.widgets.BookListWidget;
 import com.Bookworm.ui.widgets.BookWidget;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,54 +18,58 @@ public class BookListView extends BorderPane {
     private List&lt;BookWidget&gt; books;
 
     private final BookListWidget listWidget;
-<span class="nc" id="L22">    private String currentFilter = &quot;&quot;;</span>
+<span class="nc" id="L21">    private String currentFilter = &quot;&quot;;</span>
 
-    public BookListView(String title, List&lt;Book&gt; books) {
-<span class="nc" id="L25">        super();</span>
-<span class="nc" id="L26">        this.title = title;</span>
-<span class="nc" id="L27">        this.books = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        for(Book book : books) {</span>
+    public BookListView(String title, String desc, List&lt;Book&gt; books) {
+<span class="nc" id="L24">        super();</span>
+<span class="nc" id="L25">        this.title = title;</span>
+<span class="nc" id="L26">        this.books = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        for(Book book : books) {</span>
             // we could even maybe async-ize this thing as well?
-<span class="nc" id="L30">            this.books.add(new BookWidget(book));</span>
-<span class="nc" id="L31">        }</span>
+<span class="nc" id="L29">            this.books.add(new BookWidget(book));</span>
+<span class="nc" id="L30">        }</span>
 
-<span class="nc" id="L33">        BorderPane headerPane = new BorderPane();</span>
-<span class="nc" id="L34">        headerPane.setPadding(new Insets(20));</span>
-<span class="nc" id="L35">        setTop(headerPane);</span>
+<span class="nc" id="L32">        BorderPane headerPane = new BorderPane();</span>
+<span class="nc" id="L33">        headerPane.setPadding(new Insets(20));</span>
+<span class="nc" id="L34">        setTop(headerPane);</span>
 
-<span class="nc" id="L37">        Label t = new Label(title);</span>
-<span class="nc" id="L38">        t.setFont(Font.font(&quot;Arial&quot;, FontWeight.EXTRA_LIGHT, 18));</span>
-<span class="nc" id="L39">        headerPane.setLeft(t);</span>
+<span class="nc" id="L36">        Label t = new Label(title);</span>
+<span class="nc" id="L37">        t.setFont(Font.font(&quot;Arial&quot;, FontWeight.EXTRA_LIGHT, 18));</span>
+<span class="nc" id="L38">        headerPane.setLeft(t);</span>
 
-<span class="nc" id="L41">        listWidget = new BookListWidget(books);</span>
-<span class="nc" id="L42">        setCenter(listWidget);</span>
-<span class="nc" id="L43">        listWidget.updateList();</span>
+<span class="nc" id="L40">        Label t2 = new Label(desc);</span>
+<span class="nc" id="L41">        t2.setFont(Font.font(&quot;Arial&quot;, FontWeight.EXTRA_LIGHT, 13));</span>
+<span class="nc" id="L42">        headerPane.setBottom(t2);</span>
 
-<span class="nc" id="L45">        TextField textField = new TextField();</span>
-<span class="nc" id="L46">        textField.setPromptText(&quot;dragons, cats, tolkien...&quot;);</span>
-<span class="nc" id="L47">        textField.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
-<span class="nc" id="L48">            String filter = newValue;</span>
-<span class="nc" id="L49">            listWidget.updateList(filter);</span>
-<span class="nc" id="L50">        });</span>
+<span class="nc" id="L44">        listWidget = new BookListWidget(books);</span>
+<span class="nc" id="L45">        setCenter(listWidget);</span>
+<span class="nc" id="L46">        listWidget.updateList();</span>
 
-<span class="nc" id="L52">        headerPane.setRight(textField);</span>
+<span class="nc" id="L48">        TextField textField = new TextField();</span>
+<span class="nc" id="L49">        textField.setPromptText(&quot;Filter&quot;);</span>
+<span class="nc" id="L50">        textField.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L51">            String filter = newValue;</span>
+<span class="nc" id="L52">            listWidget.updateList(filter);</span>
+<span class="nc" id="L53">        });</span>
 
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L55">        headerPane.setRight(textField);</span>
+
+<span class="nc" id="L57">    }</span>
 
     public BookListWidget getListWidget() {
-<span class="nc" id="L57">        return listWidget;</span>
+<span class="nc" id="L60">        return listWidget;</span>
     }
 
     public String getTitle() {
-<span class="nc" id="L61">        return title;</span>
+<span class="nc" id="L64">        return title;</span>
     }
 
     public List&lt;BookWidget&gt; getBooks() {
-<span class="nc" id="L65">        return books;</span>
+<span class="nc" id="L68">        return books;</span>
     }
     public void setBooks(List&lt;BookWidget&gt; books) {
-<span class="nc" id="L68">        this.books = books;</span>
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L71">        this.books = books;</span>
+<span class="nc" id="L72">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

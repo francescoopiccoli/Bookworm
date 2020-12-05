@@ -65,71 +65,71 @@ public class BookshelfView extends BorderPane {
 <span class="nc" id="L65">            root.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
             //root.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style2.css&quot;).toExternalForm());
 <span class="nc" id="L67">            root.setSpacing(5);</span>
-<span class="nc" id="L68">            Label name = new Label(&quot;Insert the name of your Bookshelf&quot;);</span>
+<span class="nc" id="L68">            Label name = new Label(&quot;Name&quot;);</span>
 <span class="nc" id="L69">            TextField nameField = new TextField();</span>
+<span class="nc" id="L70">            nameField.setPrefWidth(10);</span>
 
-<span class="nc" id="L71">            root.getChildren().addAll(name, nameField);</span>
-<span class="nc" id="L72">            Label Description = new Label(&quot;Insert a description for your bookshelf&quot;);</span>
-<span class="nc" id="L73">            TextField descfield = new TextField();</span>
+<span class="nc" id="L72">            root.getChildren().addAll(name, nameField);</span>
+<span class="nc" id="L73">            Label Description = new Label(&quot;Description&quot;);</span>
+<span class="nc" id="L74">            TextField descfield = new TextField();</span>
 
-<span class="nc" id="L75">            root.getChildren().addAll(Description, descfield);</span>
-<span class="nc" id="L76">            BorderPane pane = new BorderPane();</span>
-<span class="nc" id="L77">            Button commit = new Button(&quot;Create the new Bookshelf&quot;);</span>
-<span class="nc" id="L78">            commit.getStyleClass().add(&quot;commitBookshelfButton&quot;);</span>
-<span class="nc" id="L79">            flagExist = false;</span>
-<span class="nc" id="L80">            commit.setOnMouseClicked(e -&gt; {</span>
-<span class="nc" id="L81">                Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());</span>
+<span class="nc" id="L76">            root.getChildren().addAll(Description, descfield);</span>
+<span class="nc" id="L77">            BorderPane pane = new BorderPane();</span>
+<span class="nc" id="L78">            Button commit = new Button(&quot;Create&quot;);</span>
+<span class="nc" id="L79">            commit.getStyleClass().add(&quot;commitBookshelfButton&quot;);</span>
+<span class="nc" id="L80">            flagExist = false;</span>
+<span class="nc" id="L81">            commit.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L82">                Bookshelf list = new Bookshelf(nameField.getText(),descfield.getText());</span>
                 try {
                     //int bookshelfID = db.getBookshelfID(nameField.getText());
-<span class="nc" id="L84">                    List&lt;Bookshelf&gt; allBookshelves = db.getBookShelves();</span>
+<span class="nc" id="L85">                    List&lt;Bookshelf&gt; allBookshelves = db.getBookShelves();</span>
 
-<span class="nc bnc" id="L86" title="All 2 branches missed.">                    for (Bookshelf b : allBookshelves) {</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">                        if(b.getName().contentEquals(list.getName())){</span>
-<span class="nc" id="L88">                            flagExist=true;</span>
-<span class="nc" id="L89">                            System.out.println(&quot;Bookshelf already exists&quot;);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                    for (Bookshelf b : allBookshelves) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                        if(b.getName().contentEquals(list.getName())){</span>
+<span class="nc" id="L89">                            flagExist=true;</span>
+<span class="nc" id="L90">                            System.out.println(&quot;Bookshelf already exists&quot;);</span>
                         }
-<span class="nc" id="L91">                    }</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if(flagExist==false){</span>
-<span class="nc" id="L93">                        System.out.println(&quot;Bookshelf inserted!&quot;);</span>
-<span class="nc" id="L94">                        db.insertBookshelf(list);</span>
+<span class="nc" id="L92">                    }</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                    if(flagExist==false){</span>
+<span class="nc" id="L94">                        System.out.println(&quot;Bookshelf inserted!&quot;);</span>
+<span class="nc" id="L95">                        db.insertBookshelf(list);</span>
                     }
-<span class="nc" id="L96">                } catch (ClassNotFoundException e1) {</span>
-<span class="nc" id="L97">                    e1.printStackTrace();</span>
-<span class="nc" id="L98">                } catch (SQLException e1) {</span>
-<span class="nc" id="L99">                    e1.printStackTrace();</span>
-<span class="nc" id="L100">                }</span>
+<span class="nc" id="L97">                } catch (ClassNotFoundException e1) {</span>
+<span class="nc" id="L98">                    e1.printStackTrace();</span>
+<span class="nc" id="L99">                } catch (SQLException e1) {</span>
+<span class="nc" id="L100">                    e1.printStackTrace();</span>
+<span class="nc" id="L101">                }</span>
                 //ADD code that creates new List
-<span class="nc" id="L102">                test.hide();</span>
+<span class="nc" id="L103">                test.hide();</span>
 
                 //Reload central part with lists
                 try {
-<span class="nc" id="L106">                    List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
-<span class="nc" id="L107">                    setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
-<span class="nc" id="L108">                } catch (SQLException throwables) {</span>
-<span class="nc" id="L109">                    throwables.printStackTrace();</span>
-<span class="nc" id="L110">                } catch (ClassNotFoundException ex) {</span>
-<span class="nc" id="L111">                    ex.printStackTrace();</span>
-<span class="nc" id="L112">                }</span>
+<span class="nc" id="L107">                    List&lt;Bookshelf&gt; bookshelveswithdefault = db.getBookShelves();</span>
+<span class="nc" id="L108">                    setCenter(new BookshelfWidget(bookshelveswithdefault,this));</span>
+<span class="nc" id="L109">                } catch (SQLException throwables) {</span>
+<span class="nc" id="L110">                    throwables.printStackTrace();</span>
+<span class="nc" id="L111">                } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L112">                    ex.printStackTrace();</span>
+<span class="nc" id="L113">                }</span>
 
-<span class="nc" id="L114">            });</span>
-<span class="nc" id="L115">            pane.setCenter(commit);</span>
-<span class="nc" id="L116">            root.getChildren().add(pane);</span>
-<span class="nc" id="L117">            test.setScene(new Scene(root, 450, 250));</span>
-<span class="nc" id="L118">            test.show();</span>
-<span class="nc" id="L119">        });</span>
+<span class="nc" id="L115">            });</span>
+<span class="nc" id="L116">            pane.setCenter(commit);</span>
+<span class="nc" id="L117">            root.getChildren().add(pane);</span>
+<span class="nc" id="L118">            test.setScene(new Scene(root, 450, 175));</span>
+<span class="nc" id="L119">            test.show();</span>
+<span class="nc" id="L120">        });</span>
 
-<span class="nc" id="L121">        Region region1 = new Region();</span>
-<span class="nc" id="L122">        HBox.setHgrow(region1, Priority.ALWAYS);</span>
+<span class="nc" id="L122">        Region region1 = new Region();</span>
+<span class="nc" id="L123">        HBox.setHgrow(region1, Priority.ALWAYS);</span>
 
 
 
-<span class="nc" id="L126">        VBox vb = new VBox();</span>
-<span class="nc" id="L127">        vb.getChildren().addAll(title,descriptionText);</span>
-<span class="nc" id="L128">        vb.setSpacing(1);</span>
-<span class="nc" id="L129">        vb.setAlignment(Pos.TOP_LEFT);</span>
-<span class="nc" id="L130">        HBox hBox = new HBox(vb, region1, addbutton);</span>
-<span class="nc" id="L131">        hBox.setPadding(new Insets(15, 12, 15, 12));</span>
-
+<span class="nc" id="L127">        VBox vb = new VBox();</span>
+<span class="nc" id="L128">        vb.getChildren().addAll(title,descriptionText);</span>
+<span class="nc" id="L129">        vb.setSpacing(1);</span>
+<span class="nc" id="L130">        vb.setAlignment(Pos.TOP_LEFT);</span>
+<span class="nc" id="L131">        HBox hBox = new HBox(vb, region1, addbutton);</span>
+<span class="nc" id="L132">        hBox.setPadding(new Insets(15, 12, 15, 12));</span>
 
 <span class="nc" id="L134">        return hBox;</span>
     }
@@ -229,20 +229,20 @@ public class BookshelfView extends BorderPane {
 <span class="nc" id="L229">            e.printStackTrace();</span>
 <span class="nc" id="L230">        }</span>
 <span class="nc" id="L231">        BorderPane pane = new BorderPane();</span>
-<span class="nc" id="L232">        BookListView blv = new BookListView(&quot;Default Bookshelf&quot;,books);</span>
+<span class="nc" id="L232">        BookListView blv = new BookListView(&quot;Default Bookshelf&quot;,&quot;&quot;, books);</span>
 <span class="nc" id="L233">        pane.setCenter(blv);</span>
 <span class="nc" id="L234">        return pane;</span>
-
     }
-    public Node createCenter3(String bookshelf) {
+
+    public Node createCenter3(String bookshelf, String desc) {
 <span class="nc" id="L238">        List&lt;Book&gt; books = null;</span>
 <span class="nc" id="L239">        books = (queryBooksOfBookshelf(bookshelf));</span>
 <span class="nc" id="L240">        BorderPane pane = new BorderPane();</span>
-<span class="nc" id="L241">        BookListView blv = new BookListView(bookshelf,books);</span>
+<span class="nc" id="L241">        BookListView blv = new BookListView(bookshelf,desc,books);</span>
 <span class="nc" id="L242">        pane.setCenter(blv);</span>
 <span class="nc" id="L243">        return pane;</span>
-
     }
+
     private List&lt;Book&gt; queryBooksOfBookshelf(String bookshelf){
 <span class="nc" id="L247">        List&lt;Book&gt; books = null;</span>
         try {
