@@ -1,7 +1,6 @@
 package com.Bookworm;
 
 import com.Bookworm.controller.DatabaseManager;
-import com.Bookworm.controller.GoogleBooksClient;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
 import com.Bookworm.ui.views.BookListView;
@@ -27,6 +26,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,8 +44,8 @@ import java.util.logging.Logger;
  */
 public class App extends Application {
 
-	private Region currentView = new DiscoverView();
-	private Map<String,Region> views = new LinkedHashMap<>();
+	private final Region currentView = new DiscoverView();
+	private final Map<String,Region> views = new LinkedHashMap<>();
 	private BorderPane mainPane;
 	private ToggleGroup toggleGroup;
     private static final Logger LOGGER = Logger.getLogger(App.class.getName());
@@ -74,10 +77,8 @@ public class App extends Application {
                 Bookshelf defaultB = new Bookshelf("Default", "Default bookshelf");
                 DatabaseManager.getInstance().insertBookshelf(defaultB);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
-        } catch (ClassNotFoundException e) {
-            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
 
@@ -166,20 +167,22 @@ public class App extends Application {
                     BookListView readingListView = null;
                     try {
                         readingListView = new BookListView("Reading List", "", DatabaseManager.getInstance().getBooks());
-                    } catch (SQLException throwables) {
+                    } catch (SQLException | ClassNotFoundException throwables) {
                         LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
-                    } catch (ClassNotFoundException e) {
-                        LOGGER.log( Level.SEVERE, e.toString(), e);
                     }
                     readingListView.getListWidget().updateList();
                     views.put("My Books", readingListView);
                 }
                 if (text.equals("Discover")) {
                     //to check whether the user is connected or not, but slows down the application launch..
-                    if(GoogleBooksClient.searchBooks("sample") == null){
-                        discoverView.setCentralLabel("No internet connection, make sure to be connected to search new books!");
-                    } else {
-                        discoverView.setCentralLabel("Add a book to start!");
+                    try {
+                        if(!isInternetAvailable()){
+                            discoverView.setCentralLabel("No internet connection, make sure to be connected to search new books!");
+                        } else {
+                            discoverView.setCentralLabel("Add a book to start!");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 mainPane.setCenter(_generateContent(text));
@@ -196,4 +199,19 @@ public class App extends Application {
         launch();
     }
 
+    private static boolean isInternetAvailable() throws IOException
+    {
+        try(Socket socket = new Socket())
+        {
+            int port = 80;
+            InetSocketAddress socketAddress = new InetSocketAddress("google.com", port);
+            socket.connect(socketAddress, 3000);
+
+            return true;
+        }
+        catch(UnknownHostException unknownHost)
+        {
+            return false;
+        }
+    }
 }

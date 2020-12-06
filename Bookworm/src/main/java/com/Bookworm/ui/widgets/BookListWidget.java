@@ -111,7 +111,7 @@ public class BookListWidget extends ScrollPane {
                     Book book = b.getBook();
                     // bookInfo should accept Book object, not just its parameters!
 
-                    BookInfoView.spawnWindow(book, 600, b.getImage(), parentWidget);
+                    BookInfoView.spawnWindow(book, 600, parentWidget);
 
                 }));
 

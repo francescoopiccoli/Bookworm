@@ -26,7 +26,7 @@ public class BookshelfView extends BorderPane {
     private DatabaseManager db = BookInfoView.dbManager;
     boolean flagExist = false;
     private List<Bookshelf> bookshelves;
-    private List<ImageView> covers = new ArrayList<>();
+    private final List<ImageView> covers = new ArrayList<>();
     private Image image;
     public BookshelfView() {
         //Create an instance of Discover to fill the borderpane with its functions
@@ -128,15 +128,17 @@ public class BookshelfView extends BorderPane {
         return hBox;
     }
 
+    /*
     private Node createCenter(Bookshelf bookshelf) {
         ScrollPane sc = new ScrollPane();
         sc.setFitToHeight(true);
         sc.getStyleClass().add("inner");
         return sc;
     }
+     */
 
 
-    public Node createTop2(String description, Bookshelf bookshelf) {
+    public Node createTop2(Bookshelf bookshelf) {
         Button deleteButton = new Button("Delete Bookshelf");
         deleteButton.setOnMouseClicked(event -> {
             try {
@@ -167,7 +169,6 @@ public class BookshelfView extends BorderPane {
                 throwables.printStackTrace();
             }
         });
-        Text t = new Text(description);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setLeft(back);
@@ -183,43 +184,6 @@ public class BookshelfView extends BorderPane {
         return hBox;
     }
 
-    //Not used anymore
-    public Node createTop2() {
-
-
-        Button back = new Button("🡰 Back");
-        back.setOnMouseClicked(event -> {
-            setTop(createTop());
-            //setCenter(createCenter());
-            try {
-                List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
-                setCenter(new BookshelfWidget(bookshelveswithdefault,this));
-            } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
-            }
-        });
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setRight(back);
-        HBox.setHgrow(borderPane,Priority.ALWAYS);
-        HBox hBox = new HBox(borderPane);
-        hBox.setPadding(new Insets(15, 12, 15, 12));
-
-        return hBox;
-    }
-    public Node createCenter2() {
-        List<Book> books = null;
-        try {
-            books = db.getBooks();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
-        BorderPane pane = new BorderPane();
-        BookListView blv = new BookListView("Default Bookshelf","", books);
-        pane.setCenter(blv);
-        return pane;
-    }
-
     public Node createCenter3(String bookshelf, String desc) {
         List<Book> books;
         books = (queryBooksOfBookshelf(bookshelf));
@@ -230,18 +194,13 @@ public class BookshelfView extends BorderPane {
     }
 
     private List<Book> queryBooksOfBookshelf(String bookshelf){
-        List<Book> books = null;
         try {
-            books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));
+            return db.getBookShelfBooks(db.getBookshelfID(bookshelf));
             //String.valueOf((db.getBookshelfID(bookshelf)))
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
+            return null;
         }
-        for (Book b: books) {
-            System.out.println("BOOK : ");
-
-        }
-        return books;
     }
 
 }

@@ -27,7 +27,6 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +36,6 @@ public class GoogleBooksClient {
   /** Value of the "API key" shown under "Simple API Access". */
   static final String API_KEY = "AIzaSyCrhM2GtOjpf-exVbgJnQdKEDRG494tEG0";
 
-  private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
-  private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
   public static LinkedList<Book> foundBooks;
   private static final Logger LOGGER = Logger.getLogger(GoogleBooksClient.class.getName());
 
@@ -50,11 +47,7 @@ public class GoogleBooksClient {
               .setApplicationName(APPLICATION_NAME)
               .setGoogleClientRequestInitializer(new BooksRequestInitializer(API_KEY))
               .build();
-    } catch (GeneralSecurityException e) {
-      LOGGER.log( Level.SEVERE, "Error instantiating google api client", e);
-      //System.out.println("Error instantiating google api client");
-      //e.printStackTrace();
-    } catch (IOException e) {
+    } catch (GeneralSecurityException | IOException e) {
       LOGGER.log( Level.SEVERE, "Error instantiating google api client", e);
       //System.out.println("Error instantiating google api client");
       //e.printStackTrace();
@@ -103,7 +96,6 @@ public class GoogleBooksClient {
 
     for (Volume volume : volumes.getItems()) {
       Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
-      Volume.SaleInfo saleInfo = volume.getSaleInfo();
 
       Book currentBook = new Book();
 
@@ -175,8 +167,7 @@ public class GoogleBooksClient {
       if (prefix != null) {
         formalQuery = prefix + formalQuery;
       }
-      LinkedList<Book> foundBooks = getFoundBooks(jsonFactory, formalQuery);
-      return foundBooks;
+      return getFoundBooks(jsonFactory, formalQuery);
     } catch (Throwable t) {
       LOGGER.log( Level.SEVERE, t.toString(), t);
       //t.printStackTrace();

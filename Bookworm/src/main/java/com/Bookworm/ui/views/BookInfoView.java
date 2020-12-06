@@ -92,20 +92,11 @@ public class BookInfoView extends BorderPane {
         getStylesheets().add(getClass().getResource("/Stylesheets/style.css").toExternalForm());
     }
 
-    public static void spawnWindow(Book book, BookListWidget parent){
+    public static void spawnWindow(Book book, Image image, BookListWidget parent){
         spawnWindow(book, DEFAULT_WIDTH, parent);
     }
 
-    public static void spawnWindow(Book book, Image image, BookListWidget parent){
-        spawnWindow(book, DEFAULT_WIDTH, image, parent);
-    }
-
     public static void spawnWindow(Book book, int w, BookListWidget parent){
-        Image image = new Image(book.getImageURL());
-        spawnWindow(book, w, image, parent);
-    }
-
-    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent){
         if (!App.hasOpenedBook(book)) {
             App.openedBooks.add(book);
             //ImageView imageView = new ImageView(image);
@@ -192,10 +183,8 @@ public class BookInfoView extends BorderPane {
             spaceNeededLabel = new Label(bookshelfNamesString.get(index).substring(1));
             spaceNeededLabel.setVisible(false);
 
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         HBox deleteButtonWorkaround = new HBox();
         deleteButtonWorkaround.getChildren().addAll(spaceNeededLabel, deleteButton);
@@ -228,10 +217,8 @@ public class BookInfoView extends BorderPane {
                 comboBookshelf.setItems(list);
                 comboBookshelf.getSelectionModel().select(1);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         comboBookshelf.setConverter(new StringConverter<>() {
@@ -328,14 +315,11 @@ public class BookInfoView extends BorderPane {
     }
 
     private void updateBookId(){
-        int newId = -1;
         Book localBook = null;
         try {
             localBook = dbManager.getBook(book.getName(), book.getAuthor());
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         if(localBook != null)
             book = localBook;
@@ -382,14 +366,11 @@ public class BookInfoView extends BorderPane {
             } else {
                 review.setText("Add the book to your library to review it!");
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         //generates starwidget calling the static method getStarWidget of Starwidget class
-        HBox starwidget = null;
-        starwidget = StarWidget.getStarWidget(this, book);
+        HBox starwidget = StarWidget.getStarWidget(this, book);
 
         //if review is changed, update/insert the new review in the database
         review.textProperty().addListener((observable, oldValue, newValue) -> {

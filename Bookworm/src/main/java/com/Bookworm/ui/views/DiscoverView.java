@@ -22,10 +22,6 @@ public class DiscoverView extends BorderPane {
 
     BookListWidget bookListWidget; // the widget from the other page
 
-    public BookListWidget getMyBooksWidget() {
-        return myBooksWidget;
-    }
-
     public void setMyBooksWidget(BookListWidget myBooksWidget) {
         this.myBooksWidget = myBooksWidget;
     }
@@ -116,9 +112,9 @@ public class DiscoverView extends BorderPane {
     }
 
     // a support class for parallel processing of queries, in order not to clog the UI thread during search operation
-    private class RefreshThread extends Thread {
-        private DiscoverView d;
-        private String query;
+    private static class RefreshThread extends Thread {
+        private final DiscoverView d;
+        private final String query;
 
         public RefreshThread(DiscoverView d, String query) {
             this.d = d;
@@ -132,7 +128,7 @@ public class DiscoverView extends BorderPane {
 
             List<Book> bookList = GoogleBooksClient.searchBooks(query);
             if (bookList != null && !bookList.isEmpty()) {
-                d.setBookList(bookList);
+                setBookList(bookList);
                 Platform.runLater(() -> d.setCenter(d.getCenterDisc()));
             }
             setLoading(false);
