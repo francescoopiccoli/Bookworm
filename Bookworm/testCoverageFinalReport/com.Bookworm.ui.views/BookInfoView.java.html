@@ -32,6 +32,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookInfoView extends BorderPane {
 
@@ -40,423 +42,405 @@ public class BookInfoView extends BorderPane {
     private static final String LABEL_NO_BOOKSHELF = &quot;[No Bookshelf]&quot;;
     private static final int ID_NO_BOOKSHELF = -5;
     private static final int ID_DEFAULT_BOOKSHELF = -6;
+<span class="nc" id="L45">    private static final Logger LOGGER = Logger.getLogger(BookInfoView.class.getName());</span>
 
-<span class="nc" id="L44">    public static ArrayList&lt;Bookshelf&gt; bookShelf = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L45">    public static List&lt;Book&gt; bookList = new LinkedList&lt;&gt;(); // ?</span>
+<span class="nc" id="L47">    public static ArrayList&lt;Bookshelf&gt; bookShelf = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L48">    public static List&lt;Book&gt; bookList = new LinkedList&lt;&gt;(); // ?</span>
     private  List&lt;BookWidget&gt; books;
     private Book book;
     private final BookListWidget parent;
     ImageView imageView;
-<span class="nc" id="L50">    public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)</span>
+<span class="nc" id="L53">    public static final DatabaseManager dbManager = DatabaseManager.getInstance(); // just 1 instance per app! (pass from app?)</span>
 
     public static List&lt;Book&gt; getBookList() {
-<span class="nc" id="L53">        return bookList;</span>
+<span class="nc" id="L56">        return bookList;</span>
     }
 
     public static void setBookList(List&lt;Book&gt; bookList) {
-<span class="nc" id="L57">        BookInfoView.bookList = bookList;</span>
-<span class="nc" id="L58">    }</span>
+<span class="nc" id="L60">        BookInfoView.bookList = bookList;</span>
+<span class="nc" id="L61">    }</span>
 
     public List&lt;BookWidget&gt; getBooks() {
-<span class="nc" id="L61">        return books;</span>
+<span class="nc" id="L64">        return books;</span>
     }
 
     public void setBooks(List&lt;BookWidget&gt; books) {
-<span class="nc" id="L65">        this.books = books;</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L68">        this.books = books;</span>
+<span class="nc" id="L69">    }</span>
 
     public static ArrayList&lt;Bookshelf&gt; getBookShelf() {
-<span class="nc" id="L69">        return bookShelf;</span>
+<span class="nc" id="L72">        return bookShelf;</span>
     }
 
     public static void setBookShelf(ArrayList&lt;Bookshelf&gt; bookShelf) {
-<span class="nc" id="L73">        BookInfoView.bookShelf = bookShelf;</span>
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L76">        BookInfoView.bookShelf = bookShelf;</span>
+<span class="nc" id="L77">    }</span>
 
 
-<span class="nc" id="L77">    public BookInfoView(Book book, BookListWidget parent){</span>
-<span class="nc" id="L78">        this.book = book;</span>
-<span class="nc" id="L79">        this.parent = parent;</span>
+<span class="nc" id="L80">    public BookInfoView(Book book, BookListWidget parent){</span>
+<span class="nc" id="L81">        this.book = book;</span>
+<span class="nc" id="L82">        this.parent = parent;</span>
         Image image;
         try {
-<span class="nc" id="L82">           image = new Image(book.getImageURL(), true);</span>
-<span class="nc" id="L83">        } catch (Exception e) {</span>
-<span class="nc" id="L84">            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));</span>
-<span class="nc" id="L85">        }</span>
-<span class="nc" id="L86">        this.imageView = new ImageView(image);</span>
+<span class="nc" id="L85">           image = new Image(book.getImageURL(), true);</span>
+<span class="nc" id="L86">        } catch (Exception e) {</span>
+<span class="nc" id="L87">            image = new Image(getClass().getResourceAsStream(BookWidget.PLACEHOLDER_IMAGE_URI));</span>
+<span class="nc" id="L88">        }</span>
+<span class="nc" id="L89">        this.imageView = new ImageView(image);</span>
 
-<span class="nc" id="L88">        setTop(addHBoxTop());</span>
-<span class="nc" id="L89">        setCenter(addVBox());</span>
-<span class="nc" id="L90">        setStyle(&quot;-fx-background-color: #F2BC94;&quot;);</span>
+<span class="nc" id="L91">        setTop(addHBoxTop());</span>
+<span class="nc" id="L92">        setCenter(addVBox());</span>
+<span class="nc" id="L93">        setStyle(&quot;-fx-background-color: #F2BC94;&quot;);</span>
         // finally, set stylesheet of this whole window
-<span class="nc" id="L92">        getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
-<span class="nc" id="L93">    }</span>
-
-    public static void spawnWindow(Book book, BookListWidget parent){
-<span class="nc" id="L96">        spawnWindow(book, DEFAULT_WIDTH, parent);</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L95">        getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L96">    }</span>
 
     public static void spawnWindow(Book book, Image image, BookListWidget parent){
-<span class="nc" id="L100">        spawnWindow(book, DEFAULT_WIDTH, image, parent);</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L99">        spawnWindow(book, DEFAULT_WIDTH, parent);</span>
+<span class="nc" id="L100">    }</span>
 
     public static void spawnWindow(Book book, int w, BookListWidget parent){
-<span class="nc" id="L104">        Image image = new Image(book.getImageURL());</span>
-<span class="nc" id="L105">        spawnWindow(book, w, image, parent);</span>
-<span class="nc" id="L106">    }</span>
-
-    public static void spawnWindow(Book book, int w, Image image, BookListWidget parent){
-<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (!App.hasOpenedBook(book)) {</span>
-<span class="nc" id="L110">            App.openedBooks.add(book);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (!App.hasOpenedBook(book)) {</span>
+<span class="nc" id="L104">            App.openedBooks.add(book);</span>
             //ImageView imageView = new ImageView(image);
-<span class="nc" id="L112">            BookInfoView bookInfoView = new BookInfoView(book, parent);</span>
-<span class="nc" id="L113">            Stage stage = new Stage();</span>
+<span class="nc" id="L106">            BookInfoView bookInfoView = new BookInfoView(book, parent);</span>
+<span class="nc" id="L107">            Stage stage = new Stage();</span>
 
-<span class="nc" id="L115">            stage.setTitle(book.getAuthor() + &quot; - &quot; + book.getName());</span>
-<span class="nc" id="L116">            Scene scene = new Scene(bookInfoView, Color.WHITE);</span>
-<span class="nc" id="L117">            stage.setScene(scene);</span>
-<span class="nc" id="L118">            stage.setWidth(w);</span>
-<span class="nc" id="L119">            stage.show();</span>
+<span class="nc" id="L109">            stage.setTitle(book.getAuthor() + &quot; - &quot; + book.getName());</span>
+<span class="nc" id="L110">            Scene scene = new Scene(bookInfoView, Color.WHITE);</span>
+<span class="nc" id="L111">            stage.setScene(scene);</span>
+<span class="nc" id="L112">            stage.setWidth(w);</span>
+<span class="nc" id="L113">            stage.show();</span>
             // when the window is closed, book is removed from App.openedBooks
-<span class="nc" id="L121">            stage.setOnCloseRequest(e -&gt; App.openedBooks.remove(book));</span>
+<span class="nc" id="L115">            stage.setOnCloseRequest(e -&gt; App.openedBooks.remove(book));</span>
 
         }
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L118">    }</span>
 
     public HBox addHBoxTop() {
-<span class="nc" id="L127">        HBox hbox = new HBox();</span>
-<span class="nc" id="L128">        hbox.getStyleClass().add(&quot;book-info-banner&quot;);</span>
-<span class="nc" id="L129">        hbox.setPadding(new Insets(20));</span>
+<span class="nc" id="L121">        HBox hbox = new HBox();</span>
+<span class="nc" id="L122">        hbox.getStyleClass().add(&quot;book-info-banner&quot;);</span>
+<span class="nc" id="L123">        hbox.setPadding(new Insets(20));</span>
 
         //book title
-<span class="nc" id="L132">        Label displayTitle = new Label();</span>
-<span class="nc" id="L133">        String bookname = book.getName();</span>
-<span class="nc bnc" id="L134" title="All 2 branches missed.">        if(bookname.length() &gt;= 52){</span>
-<span class="nc" id="L135">            bookname = bookname.substring(0, 52) + &quot;\n&quot; + bookname.substring(52);</span>
+<span class="nc" id="L126">        Label displayTitle = new Label();</span>
+<span class="nc" id="L127">        String bookname = book.getName();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if(bookname.length() &gt;= 52){</span>
+<span class="nc" id="L129">            bookname = bookname.substring(0, 52) + &quot;\n&quot; + bookname.substring(52);</span>
         }
-<span class="nc" id="L137">        displayTitle.setText(bookname);</span>
-<span class="nc" id="L138">        displayTitle.getStyleClass().add(&quot;display&quot;);</span>
-<span class="nc" id="L139">        displayTitle.setFont(Font.font(&quot;Cantarell&quot;, FontWeight.BOLD, 18));</span>
+<span class="nc" id="L131">        displayTitle.setText(bookname);</span>
+<span class="nc" id="L132">        displayTitle.getStyleClass().add(&quot;display&quot;);</span>
+<span class="nc" id="L133">        displayTitle.setFont(Font.font(&quot;Cantarell&quot;, FontWeight.BOLD, 18));</span>
 
         //book author
-<span class="nc" id="L142">        Label displayAuthor = new Label();</span>
-<span class="nc" id="L143">        displayAuthor.setText(book.getAuthor());</span>
-<span class="nc" id="L144">        displayAuthor.getStyleClass().add(&quot;display&quot;);</span>
-<span class="nc" id="L145">        displayAuthor.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 12));</span>
+<span class="nc" id="L136">        Label displayAuthor = new Label();</span>
+<span class="nc" id="L137">        displayAuthor.setText(book.getAuthor());</span>
+<span class="nc" id="L138">        displayAuthor.getStyleClass().add(&quot;display&quot;);</span>
+<span class="nc" id="L139">        displayAuthor.setFont(Font.font(&quot;Arial&quot;, FontWeight.BOLD, 12));</span>
 
 
         //bookshelf
-<span class="nc" id="L149">        BorderPane bookshelfBox = new BorderPane();</span>
-<span class="nc" id="L150">        ComboBox&lt;Bookshelf&gt; comboBookshelf = new ComboBox&lt;&gt;();</span>
-<span class="nc" id="L151">        comboBookshelf.setPlaceholder(new Label(&quot;None&quot;));</span>
+<span class="nc" id="L143">        BorderPane bookshelfBox = new BorderPane();</span>
+<span class="nc" id="L144">        ComboBox&lt;Bookshelf&gt; comboBookshelf = new ComboBox&lt;&gt;();</span>
+<span class="nc" id="L145">        comboBookshelf.setPlaceholder(new Label(&quot;None&quot;));</span>
         //list stays empty need to check later
 
-<span class="nc" id="L154">        VBox rightElements = new VBox();</span>
-<span class="nc" id="L155">        Button deleteButton = new Button(&quot;Delete&quot;);</span>
-<span class="nc" id="L156">        deleteButton.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
-<span class="nc" id="L157">        deleteButton.getStyleClass().add(&quot;deleteButton&quot;);</span>
-<span class="nc" id="L158">        deleteButton.setOnMouseClicked(event -&gt; {</span>
+<span class="nc" id="L148">        VBox rightElements = new VBox();</span>
+<span class="nc" id="L149">        Button deleteButton = new Button(&quot;Delete&quot;);</span>
+<span class="nc" id="L150">        deleteButton.getStylesheets().add(getClass().getResource(&quot;/Stylesheets/style.css&quot;).toExternalForm());</span>
+<span class="nc" id="L151">        deleteButton.getStyleClass().add(&quot;deleteButton&quot;);</span>
+<span class="nc" id="L152">        deleteButton.setOnMouseClicked(event -&gt; {</span>
             try {
-<span class="nc" id="L160">                dbManager.deleteBook(book);</span>
+<span class="nc" id="L154">                dbManager.deleteBook(book);</span>
                 //book.setId(-1);
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                if(parent != null) {</span>
-<span class="nc" id="L163">                    List&lt;BookWidget&gt; books = parent.getBooks();</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                    books.removeIf(widget -&gt; widget.getBook().getId() == book.getId());</span>
-<span class="nc" id="L165">                    parent.updateList(null);</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                if(parent != null) {</span>
+<span class="nc" id="L157">                    List&lt;BookWidget&gt; books = parent.getBooks();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">                    books.removeIf(widget -&gt; widget.getBook().getId() == book.getId());</span>
+<span class="nc" id="L159">                    parent.updateList(null);</span>
                 }
-<span class="nc" id="L167">            } catch (SQLException | ClassNotFoundException throwables) {</span>
-<span class="nc" id="L168">                throwables.printStackTrace();</span>
-<span class="nc" id="L169">            }</span>
-<span class="nc" id="L170">        });</span>
-<span class="nc" id="L171">        Label spaceNeededLabel = new Label();</span>
+<span class="nc" id="L161">            } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L162">                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L163">            }</span>
+<span class="nc" id="L164">        });</span>
+<span class="nc" id="L165">        Label spaceNeededLabel = new Label();</span>
         //no margin or float in javafx, only way to align on the right the delete button :-)
         try {
-<span class="nc" id="L174">            LinkedList&lt;Bookshelf&gt; bookshelves = (LinkedList&lt;Bookshelf&gt;) DatabaseManager.getInstance().getBookShelves();</span>
-<span class="nc" id="L175">            LinkedList&lt;String&gt; bookshelfNamesString = new LinkedList&lt;&gt;();</span>
-<span class="nc" id="L176">            bookshelfNamesString.add(&quot;Default&quot;);</span>
-<span class="nc bnc" id="L177" title="All 2 branches missed.">            for(Bookshelf b : bookshelves){</span>
-<span class="nc" id="L178">                bookshelfNamesString.add(b.getName());</span>
-<span class="nc" id="L179">            }</span>
+<span class="nc" id="L168">            LinkedList&lt;Bookshelf&gt; bookshelves = (LinkedList&lt;Bookshelf&gt;) DatabaseManager.getInstance().getBookShelves();</span>
+<span class="nc" id="L169">            LinkedList&lt;String&gt; bookshelfNamesString = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L170">            bookshelfNamesString.add(&quot;Default&quot;);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            for(Bookshelf b : bookshelves){</span>
+<span class="nc" id="L172">                bookshelfNamesString.add(b.getName());</span>
+<span class="nc" id="L173">            }</span>
 
-<span class="nc" id="L181">                int largestString = bookshelfNamesString.get(0).length();</span>
-<span class="nc" id="L182">                int index = 0;</span>
+<span class="nc" id="L175">                int largestString = bookshelfNamesString.get(0).length();</span>
+<span class="nc" id="L176">                int index = 0;</span>
 
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            for(int i = 0; i &lt; bookshelfNamesString.size(); i++)</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            for(int i = 0; i &lt; bookshelfNamesString.size(); i++)</span>
             {
-<span class="nc bnc" id="L186" title="All 2 branches missed.">                if(bookshelfNamesString.get(i).length() &gt; largestString)</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">                if(bookshelfNamesString.get(i).length() &gt; largestString)</span>
                 {
-<span class="nc" id="L188">                    largestString = bookshelfNamesString.get(i).length();</span>
-<span class="nc" id="L189">                    index = i;</span>
+<span class="nc" id="L182">                    largestString = bookshelfNamesString.get(i).length();</span>
+<span class="nc" id="L183">                    index = i;</span>
                 }
             }
-<span class="nc" id="L192">            spaceNeededLabel = new Label(bookshelfNamesString.get(index).substring(1));</span>
-<span class="nc" id="L193">            spaceNeededLabel.setVisible(false);</span>
+<span class="nc" id="L186">            spaceNeededLabel = new Label(bookshelfNamesString.get(index).substring(1));</span>
+<span class="nc" id="L187">            spaceNeededLabel.setVisible(false);</span>
 
-<span class="nc" id="L195">        } catch (SQLException throwables) {</span>
-<span class="nc" id="L196">            throwables.printStackTrace();</span>
-<span class="nc" id="L197">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L198">            e.printStackTrace();</span>
-<span class="nc" id="L199">        }</span>
-<span class="nc" id="L200">        HBox deleteButtonWorkaround = new HBox();</span>
-<span class="nc" id="L201">        deleteButtonWorkaround.getChildren().addAll(spaceNeededLabel, deleteButton);</span>
+<span class="nc" id="L189">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L190">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L191">        }</span>
+<span class="nc" id="L192">        HBox deleteButtonWorkaround = new HBox();</span>
+<span class="nc" id="L193">        deleteButtonWorkaround.getChildren().addAll(spaceNeededLabel, deleteButton);</span>
 
-<span class="nc" id="L203">        ObservableList&lt;Bookshelf&gt; list = FXCollections.observableArrayList(bookShelf);</span>
+<span class="nc" id="L195">        ObservableList&lt;Bookshelf&gt; list = FXCollections.observableArrayList(bookShelf);</span>
 
-<span class="nc" id="L205">        Bookshelf b = new Bookshelf(&quot;Not added&quot;, &quot;&quot;);</span>
-<span class="nc" id="L206">        list.add(0, b);</span>
-<span class="nc" id="L207">        int i = 1;</span>
+<span class="nc" id="L197">        Bookshelf b = new Bookshelf(&quot;Not added&quot;, &quot;&quot;);</span>
+<span class="nc" id="L198">        list.add(0, b);</span>
+<span class="nc" id="L199">        int i = 1;</span>
 
         try {
             //CHECK this i instead of bookshelf.getId()!!!
-<span class="nc" id="L211">            LinkedList&lt;Bookshelf&gt; b2 = (LinkedList&lt;Bookshelf&gt;) DatabaseManager.getInstance().getBookShelves();</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">            for(Bookshelf bookshelf : b2) {</span>
-<span class="nc" id="L213">                list.add(i, bookshelf);</span>
-<span class="nc" id="L214">                i++;</span>
-<span class="nc" id="L215">            }</span>
+<span class="nc" id="L203">            LinkedList&lt;Bookshelf&gt; b2 = (LinkedList&lt;Bookshelf&gt;) DatabaseManager.getInstance().getBookShelves();</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            for(Bookshelf bookshelf : b2) {</span>
+<span class="nc" id="L205">                list.add(i, bookshelf);</span>
+<span class="nc" id="L206">                i++;</span>
+<span class="nc" id="L207">            }</span>
 
-<span class="nc" id="L217">        } catch (SQLException | ClassNotFoundException throwables) {</span>
-<span class="nc" id="L218">            throwables.printStackTrace();</span>
-<span class="nc" id="L219">        }</span>
+<span class="nc" id="L209">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L210">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L211">        }</span>
 
         try {
-<span class="nc bnc" id="L222" title="All 2 branches missed.">            if(dbManager.getBook(book.getName(), book.getAuthor()) == null){</span>
-<span class="nc" id="L223">                comboBookshelf.setItems(list);</span>
-<span class="nc" id="L224">                comboBookshelf.getSelectionModel().select(0);</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">            if(dbManager.getBook(book.getName(), book.getAuthor()) == null){</span>
+<span class="nc" id="L215">                comboBookshelf.setItems(list);</span>
+<span class="nc" id="L216">                comboBookshelf.getSelectionModel().select(0);</span>
             }
             else{
-<span class="nc" id="L227">                list.remove(0);</span>
-<span class="nc" id="L228">                comboBookshelf.setItems(list);</span>
-<span class="nc" id="L229">                comboBookshelf.getSelectionModel().select(1);</span>
+<span class="nc" id="L219">                list.remove(0);</span>
+<span class="nc" id="L220">                comboBookshelf.setItems(list);</span>
+<span class="nc" id="L221">                comboBookshelf.getSelectionModel().select(1);</span>
             }
-<span class="nc" id="L231">        } catch (SQLException throwables) {</span>
-<span class="nc" id="L232">            throwables.printStackTrace();</span>
-<span class="nc" id="L233">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L234">            e.printStackTrace();</span>
-<span class="nc" id="L235">        }</span>
+<span class="nc" id="L223">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L224">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L225">        }</span>
 
-<span class="nc" id="L237">        comboBookshelf.setConverter(new StringConverter&lt;&gt;() {</span>
+<span class="nc" id="L227">        comboBookshelf.setConverter(new StringConverter&lt;&gt;() {</span>
 
             @Override
             public String toString(Bookshelf bookshelf) {
-<span class="nc bnc" id="L241" title="All 2 branches missed.">                if (bookshelf != null)</span>
-<span class="nc" id="L242">                    return bookshelf.getName();</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">                if (bookshelf != null)</span>
+<span class="nc" id="L232">                    return bookshelf.getName();</span>
                 else
-<span class="nc" id="L244">                    return null;</span>
+<span class="nc" id="L234">                    return null;</span>
             }
 
             @Override
             public Bookshelf fromString(String s) {
-<span class="nc" id="L249">                return null;</span>
+<span class="nc" id="L239">                return null;</span>
             }
         });
 
         try {
-<span class="nc" id="L254">            updateBookId();</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">            if(dbManager.bookAlreadySaved(book)) {</span>
-<span class="nc" id="L256">                int id = dbManager.getBookshelfIdByBook(book);</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">                for(Bookshelf bs : comboBookshelf.getItems()) {</span>
-<span class="nc bnc" id="L258" title="All 2 branches missed.">                    if(bs.getId() == id)</span>
-<span class="nc" id="L259">                        comboBookshelf.setValue(bs);</span>
-<span class="nc" id="L260">                }</span>
-<span class="nc" id="L261">            } else {</span>
-<span class="nc" id="L262">                comboBookshelf.setValue(b);</span>
+<span class="nc" id="L244">            updateBookId();</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L246">                int id = dbManager.getBookshelfIdByBook(book);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">                for(Bookshelf bs : comboBookshelf.getItems()) {</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">                    if(bs.getId() == id)</span>
+<span class="nc" id="L249">                        comboBookshelf.setValue(bs);</span>
+<span class="nc" id="L250">                }</span>
+<span class="nc" id="L251">            } else {</span>
+<span class="nc" id="L252">                comboBookshelf.setValue(b);</span>
             }
-<span class="nc" id="L264">        } catch (Exception e) {</span>
-<span class="nc" id="L265">            e.printStackTrace();</span>
-<span class="nc" id="L266">        }</span>
+<span class="nc" id="L254">        } catch (Exception e) {</span>
+<span class="nc" id="L255">            LOGGER.log( Level.SEVERE, e.toString(), e);</span>
+<span class="nc" id="L256">        }</span>
 
         // saving book in bookshelf: problem -&gt; bookId is never assigned
-<span class="nc" id="L269">        comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -&gt; {</span>
+<span class="nc" id="L259">        comboBookshelf.valueProperty().addListener((obs, oldVal, newVal) -&gt; {</span>
             //???
-<span class="nc bnc" id="L271" title="All 2 branches missed.">            if(!oldVal.getName().equals(newVal.getName())) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            if(!oldVal.getName().equals(newVal.getName())) {</span>
                 // delete first
                 try {
-<span class="nc" id="L274">                    dbManager.deleteBook(book);</span>
-<span class="nc bnc" id="L275" title="All 2 branches missed.">                    if(parent != null) {</span>
-<span class="nc" id="L276">                        List&lt;BookWidget&gt; books = parent.getBooks();</span>
+<span class="nc" id="L264">                    dbManager.deleteBook(book);</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">                    if(parent != null) {</span>
+<span class="nc" id="L266">                        List&lt;BookWidget&gt; books = parent.getBooks();</span>
 
-<span class="nc bnc" id="L278" title="All 2 branches missed.">                        books.removeIf(widget -&gt; widget.getBook().getId() == book.getId());</span>
-<span class="nc" id="L279">                        parent.updateList(null);</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">                        books.removeIf(widget -&gt; widget.getBook().getId() == book.getId());</span>
+<span class="nc" id="L269">                        parent.updateList(null);</span>
                     }
-<span class="nc" id="L281">                    book.setId(-1);</span>
-<span class="nc" id="L282">                } catch (Exception e) {</span>
-<span class="nc" id="L283">                    e.printStackTrace();</span>
-<span class="nc" id="L284">                }</span>
+<span class="nc" id="L271">                    book.setId(-1);</span>
+<span class="nc" id="L272">                } catch (Exception throwables) {</span>
+<span class="nc" id="L273">                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L274">                }</span>
                 // then reinsert if needed
 
-<span class="nc bnc" id="L287" title="All 2 branches missed.">                if(newVal.getId() != ID_NO_BOOKSHELF) {</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">                if(newVal.getId() != ID_NO_BOOKSHELF) {</span>
                     try {
-<span class="nc" id="L289">                        dbManager.insertBook(book, newVal.getName());</span>
-<span class="nc" id="L290">                        updateBookId();</span>
-<span class="nc bnc" id="L291" title="All 2 branches missed.">                        if (parent != null) {</span>
-<span class="nc" id="L292">                            List&lt;BookWidget&gt; books = parent.getBooks();</span>
-<span class="nc" id="L293">                            books.add(new BookWidget(book));</span>
-<span class="nc" id="L294">                            parent.updateList(null);</span>
+<span class="nc" id="L279">                        dbManager.insertBook(book, newVal.getName());</span>
+<span class="nc" id="L280">                        updateBookId();</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">                        if (parent != null) {</span>
+<span class="nc" id="L282">                            List&lt;BookWidget&gt; books = parent.getBooks();</span>
+<span class="nc" id="L283">                            books.add(new BookWidget(book));</span>
+<span class="nc" id="L284">                            parent.updateList(null);</span>
                         }
-<span class="nc" id="L296">                    } catch (Exception e) {</span>
-<span class="nc" id="L297">                        e.printStackTrace();</span>
-<span class="nc" id="L298">                    }</span>
+<span class="nc" id="L286">                    } catch (Exception e) {</span>
+<span class="nc" id="L287">                        LOGGER.log( Level.SEVERE, e.toString(), e);</span>
+<span class="nc" id="L288">                    }</span>
                 }
             }
-<span class="nc" id="L301">        });</span>
+<span class="nc" id="L291">        });</span>
 
-<span class="nc" id="L303">        BorderPane.setAlignment(comboBookshelf, Pos.CENTER);</span>
+<span class="nc" id="L293">        BorderPane.setAlignment(comboBookshelf, Pos.CENTER);</span>
         //show delete button only if book exists in database
         try {
-<span class="nc bnc" id="L306" title="All 2 branches missed.">            if(dbManager.getBook(book.getName(), book.getAuthor()) != null){</span>
-<span class="nc" id="L307">                rightElements.getChildren().addAll(comboBookshelf, deleteButtonWorkaround);</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">            if(dbManager.getBook(book.getName(), book.getAuthor()) != null){</span>
+<span class="nc" id="L297">                rightElements.getChildren().addAll(comboBookshelf, deleteButtonWorkaround);</span>
             }
             else{
-<span class="nc" id="L310">                rightElements.getChildren().addAll(comboBookshelf);</span>
+<span class="nc" id="L300">                rightElements.getChildren().addAll(comboBookshelf);</span>
             }
-<span class="nc" id="L312">        } catch (SQLException | ClassNotFoundException throwables) {</span>
-<span class="nc" id="L313">            throwables.printStackTrace();</span>
-<span class="nc" id="L314">        }</span>
-<span class="nc" id="L315">        bookshelfBox.setRight(rightElements);</span>
+<span class="nc" id="L302">        } catch (SQLException | ClassNotFoundException e) {</span>
+<span class="nc" id="L303">            LOGGER.log( Level.SEVERE, e.toString(), e);</span>
+<span class="nc" id="L304">        }</span>
+<span class="nc" id="L305">        bookshelfBox.setRight(rightElements);</span>
 
 
         //Vbox for left elements
-<span class="nc" id="L319">        VBox vBox = new VBox();</span>
-<span class="nc" id="L320">        vBox.setSpacing(8);</span>
-<span class="nc" id="L321">        vBox.getChildren().addAll(displayTitle, displayAuthor);</span>
-<span class="nc" id="L322">        bookshelfBox.setLeft(vBox);</span>
+<span class="nc" id="L309">        VBox vBox = new VBox();</span>
+<span class="nc" id="L310">        vBox.setSpacing(8);</span>
+<span class="nc" id="L311">        vBox.getChildren().addAll(displayTitle, displayAuthor);</span>
+<span class="nc" id="L312">        bookshelfBox.setLeft(vBox);</span>
 
-<span class="nc" id="L324">        HBox.setHgrow(bookshelfBox, Priority.ALWAYS);</span>
-<span class="nc" id="L325">        hbox.getChildren().addAll(bookshelfBox);</span>
+<span class="nc" id="L314">        HBox.setHgrow(bookshelfBox, Priority.ALWAYS);</span>
+<span class="nc" id="L315">        hbox.getChildren().addAll(bookshelfBox);</span>
 
-<span class="nc" id="L327">        return hbox;</span>
+<span class="nc" id="L317">        return hbox;</span>
     }
 
     private void updateBookId(){
-<span class="nc" id="L331">        int newId = -1;</span>
-<span class="nc" id="L332">        Book localBook = null;</span>
+<span class="nc" id="L321">        Book localBook = null;</span>
         try {
-<span class="nc" id="L334">            localBook = dbManager.getBook(book.getName(), book.getAuthor());</span>
-<span class="nc" id="L335">        } catch (SQLException throwables) {</span>
-<span class="nc" id="L336">            throwables.printStackTrace();</span>
-<span class="nc" id="L337">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L338">            e.printStackTrace();</span>
-<span class="nc" id="L339">        }</span>
-<span class="nc bnc" id="L340" title="All 2 branches missed.">        if(localBook != null)</span>
-<span class="nc" id="L341">            book = localBook;</span>
-<span class="nc" id="L342">    }</span>
+<span class="nc" id="L323">            localBook = dbManager.getBook(book.getName(), book.getAuthor());</span>
+<span class="nc" id="L324">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L325">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L326">        }</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">        if(localBook != null)</span>
+<span class="nc" id="L328">            book = localBook;</span>
+<span class="nc" id="L329">    }</span>
 
     public VBox addVBox(){
-<span class="nc" id="L345">        VBox vbox = new VBox();</span>
-<span class="nc" id="L346">        vbox.setPadding(new Insets(10));</span>
-<span class="nc" id="L347">        vbox.setSpacing(5);</span>
-<span class="nc" id="L348">        vbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L332">        VBox vbox = new VBox();</span>
+<span class="nc" id="L333">        vbox.setPadding(new Insets(10));</span>
+<span class="nc" id="L334">        vbox.setSpacing(5);</span>
+<span class="nc" id="L335">        vbox.setAlignment(Pos.CENTER);</span>
 
 
         //description
 
-<span class="nc" id="L353">        Label description = new Label(&quot;Short Description&quot;);</span>
-<span class="nc" id="L354">        description.setStyle(&quot;-fx-text-fill: #722620;&quot;);</span>
-<span class="nc bnc" id="L355" title="All 2 branches missed.">        if(book.getDescription() != null)</span>
-<span class="nc" id="L356">            description.setText(book.getDescription());</span>
-<span class="nc" id="L357">        description.setWrapText(true);</span>
-<span class="nc" id="L358">        description.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
-<span class="nc" id="L359">        description.getStyleClass().add(&quot;description&quot;);</span>
-<span class="nc" id="L360">        description.setPadding(new Insets(10));</span>
-<span class="nc" id="L361">        HBox.setHgrow(description, Priority.ALWAYS);</span>
+<span class="nc" id="L340">        Label description = new Label(&quot;Short Description&quot;);</span>
+<span class="nc" id="L341">        description.setStyle(&quot;-fx-text-fill: #722620;&quot;);</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">        if(book.getDescription() != null)</span>
+<span class="nc" id="L343">            description.setText(book.getDescription());</span>
+<span class="nc" id="L344">        description.setWrapText(true);</span>
+<span class="nc" id="L345">        description.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
+<span class="nc" id="L346">        description.getStyleClass().add(&quot;description&quot;);</span>
+<span class="nc" id="L347">        description.setPadding(new Insets(10));</span>
+<span class="nc" id="L348">        HBox.setHgrow(description, Priority.ALWAYS);</span>
 
         //scroll for description textarea
 
-<span class="nc" id="L365">        ScrollPane scrollPane = new ScrollPane(description);</span>
-<span class="nc" id="L366">        scrollPane.setFitToWidth(true);</span>
-<span class="nc" id="L367">        scrollPane.setFitToHeight(true);</span>
-<span class="nc" id="L368">        scrollPane.getStyleClass().add(&quot;scroll-description&quot;);</span>
+<span class="nc" id="L352">        ScrollPane scrollPane = new ScrollPane(description);</span>
+<span class="nc" id="L353">        scrollPane.setFitToWidth(true);</span>
+<span class="nc" id="L354">        scrollPane.setFitToHeight(true);</span>
+<span class="nc" id="L355">        scrollPane.getStyleClass().add(&quot;scroll-description&quot;);</span>
 
 
         //Review and rating Area
-<span class="nc" id="L372">        TextArea review = new TextArea(&quot;review&quot;);</span>
-<span class="nc" id="L373">        review.setStyle(&quot;-fx-text-fill: #722620;&quot;);</span>
+<span class="nc" id="L359">        TextArea review = new TextArea(&quot;review&quot;);</span>
+<span class="nc" id="L360">        review.setStyle(&quot;-fx-text-fill: #722620;&quot;);</span>
         //in case the book is already in DB, retreives the already existing review
         try {
-<span class="nc bnc" id="L376" title="All 2 branches missed.">            if(dbManager.bookAlreadySaved(book)) {</span>
-<span class="nc" id="L377">                review.setEditable(true);</span>
-<span class="nc" id="L378">                review.setText(dbManager.getReview(book));</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">            if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L364">                review.setEditable(true);</span>
+<span class="nc" id="L365">                review.setText(dbManager.getReview(book));</span>
                 // override remote rating with local rating if it exists
-<span class="nc" id="L380">                book.setRating(dbManager.getRating(book));</span>
-<span class="nc" id="L381">                book.setReview(dbManager.getReview(book));</span>
+<span class="nc" id="L367">                book.setRating(dbManager.getRating(book));</span>
+<span class="nc" id="L368">                book.setReview(dbManager.getReview(book));</span>
             } else {
-<span class="nc" id="L383">                review.setText(&quot;Add the book to your library to review it!&quot;);</span>
+<span class="nc" id="L370">                review.setText(&quot;Add the book to your library to review it!&quot;);</span>
             }
-<span class="nc" id="L385">        } catch (SQLException throwables) {</span>
-<span class="nc" id="L386">            throwables.printStackTrace();</span>
-<span class="nc" id="L387">        } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L388">            e.printStackTrace();</span>
-<span class="nc" id="L389">        }</span>
+<span class="nc" id="L372">        } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L373">            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L374">        }</span>
         //generates starwidget calling the static method getStarWidget of Starwidget class
-<span class="nc" id="L391">        HBox starwidget = null;</span>
-<span class="nc" id="L392">        starwidget = StarWidget.getStarWidget(this, book);</span>
+<span class="nc" id="L376">        HBox starwidget = StarWidget.getStarWidget(this, book);</span>
 
         //if review is changed, update/insert the new review in the database
-<span class="nc" id="L395">        review.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
+<span class="nc" id="L379">        review.textProperty().addListener((observable, oldValue, newValue) -&gt; {</span>
             // this will run whenever text is changed
             try {
-<span class="nc bnc" id="L398" title="All 2 branches missed.">                if(dbManager.bookAlreadySaved(book)) {</span>
-<span class="nc" id="L399">                    updateBookId();</span>
-<span class="nc" id="L400">                    dbManager.insertReview(book, review.getText());</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                if(dbManager.bookAlreadySaved(book)) {</span>
+<span class="nc" id="L383">                    updateBookId();</span>
+<span class="nc" id="L384">                    dbManager.insertReview(book, review.getText());</span>
                 } else {
-<span class="nc" id="L402">                    System.out.println(&quot;Book not saved, review has been ignored&quot;);</span>
-<span class="nc" id="L403">                    Platform.runLater(() -&gt; review.setText(&quot;Add the book to your library to review it!&quot;));</span>
+<span class="nc" id="L386">                    System.out.println(&quot;Book not saved, review has been ignored&quot;);</span>
+<span class="nc" id="L387">                    Platform.runLater(() -&gt; review.setText(&quot;Add the book to your library to review it!&quot;));</span>
                 }
-<span class="nc" id="L405">            } catch (SQLException | ClassNotFoundException throwables) {</span>
-<span class="nc" id="L406">                throwables.printStackTrace();</span>
-<span class="nc" id="L407">            }</span>
-<span class="nc" id="L408">        });</span>
-<span class="nc" id="L409">        review.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
-<span class="nc" id="L410">        review.setWrapText(true);</span>
-<span class="nc" id="L411">        review.setPrefColumnCount(15);</span>
+<span class="nc" id="L389">            } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L390">                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
+<span class="nc" id="L391">            }</span>
+<span class="nc" id="L392">        });</span>
+<span class="nc" id="L393">        review.setFont(Font.font(null, FontWeight.NORMAL, 12));</span>
+<span class="nc" id="L394">        review.setWrapText(true);</span>
+<span class="nc" id="L395">        review.setPrefColumnCount(15);</span>
 
 
         //scroll for review textarea
-<span class="nc" id="L415">        ScrollPane scrollPane2 = new ScrollPane(review);</span>
+<span class="nc" id="L399">        ScrollPane scrollPane2 = new ScrollPane(review);</span>
         //scrollPane2.getStyleClass().add(&quot;scrollReview&quot;);
-<span class="nc" id="L417">        scrollPane2.setFitToWidth(true);</span>
-<span class="nc" id="L418">        scrollPane2.setFitToHeight(true);</span>
+<span class="nc" id="L401">        scrollPane2.setFitToWidth(true);</span>
+<span class="nc" id="L402">        scrollPane2.setFitToHeight(true);</span>
 
         //Vbox for review
-<span class="nc" id="L421">        VBox reviewBox = new VBox();</span>
-<span class="nc" id="L422">        reviewBox.setSpacing(10);</span>
-<span class="nc" id="L423">        reviewBox.getChildren().addAll(starwidget, scrollPane2);</span>
+<span class="nc" id="L405">        VBox reviewBox = new VBox();</span>
+<span class="nc" id="L406">        reviewBox.setSpacing(10);</span>
+<span class="nc" id="L407">        reviewBox.getChildren().addAll(starwidget, scrollPane2);</span>
 
         //left side
-<span class="nc" id="L426">        VBox left = new VBox();</span>
-<span class="nc" id="L427">        left.setSpacing(20);</span>
-<span class="nc" id="L428">        VBox.setVgrow(scrollPane, Priority.ALWAYS);</span>
-<span class="nc" id="L429">        VBox.setVgrow(scrollPane2, Priority.ALWAYS);</span>
-<span class="nc" id="L430">        left.getChildren().addAll(scrollPane);</span>
+<span class="nc" id="L410">        VBox left = new VBox();</span>
+<span class="nc" id="L411">        left.setSpacing(20);</span>
+<span class="nc" id="L412">        VBox.setVgrow(scrollPane, Priority.ALWAYS);</span>
+<span class="nc" id="L413">        VBox.setVgrow(scrollPane2, Priority.ALWAYS);</span>
+<span class="nc" id="L414">        left.getChildren().addAll(scrollPane);</span>
 
         //image
-<span class="nc" id="L433">        imageView.setFitWidth(200);</span>
-<span class="nc" id="L434">        imageView.setFitHeight(280);</span>
-<span class="nc" id="L435">        imageView.setPreserveRatio(false);</span>
-<span class="nc" id="L436">        HBox.setHgrow(imageView, Priority.ALWAYS);</span>
-<span class="nc" id="L437">        VBox.setVgrow(imageView, Priority.ALWAYS);</span>
+<span class="nc" id="L417">        imageView.setFitWidth(200);</span>
+<span class="nc" id="L418">        imageView.setFitHeight(280);</span>
+<span class="nc" id="L419">        imageView.setPreserveRatio(false);</span>
+<span class="nc" id="L420">        HBox.setHgrow(imageView, Priority.ALWAYS);</span>
+<span class="nc" id="L421">        VBox.setVgrow(imageView, Priority.ALWAYS);</span>
 
         //overall view
-<span class="nc" id="L440">        HBox overall = new HBox();</span>
-<span class="nc" id="L441">        VBox.setVgrow(overall, Priority.NEVER);</span>
+<span class="nc" id="L424">        HBox overall = new HBox();</span>
+<span class="nc" id="L425">        VBox.setVgrow(overall, Priority.NEVER);</span>
 
-<span class="nc" id="L443">        overall.setSpacing(20);</span>
-<span class="nc" id="L444">        overall.maxHeightProperty().bind(imageView.fitHeightProperty());</span>
-<span class="nc" id="L445">        HBox.setHgrow(reviewBox, Priority.NEVER);</span>
-<span class="nc" id="L446">        overall.getChildren().addAll(imageView, left, new Separator(Orientation.VERTICAL), reviewBox);</span>
-
-
-
-<span class="nc" id="L450">        vbox.getChildren().addAll(overall);</span>
+<span class="nc" id="L427">        overall.setSpacing(20);</span>
+<span class="nc" id="L428">        overall.maxHeightProperty().bind(imageView.fitHeightProperty());</span>
+<span class="nc" id="L429">        HBox.setHgrow(reviewBox, Priority.NEVER);</span>
+<span class="nc" id="L430">        overall.getChildren().addAll(imageView, left, new Separator(Orientation.VERTICAL), reviewBox);</span>
 
 
-<span class="nc" id="L453">        return vbox;</span>
+
+<span class="nc" id="L434">        vbox.getChildren().addAll(overall);</span>
+
+
+<span class="nc" id="L437">        return vbox;</span>
     }
 
 //method called in StarWidget class to refresh the bookinfo window once a new rating has been inserted
     public void refresh(){
-<span class="nc" id="L458">        setCenter(addVBox());</span>
-<span class="nc" id="L459">    }</span>
+<span class="nc" id="L442">        setCenter(addVBox());</span>
+<span class="nc" id="L443">    }</span>
 }
 
 
