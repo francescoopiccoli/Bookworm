@@ -1,5 +1,6 @@
 package com.Bookworm.ui.views;
 
+import com.Bookworm.App;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
@@ -21,10 +22,13 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookshelfView extends BorderPane {
     private DatabaseManager db = BookInfoView.dbManager;
     boolean flagExist = false;
+    private static final Logger LOGGER = Logger.getLogger(BookshelfView.class.getName());
     private List<Bookshelf> bookshelves;
     private List<ImageView> covers = new ArrayList<>();
     private Image image;
@@ -35,7 +39,7 @@ public class BookshelfView extends BorderPane {
             List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
             setCenter(new BookshelfWidget(bookshelveswithdefault,this));
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         }
         //setCenter(createCenter());
 
@@ -92,8 +96,8 @@ public class BookshelfView extends BorderPane {
                         System.out.println("Bookshelf inserted!");
                         db.insertBookshelf(list);
                     }
-                } catch (ClassNotFoundException | SQLException e1) {
-                    e1.printStackTrace();
+                } catch (ClassNotFoundException | SQLException throwables) {
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                 }
                 //ADD code that creates new List
                 test.hide();
@@ -103,7 +107,7 @@ public class BookshelfView extends BorderPane {
                     List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                     setCenter(new BookshelfWidget(bookshelveswithdefault,this));
                 } catch (SQLException | ClassNotFoundException throwables) {
-                    throwables.printStackTrace();
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                 }
 
             });
@@ -151,8 +155,8 @@ public class BookshelfView extends BorderPane {
                 db.deleteBookshelf(bookshelf);
                 deleteButton.setText("Click on Back");
                 //BookListView.getListWidget().updateList();
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException | SQLException throwables) {
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
             }
         });
 
@@ -164,7 +168,7 @@ public class BookshelfView extends BorderPane {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
             }
         });
         Text t = new Text(description);
@@ -195,7 +199,7 @@ public class BookshelfView extends BorderPane {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
             } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
             }
         });
 
@@ -212,7 +216,7 @@ public class BookshelfView extends BorderPane {
         try {
             books = db.getBooks();
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         }
         BorderPane pane = new BorderPane();
         BookListView blv = new BookListView("Default Bookshelf","", books);
@@ -235,7 +239,7 @@ public class BookshelfView extends BorderPane {
             books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));
             //String.valueOf((db.getBookshelfID(bookshelf)))
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         }
         for (Book b: books) {
             System.out.println("BOOK : ");

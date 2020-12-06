@@ -32,6 +32,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookInfoView extends BorderPane {
 
@@ -40,6 +42,7 @@ public class BookInfoView extends BorderPane {
     private static final String LABEL_NO_BOOKSHELF = "[No Bookshelf]";
     private static final int ID_NO_BOOKSHELF = -5;
     private static final int ID_DEFAULT_BOOKSHELF = -6;
+    private static final Logger LOGGER = Logger.getLogger(BookInfoView.class.getName());
 
     public static ArrayList<Bookshelf> bookShelf = new ArrayList<>();
     public static List<Book> bookList = new LinkedList<>(); // ?
@@ -165,7 +168,7 @@ public class BookInfoView extends BorderPane {
                     parent.updateList(null);
                 }
             } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
             }
         });
         Label spaceNeededLabel = new Label();
@@ -193,9 +196,9 @@ public class BookInfoView extends BorderPane {
             spaceNeededLabel.setVisible(false);
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
         HBox deleteButtonWorkaround = new HBox();
         deleteButtonWorkaround.getChildren().addAll(spaceNeededLabel, deleteButton);
@@ -215,7 +218,7 @@ public class BookInfoView extends BorderPane {
             }
 
         } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         }
 
         try {
@@ -229,9 +232,9 @@ public class BookInfoView extends BorderPane {
                 comboBookshelf.getSelectionModel().select(1);
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
         comboBookshelf.setConverter(new StringConverter<>() {
@@ -262,7 +265,7 @@ public class BookInfoView extends BorderPane {
                 comboBookshelf.setValue(b);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
 
         // saving book in bookshelf: problem -> bookId is never assigned
@@ -279,8 +282,8 @@ public class BookInfoView extends BorderPane {
                         parent.updateList(null);
                     }
                     book.setId(-1);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception throwables) {
+                    LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                 }
                 // then reinsert if needed
 
@@ -294,7 +297,7 @@ public class BookInfoView extends BorderPane {
                             parent.updateList(null);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.log( Level.SEVERE, e.toString(), e);
                     }
                 }
             }
@@ -309,8 +312,8 @@ public class BookInfoView extends BorderPane {
             else{
                 rightElements.getChildren().addAll(comboBookshelf);
             }
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
         bookshelfBox.setRight(rightElements);
 
@@ -333,9 +336,9 @@ public class BookInfoView extends BorderPane {
         try {
             localBook = dbManager.getBook(book.getName(), book.getAuthor());
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
         if(localBook != null)
             book = localBook;
@@ -383,9 +386,9 @@ public class BookInfoView extends BorderPane {
                 review.setText("Add the book to your library to review it!");
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log( Level.SEVERE, e.toString(), e);
         }
         //generates starwidget calling the static method getStarWidget of Starwidget class
         HBox starwidget = null;
@@ -403,7 +406,7 @@ public class BookInfoView extends BorderPane {
                     Platform.runLater(() -> review.setText("Add the book to your library to review it!"));
                 }
             } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
+                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
             }
         });
         review.setFont(Font.font(null, FontWeight.NORMAL, 12));
