@@ -181,8 +181,8 @@ public class App extends Application {
                         } else {
                             discoverView.setCentralLabel("Add a book to start!");
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException throwables) {
+                        LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                     }
                 }
                 mainPane.setCenter(_generateContent(text));

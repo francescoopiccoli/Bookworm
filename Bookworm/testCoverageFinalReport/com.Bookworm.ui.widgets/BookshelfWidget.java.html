@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookshelfWidget.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">App$All_in_App.exec</a> &gt; <a href="index.source.html" class="el_package">com.Bookworm.ui.widgets</a> &gt; <span class="el_source">BookshelfWidget.java</span></div><h1>BookshelfWidget.java</h1><pre class="source lang-java linenums">package com.Bookworm.ui.widgets;
 
-import com.Bookworm.App;
 import com.Bookworm.controller.DatabaseManager;
 import com.Bookworm.model.Book;
 import com.Bookworm.model.Bookshelf;
-import com.Bookworm.ui.views.BookInfoView;
-import com.Bookworm.ui.views.BookListView;
 import com.Bookworm.ui.views.BookshelfView;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,148 +21,142 @@ import java.util.logging.Logger;
 
 //NOT USED
 public class BookshelfWidget extends ScrollPane{
-<span class="nc" id="L31">    private String currentFilter = &quot;&quot;;</span>
-    private List&lt;Bookshelf&gt; bookshelves;
-<span class="nc" id="L33">    private List&lt;ImageView&gt; covers = new ArrayList&lt;&gt;();</span>
-    private BookshelfView parent;
+    private final List&lt;Bookshelf&gt; bookshelves;
+<span class="nc" id="L25">    private final List&lt;ImageView&gt; covers = new ArrayList&lt;&gt;();</span>
+    private final BookshelfView parent;
     private Image image;
-<span class="nc" id="L36">    private static final Logger LOGGER = Logger.getLogger(BookshelfWidget.class.getName());</span>
+<span class="nc" id="L28">    private static final Logger LOGGER = Logger.getLogger(BookshelfWidget.class.getName());</span>
 
     public static final String BOOKSHELF_IMAGE_URI = &quot;/Images/bookshelfPlaceholder.png&quot;;
 
     public BookshelfWidget(List&lt;Bookshelf&gt;bookshelves, BookshelfView parent){
-<span class="nc" id="L41">        super();</span>
-<span class="nc" id="L42">        this.bookshelves = bookshelves;</span>
-<span class="nc" id="L43">        this.parent = parent;</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        for(Bookshelf b : bookshelves){</span>
-            try {
-<span class="nc" id="L46">                List&lt;Book&gt; list = DatabaseManager.getInstance().getBookShelfBooks(b.getId());</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">                if(list.isEmpty()){</span>
-<span class="nc" id="L48">                    image = new Image(getClass().getResource(BOOKSHELF_IMAGE_URI).toExternalForm());</span>
-<span class="nc" id="L49">                    ImageView img = new ImageView(image);</span>
-<span class="nc" id="L50">                    img.setFitHeight(200);</span>
-<span class="nc" id="L51">                    img.setFitWidth(160);</span>
+<span class="nc" id="L33">        super();</span>
+<span class="nc" id="L34">        this.bookshelves = bookshelves;</span>
+<span class="nc" id="L35">        this.parent = parent;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if(bookshelves != null) {</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">            for (Bookshelf b : bookshelves) {</span>
+                try {
+<span class="nc" id="L39">                    List&lt;Book&gt; list = DatabaseManager.getInstance().getBookShelfBooks(b.getId());</span>
 
-<span class="nc" id="L53">                    covers.add(img);</span>
-<span class="nc" id="L54">                }else {</span>
-<span class="nc" id="L55">                    image = new Image(list.get(0).getImageURL());</span>
-<span class="nc" id="L56">                    ImageView img = new ImageView(image);</span>
-<span class="nc" id="L57">                    img.setFitHeight(100);</span>
-<span class="nc" id="L58">                    img.setFitWidth(70);</span>
-<span class="nc" id="L59">                    covers.add(img);</span>
-                }
-<span class="nc" id="L61">            } catch (SQLException throwables) {</span>
-<span class="nc" id="L62">                LOGGER.log( Level.SEVERE, throwables.toString(), throwables);</span>
-                //throwables.printStackTrace();
-<span class="nc" id="L64">            } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L65">                LOGGER.log( Level.SEVERE, e.toString(), e);</span>
-                //e.printStackTrace();
-<span class="nc" id="L67">            }</span>
-<span class="nc" id="L68">        }</span>
-<span class="nc" id="L69">        setFitToHeight(true);</span>
-<span class="nc" id="L70">        setFitToWidth(true);</span>
-<span class="nc" id="L71">        widthProperty().addListener((e) -&gt; updateList(null));</span>
-<span class="nc" id="L72">        updateList();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">                    if (list.isEmpty()) {</span>
+<span class="nc" id="L42">                        image = new Image(getClass().getResource(BOOKSHELF_IMAGE_URI).toExternalForm());</span>
+                    } else {
+<span class="nc" id="L44">                        image = new Image(list.get(0).getImageURL());</span>
+                    }
 
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L47">                    ImageView img = new ImageView(image);</span>
+<span class="nc" id="L48">                    img.setFitHeight(100);</span>
+<span class="nc" id="L49">                    img.setFitWidth(70);</span>
+<span class="nc" id="L50">                    covers.add(img);</span>
+<span class="nc" id="L51">                } catch (SQLException | ClassNotFoundException throwables) {</span>
+<span class="nc" id="L52">                    LOGGER.log(Level.SEVERE, throwables.toString(), throwables);</span>
+                    //throwables.printStackTrace();
+<span class="nc" id="L54">                } //e.printStackTrace();</span>
+
+<span class="nc" id="L56">            }</span>
+        }
+<span class="nc" id="L58">        setFitToHeight(true);</span>
+<span class="nc" id="L59">        setFitToWidth(true);</span>
+<span class="nc" id="L60">        widthProperty().addListener((e) -&gt; updateList(null));</span>
+<span class="nc" id="L61">        updateList();</span>
+
+<span class="nc" id="L63">    }</span>
     public void updateList() throws NullPointerException {
-<span class="nc" id="L76">        updateList(&quot;&quot;);</span>
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L65">        updateList(&quot;&quot;);</span>
+<span class="nc" id="L66">    }</span>
 
     public  void updateList(String filter) throws NullPointerException {
-<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (filter != null)</span>
-<span class="nc" id="L81">            currentFilter = filter;</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">        if (bookshelves == null || bookshelves.size() == 0) {</span>
 
-<span class="nc bnc" id="L83" title="All 4 branches missed.">        if (bookshelves == null || bookshelves.size() == 0) {</span>
-
-<span class="nc" id="L85">            image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
-<span class="nc" id="L86">            ImageView imageView = new ImageView(this.image);</span>
-<span class="nc" id="L87">            imageView.setFitHeight(250);</span>
-<span class="nc" id="L88">            imageView.setFitWidth(150);</span>
-<span class="nc" id="L89">            imageView = new ImageView(this.image);</span>
+<span class="nc" id="L71">            image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
+<span class="nc" id="L72">            ImageView imageView = new ImageView(this.image);</span>
+<span class="nc" id="L73">            imageView.setFitHeight(250);</span>
+<span class="nc" id="L74">            imageView.setFitWidth(150);</span>
+<span class="nc" id="L75">            imageView = new ImageView(this.image);</span>
 
 
-<span class="nc" id="L92">            VBox centerVBox = new VBox();</span>
-<span class="nc" id="L93">            centerVBox.getStyleClass().add(&quot;inner&quot;);</span>
-<span class="nc" id="L94">            HBox hBox = new HBox();</span>
-<span class="nc" id="L95">            centerVBox.getChildren().addAll(hBox, imageView);</span>
-<span class="nc" id="L96">            centerVBox.setSpacing(50);</span>
-<span class="nc" id="L97">            centerVBox.setAlignment(Pos.BASELINE_CENTER);</span>
-<span class="nc" id="L98">            setContent(centerVBox);</span>
+<span class="nc" id="L78">            VBox centerVBox = new VBox();</span>
+<span class="nc" id="L79">            centerVBox.getStyleClass().add(&quot;inner&quot;);</span>
+<span class="nc" id="L80">            HBox hBox = new HBox();</span>
+<span class="nc" id="L81">            centerVBox.getChildren().addAll(hBox, imageView);</span>
+<span class="nc" id="L82">            centerVBox.setSpacing(50);</span>
+<span class="nc" id="L83">            centerVBox.setAlignment(Pos.BASELINE_CENTER);</span>
+<span class="nc" id="L84">            setContent(centerVBox);</span>
             try {
-<span class="nc" id="L100">                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
-<span class="nc" id="L101">                imageView.setImage(image);</span>
-<span class="nc" id="L102">            } catch (IllegalArgumentException | NullPointerException e) {</span>
-<span class="nc" id="L103">                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
-<span class="nc" id="L104">            }</span>
+<span class="nc" id="L86">                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
+<span class="nc" id="L87">                imageView.setImage(image);</span>
+<span class="nc" id="L88">            } catch (IllegalArgumentException | NullPointerException e) {</span>
+<span class="nc" id="L89">                image = new Image(getClass().getResource(BookListWidget.PLACEHOLDER_IMAGE_URI).toExternalForm());</span>
+<span class="nc" id="L90">            }</span>
 
-<span class="nc" id="L106">        } else {</span>
-<span class="nc" id="L107">            VBox vb = new VBox();</span>
-<span class="nc" id="L108">            vb.getStyleClass().add(&quot;inner&quot;);</span>
-<span class="nc" id="L109">            vb.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L92">        } else {</span>
+<span class="nc" id="L93">            VBox vb = new VBox();</span>
+<span class="nc" id="L94">            vb.getStyleClass().add(&quot;inner&quot;);</span>
+<span class="nc" id="L95">            vb.setAlignment(Pos.CENTER);</span>
 
-<span class="nc" id="L111">            int width = (int) getWidth();</span>
-<span class="nc" id="L112">            int numColumns = getMaxColumns(width);</span>
+<span class="nc" id="L97">            int width = (int) getWidth();</span>
+<span class="nc" id="L98">            int numColumns = getMaxColumns(width);</span>
 
-<span class="nc" id="L114">            int i = 0;</span>
-<span class="nc" id="L115">            HBox hb = new HBox();</span>
+<span class="nc" id="L100">            int i = 0;</span>
+<span class="nc" id="L101">            HBox hb = new HBox();</span>
 
-<span class="nc bnc" id="L117" title="All 2 branches missed.">            for(int j = 0; j&lt;bookshelves.size();j++) {</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">                if (i &gt;= numColumns) {</span>
-<span class="nc" id="L119">                    i = 0;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            for(int j = 0; j&lt;bookshelves.size();j++) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                if (i &gt;= numColumns) {</span>
+<span class="nc" id="L105">                    i = 0;</span>
                 }
-<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (i == 0) {</span>
-<span class="nc" id="L122">                    hb = new HBox();</span>
-<span class="nc" id="L123">                    hb.setAlignment(Pos.CENTER);</span>
-<span class="nc" id="L124">                    ImageView imgv = new ImageView(image);</span>
-<span class="nc" id="L125">                    imgv.setFitWidth(180);</span>
-<span class="nc" id="L126">                    imgv.setFitHeight(200);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                if (i == 0) {</span>
+<span class="nc" id="L108">                    hb = new HBox();</span>
+<span class="nc" id="L109">                    hb.setSpacing(20);</span>
+<span class="nc" id="L110">                    hb.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L111">                    ImageView imgv = new ImageView(image);</span>
+<span class="nc" id="L112">                    imgv.setFitWidth(180);</span>
+<span class="nc" id="L113">                    imgv.setFitHeight(200);</span>
 
 
-<span class="nc" id="L129">                    vb.getChildren().add(hb);</span>
+<span class="nc" id="L116">                    vb.getChildren().add(hb);</span>
                 }
 
                 // filtering
-<span class="nc bnc" id="L133" title="All 2 branches missed.">                if (filter != null</span>
-<span class="nc bnc" id="L134" title="All 2 branches missed.">                        &amp;&amp; !bookshelves.get(j).getName().toLowerCase().contains(filter.toLowerCase()))</span>
-<span class="nc" id="L135">                    continue;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if (filter != null</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                        &amp;&amp; !bookshelves.get(j).getName().toLowerCase().contains(filter.toLowerCase()))</span>
+<span class="nc" id="L122">                    continue;</span>
 
-<span class="nc" id="L137">                    Button button = new Button(bookshelves.get(j).getName(), covers.get(j));</span>
-<span class="nc" id="L138">                    button.getStyleClass().add(&quot;bookshelfWidget&quot;);</span>
+<span class="nc" id="L124">                    Button button = new Button(bookshelves.get(j).getName(), covers.get(j));</span>
+<span class="nc" id="L125">                    button.getStyleClass().add(&quot;bookshelfWidget&quot;);</span>
                     //To FIx
-<span class="nc" id="L140">                    button.setPrefWidth(250);</span>
-<span class="nc" id="L141">                    button.setAlignment(Pos.CENTER_LEFT);</span>
-<span class="nc" id="L142">                    String bookshelfName = bookshelves.get(j).getName();</span>
-<span class="nc" id="L143">                    String bookshelfDesc = bookshelves.get(j).getDescription();</span>
+<span class="nc" id="L127">                    button.setPrefWidth(250);</span>
+<span class="nc" id="L128">                    button.setAlignment(Pos.CENTER_LEFT);</span>
+<span class="nc" id="L129">                    String bookshelfName = bookshelves.get(j).getName();</span>
+<span class="nc" id="L130">                    String bookshelfDesc = bookshelves.get(j).getDescription();</span>
 
 
-<span class="nc" id="L146">                    int finalJ = j;</span>
-<span class="nc" id="L147">                    button.setOnMouseClicked((event -&gt; {</span>
-<span class="nc" id="L148">                        parent.setTop(parent.createTop2(bookshelfDesc, bookshelves.get(finalJ)));</span>
-<span class="nc" id="L149">                        parent.setCenter(parent.createCenter3(bookshelfName, bookshelfDesc));</span>
-<span class="nc" id="L150">                    }));</span>
+<span class="nc" id="L133">                    int finalJ = j;</span>
+<span class="nc" id="L134">                    button.setOnMouseClicked((event -&gt; {</span>
+<span class="nc" id="L135">                        parent.setTop(parent.createTop2(bookshelves.get(finalJ)));</span>
+<span class="nc" id="L136">                        parent.setCenter(parent.createCenter3(bookshelfName, bookshelfDesc));</span>
+<span class="nc" id="L137">                    }));</span>
 
-<span class="nc" id="L152">                    HBox.setMargin(button, new Insets(20));</span>
-<span class="nc" id="L153">                    hb.getChildren().add(button);</span>
+<span class="nc" id="L139">                    HBox.setMargin(button, new Insets(20));</span>
+<span class="nc" id="L140">                    hb.getChildren().add(button);</span>
 
-<span class="nc" id="L155">                i++;</span>
+<span class="nc" id="L142">                i++;</span>
             }
 
             // fill with whitespace
-<span class="nc bnc" id="L159" title="All 4 branches missed.">            while (i != 0 &amp;&amp; i &lt; numColumns) {</span>
-<span class="nc" id="L160">                BookWidget b = new BookWidget(null);</span>
-<span class="nc" id="L161">                b.setVisible(false);</span>
-<span class="nc" id="L162">                HBox.setMargin(b, new Insets(20));</span>
-<span class="nc" id="L163">                hb.getChildren().add(b);</span>
-<span class="nc" id="L164">                i++;</span>
-<span class="nc" id="L165">            }</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">            while (i != 0 &amp;&amp; i &lt; numColumns) {</span>
+<span class="nc" id="L147">                BookshelfWidget b = new BookshelfWidget(null, null);</span>
+<span class="nc" id="L148">                b.setVisible(false);</span>
+<span class="nc" id="L149">                HBox.setMargin(b, new Insets(20));</span>
+<span class="nc" id="L150">                hb.getChildren().add(b);</span>
+<span class="nc" id="L151">                i++;</span>
+<span class="nc" id="L152">            }</span>
 
-<span class="nc" id="L167">            setContent(vb);</span>
+<span class="nc" id="L154">            setContent(vb);</span>
         }
-<span class="nc" id="L169">    }</span>
+<span class="nc" id="L156">    }</span>
 
     private int getMaxColumns(int width) {
-<span class="nc" id="L172">        return width / 230; // width + margin</span>
+<span class="nc" id="L159">        return width / 230; // width + margin</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
