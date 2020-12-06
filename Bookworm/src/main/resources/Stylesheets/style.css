@@ -127,8 +127,6 @@
     -fx-overflow: hidden;
     -fx-text-overflow: ellipsis;
     -fx-min-width: 175px;
-    -fx-pref-height: 250px;
-    -fx-pref-height: 250px;
     -fx-border-insets: 25px;
 
 }

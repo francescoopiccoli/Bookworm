@@ -44,27 +44,22 @@ public class BookshelfWidget extends ScrollPane{
         for(Bookshelf b : bookshelves){
             try {
                 List<Book> list = DatabaseManager.getInstance().getBookShelfBooks(b.getId());
+
                 if(list.isEmpty()){
                     image = new Image(getClass().getResource(BOOKSHELF_IMAGE_URI).toExternalForm());
-                    ImageView img = new ImageView(image);
-                    img.setFitHeight(200);
-                    img.setFitWidth(160);
-
-                    covers.add(img);
-                }else {
+                } else {
                     image = new Image(list.get(0).getImageURL());
-                    ImageView img = new ImageView(image);
-                    img.setFitHeight(100);
-                    img.setFitWidth(70);
-                    covers.add(img);
                 }
-            } catch (SQLException throwables) {
+
+                ImageView img = new ImageView(image);
+                img.setFitHeight(100);
+                img.setFitWidth(70);
+                covers.add(img);
+            } catch (SQLException | ClassNotFoundException throwables) {
                 LOGGER.log( Level.SEVERE, throwables.toString(), throwables);
                 //throwables.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                LOGGER.log( Level.SEVERE, e.toString(), e);
-                //e.printStackTrace();
-            }
+            } //e.printStackTrace();
+
         }
         setFitToHeight(true);
         setFitToWidth(true);
@@ -120,6 +115,7 @@ public class BookshelfWidget extends ScrollPane{
                 }
                 if (i == 0) {
                     hb = new HBox();
+                    hb.setSpacing(20);
                     hb.setAlignment(Pos.CENTER);
                     ImageView imgv = new ImageView(image);
                     imgv.setFitWidth(180);

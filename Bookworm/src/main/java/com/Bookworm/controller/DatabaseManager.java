@@ -72,7 +72,7 @@ public class DatabaseManager implements BookStorage {
         }
 
         try {
-            if (con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -90,7 +90,7 @@ public class DatabaseManager implements BookStorage {
         }
 
         try {
-            if ( con.isClosed()) {
+            if (con == null || con.isClosed()) {
                 getConnection();
             }
             s = con.createStatement();
@@ -114,24 +114,7 @@ public class DatabaseManager implements BookStorage {
             }
         }
 
-        /*try {
-            if (con.isClosed()) {
-                getConnection();
-            }
-            s = con.createStatement();
-            s.executeUpdate("CREATE TABLE IF NOT EXISTS BookTags(" +
-                    "bookID INTEGER," +
-                    "tagName TEXT," +
-                    "PRIMARY KEY (bookID, tagName)," +
-                    "FOREIGN KEY(bookID) REFERENCES Book(id))");
-        } finally {
-            if (s != null) {
-                s.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }*/
+
         //if no default bookself is present it is created
     }
 

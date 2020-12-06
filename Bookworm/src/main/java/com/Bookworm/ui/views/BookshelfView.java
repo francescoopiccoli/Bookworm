@@ -34,10 +34,8 @@ public class BookshelfView extends BorderPane {
         try {
             List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
             setCenter(new BookshelfWidget(bookshelveswithdefault,this));
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         //setCenter(createCenter());
 
@@ -90,13 +88,11 @@ public class BookshelfView extends BorderPane {
                             System.out.println("Bookshelf already exists");
                         }
                     }
-                    if(flagExist==false){
+                    if(!flagExist){
                         System.out.println("Bookshelf inserted!");
                         db.insertBookshelf(list);
                     }
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (SQLException e1) {
+                } catch (ClassNotFoundException | SQLException e1) {
                     e1.printStackTrace();
                 }
                 //ADD code that creates new List
@@ -106,10 +102,8 @@ public class BookshelfView extends BorderPane {
                 try {
                     List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                     setCenter(new BookshelfWidget(bookshelveswithdefault,this));
-                } catch (SQLException throwables) {
+                } catch (SQLException | ClassNotFoundException throwables) {
                     throwables.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
                 }
 
             });
@@ -143,38 +137,34 @@ public class BookshelfView extends BorderPane {
 
 
     public Node createTop2(String description, Bookshelf bookshelf) {
-            Button deleteButton = new Button("Delete Bookshelf");
-            deleteButton.setOnMouseClicked(event -> {
-                try {
-                    ArrayList<Book> books = bookshelf.getBooks();
-                    if (books != null) {
-                        for(Book b: books) {
-                            db.deleteBook(b);
-                            //start
-                           // db.insertBook(b, "Default");
-                        }
+        Button deleteButton = new Button("Delete Bookshelf");
+        deleteButton.setOnMouseClicked(event -> {
+            try {
+                ArrayList<Book> books = bookshelf.getBooks();
+                if (books != null) {
+                    for(Book b: books) {
+                        db.deleteBook(b);
+                        //start
+                       // db.insertBook(b, "Default");
                     }
-                    db.deleteBookshelf(bookshelf);
-                    deleteButton.setText("Click on Go Back");
-                    //BookListView.getListWidget().updateList();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 }
-            });
+                db.deleteBookshelf(bookshelf);
+                deleteButton.setText("Click on Back");
+                //BookListView.getListWidget().updateList();
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        });
 
-            Button back = new Button("Go Back");
+        Button back = new Button("🡰 Back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             //setCenter(createCenter());
             try {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
-            } catch (SQLException throwables) {
+            } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
         });
         Text t = new Text(description);
@@ -197,17 +187,15 @@ public class BookshelfView extends BorderPane {
     public Node createTop2() {
 
 
-        Button back = new Button("Go Back");
+        Button back = new Button("🡰 Back");
         back.setOnMouseClicked(event -> {
             setTop(createTop());
             //setCenter(createCenter());
             try {
                 List<Bookshelf> bookshelveswithdefault = db.getBookShelves();
                 setCenter(new BookshelfWidget(bookshelveswithdefault,this));
-            } catch (SQLException throwables) {
+            } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
             }
         });
 
@@ -223,10 +211,8 @@ public class BookshelfView extends BorderPane {
         List<Book> books = null;
         try {
             books = db.getBooks();
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         BorderPane pane = new BorderPane();
         BookListView blv = new BookListView("Default Bookshelf","", books);
@@ -235,7 +221,7 @@ public class BookshelfView extends BorderPane {
     }
 
     public Node createCenter3(String bookshelf, String desc) {
-        List<Book> books = null;
+        List<Book> books;
         books = (queryBooksOfBookshelf(bookshelf));
         BorderPane pane = new BorderPane();
         BookListView blv = new BookListView(bookshelf,desc,books);
@@ -248,13 +234,10 @@ public class BookshelfView extends BorderPane {
         try {
             books = db.getBookShelfBooks(db.getBookshelfID(bookshelf));
             //String.valueOf((db.getBookshelfID(bookshelf)))
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-        for (Book b: books
-             ) {
+        for (Book b: books) {
             System.out.println("BOOK : ");
 
         }
